@@ -94,6 +94,7 @@ app.UseHttpsRedirection();
 // 🔐 مهم جدًا: Authentication قبل Authorization
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseAuthorization();
 
 app.MapControllers();
 app.Run();
