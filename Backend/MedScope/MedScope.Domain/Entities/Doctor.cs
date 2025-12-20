@@ -1,16 +1,12 @@
-﻿namespace MedScope.Domain.Entities
+﻿public class Doctor
 {
-    public class Doctor
-    {
-        public int Id { get; set; }
+    public int Id { get; set; }
+    public string UserId { get; set; }
 
-        public string UserId { get; set; } = null!;
+    public string? Specialty { get; set; }
+    public string? LicenseNumber { get; set; }
 
-        // بيانات الدكتور
-        public string? Specialty { get; set; }
-        public string? LicenseNumber { get; set; }
-
-        // Navigation
-
-    }
+    public ICollection<Appointment> Appointments { get; set; }
 }
+
+

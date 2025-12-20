@@ -1,11 +1,9 @@
-﻿using MedScope.Domain.Enums;
-
-namespace MedScope.Domain.Entities
+﻿public class Patient : AuditableEntity
 {
-    public class Patient : AuditableEntity
-    {
-        public string UserId { get; set; }   // ⬅ مهم لربط المريض باليوزر
+    public int Id { get; set; }
+    public string UserId { get; set; }
 
-
-    }
+    public ICollection<Appointment> Appointments { get; set; }
 }
+
+

@@ -1,9 +1,8 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 
 namespace MedScope.Infrastructure.Identity
 {
@@ -16,21 +15,34 @@ namespace MedScope.Infrastructure.Identity
             _settings = options.Value;
         }
 
-        public string GenerateToken(ApplicationUser user, string role, out DateTime expiresAt)
+        public string GenerateToken(
+            ApplicationUser user,
+            IList<string> roles,
+            out DateTime expiresAt)
         {
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email!),
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
-                new Claim(ClaimTypes.Role, role)
+                new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}")
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.Key));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            // 👈 دي أهم حتة
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
-            expiresAt = DateTime.UtcNow.AddMinutes(_settings.ExpiryInMinutes);
+            var key = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(_settings.Key));
+
+            var creds = new SigningCredentials(
+                key,
+                SecurityAlgorithms.HmacSha256);
+
+            expiresAt = DateTime.UtcNow
+                .AddMinutes(_settings.ExpiryInMinutes);
 
             var token = new JwtSecurityToken(
                 issuer: _settings.Issuer,
@@ -40,7 +52,8 @@ namespace MedScope.Infrastructure.Identity
                 signingCredentials: creds
             );
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return new JwtSecurityTokenHandler()
+                .WriteToken(token);
         }
     }
 }
