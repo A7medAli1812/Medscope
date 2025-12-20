@@ -16,9 +16,13 @@
   overflow: hidden;
   height: 100vh;
   transform-origin: center center;
-  background-color:#fff;
+  /* background-color:#fff; */
+  background-image: url(/public/Login.jpeg);
+  background-size: cover;
+  background-position: center;
 }
 [data-theme="dark"] .main-content {
   background-color: #111;
+  background-image: url(/public/Sign\ up-Dark.jpeg);
 }
 

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import "../pages/LoginForm.css";
+import "./LoginForm.css";
 import { useTranslation } from "react-i18next";
 
 const Login = () => {

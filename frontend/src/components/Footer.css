@@ -1,8 +1,8 @@
 .footer {
-  background: #fff;
+  background: #090D19;
   position: relative;
   z-index: 100;
-  border-top: 1px solid var(--border-color);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.285);
 }
 [data-theme="dark"] .footer {
   background: #111;

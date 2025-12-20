@@ -17,10 +17,10 @@ body {
   overflow: hidden; /* Remove scrollbar completely */
   margin: 0;
   padding: 0;
-  background-image: url('/background.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  /* background-image: url('/background.jpg'); */
+  /* background-size: cover; */
+  /* background-position: center; */
+  /* background-repeat: no-repeat; */
 }
 
 html[dir="rtl"] {
@@ -111,7 +111,6 @@ html, body {
   -ms-overflow-style: none; /* Internet Explorer و Edge القديم */
 }
 
-/* ✅ خلي الصفحة قابلة للسكرول بالبكرة أو الكيبورد */
 body {
   overscroll-behavior: contain;
   touch-action: pan-y;

@@ -1,5 +1,5 @@
 .header {
-  background-color: #fff;
+  background-color: #090D19;
   padding: 0.2rem 0;
   position: relative;
   z-index: 100;
@@ -93,12 +93,15 @@
 }
 
 .nav-link {
-  color: var(--text-primary);
+  color: #fff;
   text-decoration: none;
   font-weight: 500;
   font-size: 0.9rem;
   transition: var(--transition);
   position: relative;
+}
+[data-theme="dark"] .nav-link {
+  color:#fcfdff70;
 }
 
 .nav-link:hover {
@@ -141,7 +144,7 @@
 .lang-switch-btn {
   background: none;
   border: none;
-  color: var(--text-color, #0a4059);
+  color: #a6adaf;
   font-size: 1.3rem;
   cursor: pointer;
   transition: transform 0.2s ease, color 0.3s ease;
@@ -152,7 +155,7 @@
 
 
 .lang-switch-btn:hover {
-  color: #0f6085;
+  color: #cdebf9;
   transform: scale(1.1);
 }
 
