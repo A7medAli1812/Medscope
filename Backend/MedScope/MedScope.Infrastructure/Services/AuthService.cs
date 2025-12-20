@@ -119,12 +119,10 @@ namespace MedScope.Infrastructure.Services
             }
 
             var roles = await _userManager.GetRolesAsync(user);
-            var role = roles.FirstOrDefault() ?? "Patient";
 
-            // ✅ Generate JWT
             var token = _jwtTokenGenerator.GenerateToken(
                 user,
-                role,
+                roles,
                 out DateTime expiresAt);
 
             return new AuthResponseDto
@@ -134,11 +132,12 @@ namespace MedScope.Infrastructure.Services
                 UserId = user.Id,
                 FullName = $"{user.FirstName} {user.LastName}",
                 Email = user.Email,
-                Role = role,
+                Role = roles.FirstOrDefault(),
                 Token = token,
                 ExpiresAt = expiresAt
             };
         }
+
 
     }
 }

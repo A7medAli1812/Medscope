@@ -1,16 +1,19 @@
-﻿namespace MedScope.Domain.Entities
+﻿using MedScope.Domain.Entities;
+
+public class Appointment : AuditableEntity
 {
-    public class Appointment : AuditableEntity
-    {
-        public int PatientId { get; set; }
-        public Patient Patient { get; set; } = null!;
+    public int Id { get; set; }
 
-        public int DoctorId { get; set; }
-        public Doctor Doctor { get; set; } = null!;
+    public DateOnly Date { get; set; }
+    public TimeOnly Time { get; set; }
 
-        public DateTime AppointmentDate { get; set; }
-        public string Status { get; set; } = "Pending"; // Pending / Confirmed / Cancelled
+    public string VisitType { get; set; }
+    public AppointmentStatus Status { get; set; }
 
-        public string? Notes { get; set; }
-    }
+    // Relations
+    public int PatientId { get; set; }
+    public Patient Patient { get; set; }
+
+    public int DoctorId { get; set; }
+    public Doctor Doctor { get; set; }
 }
