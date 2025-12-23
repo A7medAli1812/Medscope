@@ -9,7 +9,12 @@ namespace MedScope.Application.Abstractions.Appointments
 
         // new - Create Appointment
         Task<int> CreateAppointmentAsync(CreateAppointmentDto dto);
+
+
+        Task CancelAppointmentAsync(int appointmentId);
+
     }
+
 }
 
 

@@ -82,6 +82,20 @@ namespace MedScope.Infrastructure.Services
 
             return appointment.Id;
         }
+        //Cancel Appointment 
+        public async Task CancelAppointmentAsync(int appointmentId)
+        {
+            var appointment = await _context.Appointments
+                .FirstOrDefaultAsync(a => a.Id == appointmentId);
+
+            if (appointment == null)
+                throw new Exception("Appointment not found");
+
+            appointment.Status = AppointmentStatus.Cancelled;
+
+            await _context.SaveChangesAsync();
+        }
+
     }
 }
 

@@ -42,5 +42,13 @@ namespace MedScope.WebApi.Controllers
                 appointmentId
             });
         }
+        // PUT /api/admin/appointments/{id}/cancel
+        [HttpPut("{id}/cancel")]
+        public async Task<IActionResult> CancelAppointment(int id)
+        {
+            await _appointmentService.CancelAppointmentAsync(id);
+            return Ok("Appointment cancelled successfully");
+        }
+
     }
 }
