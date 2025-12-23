@@ -9,7 +9,7 @@ using MedScope.Application.DTOs.Admin;
 namespace MedScope.WebApi.Controllers
 {
     [ApiController]
-    [Route("api/admin")]
+    [Route("api/admin/users")]
     public class AdminController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
