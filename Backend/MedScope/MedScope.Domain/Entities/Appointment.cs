@@ -1,13 +1,14 @@
-﻿using MedScope.Domain.Entities;
-
-public class Appointment : AuditableEntity
+﻿public class Appointment : AuditableEntity
 {
     public int Id { get; set; }
 
     public DateOnly Date { get; set; }
     public TimeOnly Time { get; set; }
 
+    public int PatientAge { get; set; }      // ✅ إضافة
     public string VisitType { get; set; }
+    public string? Notes { get; set; }        // ✅ إضافة
+
     public AppointmentStatus Status { get; set; }
 
     // Relations
@@ -17,3 +18,4 @@ public class Appointment : AuditableEntity
     public int DoctorId { get; set; }
     public Doctor Doctor { get; set; }
 }
+

@@ -1,9 +1,10 @@
 ﻿using MedScope.Application.Interfaces;
+using MedScope.Application.Abstractions.Appointments;
 using MedScope.Infrastructure.Identity;
 using MedScope.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MedScope.Application.Abstractions.Appointments;
+
 namespace MedScope.Infrastructure
 {
     public static class DependencyInjection
@@ -12,31 +13,23 @@ namespace MedScope.Infrastructure
             this IServiceCollection services,
             IConfiguration configuration)
         {
-            // Auth Service
+            // =========================
+            // Auth
+            // =========================
             services.AddScoped<IAuthService, AuthService>();
 
-            // Auth Service
-            services.AddScoped<IAuthService, AuthService>();
+            services.Configure<AuthSettings>(
+                configuration.GetSection("AuthSettings"));
 
-            // Appointment Service ✅ (ضيفي ده)
+            services.AddScoped<JwtTokenGenerator>();
+
+            // =========================
+            // Appointments
+            // =========================
             services.AddScoped<IAppointmentService, AppointmentService>();
-
-            // JWT Settings
-            services.Configure<AuthSettings>(
-                configuration.GetSection("AuthSettings"));
-
-            // JWT Generator
-            services.AddScoped<JwtTokenGenerator>();
-
-
-            // 🔐 JWT Settings
-            services.Configure<AuthSettings>(
-                configuration.GetSection("AuthSettings"));
-
-            // 🔐 JWT Generator
-            services.AddScoped<JwtTokenGenerator>();
 
             return services;
         }
     }
 }
+
