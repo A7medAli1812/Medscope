@@ -96,6 +96,31 @@ namespace MedScope.Infrastructure.Services
             await _context.SaveChangesAsync();
         }
 
+        //RescheduleAppointment
+        public async Task RescheduleAppointmentAsync(
+    int appointmentId,
+    RescheduleAppointmentDto dto)
+        {
+            var appointment = await _context.Appointments
+                .FirstOrDefaultAsync(a => a.Id == appointmentId);
+
+            if (appointment == null)
+                throw new Exception("Appointment not found");
+
+            appointment.DoctorId = dto.DoctorId;
+            appointment.Date = DateOnly.FromDateTime(dto.Date);
+            appointment.Time = TimeOnly.Parse(dto.Time);
+            appointment.PatientAge = dto.PatientAge;
+            appointment.VisitType = dto.VisitType;
+            appointment.Notes = dto.Notes;
+
+            // بيرجع New علشان يفضل ظاهر في New Appointments
+            appointment.Status = AppointmentStatus.New;
+
+            await _context.SaveChangesAsync();
+        }
+
+
     }
 }
 

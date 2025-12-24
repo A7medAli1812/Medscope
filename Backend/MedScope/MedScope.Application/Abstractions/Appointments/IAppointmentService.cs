@@ -13,6 +13,11 @@ namespace MedScope.Application.Abstractions.Appointments
 
         Task CancelAppointmentAsync(int appointmentId);
 
+        Task RescheduleAppointmentAsync(
+    int appointmentId,
+    RescheduleAppointmentDto dto);
+
+
     }
 
 }

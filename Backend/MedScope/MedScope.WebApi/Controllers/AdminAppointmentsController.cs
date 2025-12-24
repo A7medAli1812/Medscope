@@ -50,5 +50,17 @@ namespace MedScope.WebApi.Controllers
             return Ok("Appointment cancelled successfully");
         }
 
+        //PUT /api/admin/appointments/{id}/reschedule
+        [HttpPut("{id}/reschedule")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> RescheduleAppointment(
+    int id,
+    [FromBody] RescheduleAppointmentDto dto)
+        {
+            await _appointmentService.RescheduleAppointmentAsync(id, dto);
+            return Ok("Appointment rescheduled successfully");
+        }
+
+
     }
 }
