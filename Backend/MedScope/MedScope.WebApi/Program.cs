@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Runtime.Intrinsics.X86;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -57,7 +58,19 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+Array.Empty<string>();
+$ git status
+On branch backend-yousef
+Your branch is up to date with 'origin/backend-yousef'.
 
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   Backend / MedScope / MedScope.WebApi / Program.cs
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+// joe
 // =======================
 // DbContext
 // =======================
