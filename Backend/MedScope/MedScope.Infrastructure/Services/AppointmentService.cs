@@ -99,7 +99,7 @@ namespace MedScope.Infrastructure.Services
         //RescheduleAppointment
         public async Task RescheduleAppointmentAsync(
     int appointmentId,
-    RescheduleAppointmentDto dto)
+    RescheduleDateTimeDto dto)   // لاحظي DTO جديد
         {
             var appointment = await _context.Appointments
                 .FirstOrDefaultAsync(a => a.Id == appointmentId);
@@ -107,18 +107,63 @@ namespace MedScope.Infrastructure.Services
             if (appointment == null)
                 throw new Exception("Appointment not found");
 
-            appointment.DoctorId = dto.DoctorId;
+            // ✅ نغير اليوم والوقت بس
             appointment.Date = DateOnly.FromDateTime(dto.Date);
             appointment.Time = TimeOnly.Parse(dto.Time);
-            appointment.PatientAge = dto.PatientAge;
-            appointment.VisitType = dto.VisitType;
-            appointment.Notes = dto.Notes;
 
-            // بيرجع New علشان يفضل ظاهر في New Appointments
+            // الحالة تفضل New
             appointment.Status = AppointmentStatus.New;
 
             await _context.SaveChangesAsync();
         }
+
+
+
+        public async Task<AppointmentDetailsDto> GetAppointmentByIdAsync(int appointmentId)
+        {
+            var query =
+                from a in _context.Appointments
+                    .Include(x => x.Patient)
+                    .Include(x => x.Doctor)
+
+                join patientUser in _context.Users
+                    on a.Patient.UserId equals patientUser.Id
+
+                join doctorUser in _context.Users
+                    on a.Doctor.UserId equals doctorUser.Id
+
+                where a.Id == appointmentId
+
+                select new AppointmentDetailsDto
+                {
+                    AppointmentId = a.Id,
+
+                    PatientId = a.PatientId,
+                    PatientName =
+                        patientUser.FirstName + " " + patientUser.LastName,
+
+                    DoctorId = a.DoctorId,
+                    DoctorName =
+                        doctorUser.FirstName + " " + doctorUser.LastName,
+
+                    Date = a.Date,
+                    Time = a.Time,
+
+                    PatientAge = a.PatientAge,
+                    VisitType = a.VisitType,
+                    Notes = a.Notes
+                };
+
+            var result = await query.FirstOrDefaultAsync();
+
+            if (result == null)
+                throw new Exception("Appointment not found");
+
+            return result;
+        }
+
+
+
 
 
     }
