@@ -4,6 +4,7 @@ using MedScope.Domain.Entities;
 using MedScope.Infrastructure.Identity;
 using MedScope.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace MedScope.Infrastructure.Services
 {
@@ -27,7 +28,7 @@ namespace MedScope.Infrastructure.Services
         }
 
         // =========================
-        // REGISTER
+        // REGISTER (Patient only)
         // =========================
         public async Task<AuthResultDto> RegisterAsync(RegisterDto dto)
         {
@@ -71,11 +72,8 @@ namespace MedScope.Infrastructure.Services
                 };
             }
 
-            // Ensure Patient role exists
             if (!await _roleManager.RoleExistsAsync("Patient"))
-            {
                 await _roleManager.CreateAsync(new IdentityRole("Patient"));
-            }
 
             await _userManager.AddToRoleAsync(user, "Patient");
 
@@ -94,7 +92,7 @@ namespace MedScope.Infrastructure.Services
         }
 
         // =========================
-        // LOGIN (JWT)
+        // LOGIN (JWT + HospitalId)
         // =========================
         public async Task<AuthResponseDto> LoginAsync(LoginDto dto)
         {
@@ -120,9 +118,54 @@ namespace MedScope.Infrastructure.Services
 
             var roles = await _userManager.GetRolesAsync(user);
 
+            // =========================
+            // 🔑 تحديد HospitalId حسب الدور
+            // =========================
+            int hospitalId = 0;
+
+            if (roles.Contains("Admin"))
+            {
+                var admin = await _context.Admins
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(a => a.UserId == user.Id);
+
+                if (admin == null)
+                {
+                    return new AuthResponseDto
+                    {
+                        IsSuccess = false,
+                        Message = "Admin is not linked to a hospital"
+                    };
+                }
+
+                hospitalId = admin.HospitalId;
+            }
+            else if (roles.Contains("Doctor"))
+            {
+                var doctor = await _context.Doctors
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(d => d.UserId == user.Id);
+
+                if (doctor == null)
+                {
+                    return new AuthResponseDto
+                    {
+                        IsSuccess = false,
+                        Message = "Doctor is not linked to a hospital"
+                    };
+                }
+
+                hospitalId = doctor.HospitalId;
+            }
+            // Patient → hospitalId = 0 (مش محتاجينه)
+
+            // =========================
+            // Generate JWT
+            // =========================
             var token = _jwtTokenGenerator.GenerateToken(
                 user,
                 roles,
+                hospitalId,
                 out DateTime expiresAt);
 
             return new AuthResponseDto
@@ -137,7 +180,5 @@ namespace MedScope.Infrastructure.Services
                 ExpiresAt = expiresAt
             };
         }
-
-
     }
 }

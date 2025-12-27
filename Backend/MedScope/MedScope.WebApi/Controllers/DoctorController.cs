@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace MedScope.WebApi.Controllers
 {
     [ApiController]
-    [Route("api/doctor")]
+    [Route("api/[controller]")]
     [Authorize(Roles = "Admin")]
     public class DoctorController : ControllerBase
     {
@@ -30,10 +30,18 @@ namespace MedScope.WebApi.Controllers
         // =========================
         // CREATE DOCTOR (Admin only)
         // =========================
-        [HttpPost("create-doctor")]
-        public async Task<IActionResult> CreateDoctor(
-            [FromBody] CreateDoctorDto dto)
+        [HttpPost("create")]
+        public async Task<IActionResult> CreateDoctor([FromBody] CreateDoctorDto dto)
         {
+            // 🔐 خُد HospitalId من التوكن
+            var hospitalIdClaim = User.FindFirst("HospitalId");
+
+            if (hospitalIdClaim == null)
+                return Unauthorized("Hospital not found in token");
+
+            var hospitalId = int.Parse(hospitalIdClaim.Value);
+
+            // إنشاء اليوزر
             var user = new ApplicationUser
             {
                 UserName = dto.Email,
@@ -46,21 +54,25 @@ namespace MedScope.WebApi.Controllers
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
 
+            // Role Doctor
             if (!await _roleManager.RoleExistsAsync("Doctor"))
                 await _roleManager.CreateAsync(new IdentityRole("Doctor"));
 
             await _userManager.AddToRoleAsync(user, "Doctor");
 
+            // إضافة الدكتور وربطه بنفس مستشفى الأدمن
             _context.Doctors.Add(new Doctor
             {
                 UserId = user.Id,
                 Specialty = dto.Specialty,
-                LicenseNumber = dto.LicenseNumber
+                LicenseNumber = dto.LicenseNumber,
+                HospitalId = hospitalId
             });
 
             await _context.SaveChangesAsync();
 
             return Ok("Doctor created successfully");
         }
+
     }
 }

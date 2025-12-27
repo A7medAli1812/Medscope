@@ -23,6 +23,7 @@ namespace MedScope.Infrastructure.Persistence
         public DbSet<Bed> Beds { get; set; }
         public DbSet<BloodBank> BloodBanks { get; set; }
         public DbSet<MedicalRecord> MedicalRecords { get; set; }
+        public DbSet<Hospital> Hospitals { get; set; }
 
         // =======================
         // Fluent API

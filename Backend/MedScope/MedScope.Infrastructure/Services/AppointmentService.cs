@@ -16,8 +16,10 @@ namespace MedScope.Infrastructure.Services
             _context = context;
         }
 
-        // ✅ القديم — سيبيه زي ما هو
-        public async Task<List<AdminAppointmentDto>> GetNewAppointmentsAsync()
+        // =========================
+        // Get New Appointments (Admin)
+        // =========================
+        public async Task<List<AdminAppointmentDto>> GetNewAppointmentsAsync(int hospitalId)
         {
             var query =
                 from a in _context.Appointments
@@ -31,6 +33,7 @@ namespace MedScope.Infrastructure.Services
                     on a.Doctor.UserId equals doctorUser.Id
 
                 where a.Status == AppointmentStatus.New
+                      && a.HospitalId == hospitalId
 
                 select new AdminAppointmentDto
                 {
@@ -42,7 +45,7 @@ namespace MedScope.Infrastructure.Services
                     PatientName =
                         patientUser.FirstName + " " + patientUser.LastName,
 
-                    PatientAge = a.PatientAge, // ✅ من Appointment
+                    PatientAge = a.PatientAge,
 
                     DoctorName =
                         doctorUser.FirstName + " " + doctorUser.LastName
@@ -51,17 +54,27 @@ namespace MedScope.Infrastructure.Services
             return await query.ToListAsync();
         }
 
-
-        // 🆕 الجديد — Create Appointment
-        public async Task<int> CreateAppointmentAsync(CreateAppointmentDto dto)
+        // =========================
+        // Create Appointment
+        // =========================
+        public async Task<int> CreateAppointmentAsync(
+            CreateAppointmentDto dto,
+            int hospitalId)
         {
-            var patientExists = await _context.Patients.AnyAsync(p => p.Id == dto.PatientId);
+            // 🔒 Doctor لازم يكون من نفس المستشفى
+            var doctor = await _context.Doctors
+                .FirstOrDefaultAsync(d =>
+                    d.Id == dto.DoctorId &&
+                    d.HospitalId == hospitalId);
+
+            if (doctor == null)
+                throw new Exception("Doctor does not belong to your hospital");
+
+            var patientExists =
+                await _context.Patients.AnyAsync(p => p.Id == dto.PatientId);
+
             if (!patientExists)
                 throw new Exception("Patient not found");
-
-            var doctorExists = await _context.Doctors.AnyAsync(d => d.Id == dto.DoctorId);
-            if (!doctorExists)
-                throw new Exception("Doctor not found");
 
             var appointment = new Appointment
             {
@@ -70,11 +83,13 @@ namespace MedScope.Infrastructure.Services
                 Date = DateOnly.FromDateTime(dto.Date),
                 Time = TimeOnly.Parse(dto.Time),
 
-
                 PatientAge = dto.PatientAge,
                 VisitType = dto.VisitType,
                 Notes = dto.Notes,
-                Status = AppointmentStatus.New
+                Status = AppointmentStatus.New,
+
+                // 🔥 Multi-Hospital
+                HospitalId = hospitalId
             };
 
             _context.Appointments.Add(appointment);
@@ -82,44 +97,55 @@ namespace MedScope.Infrastructure.Services
 
             return appointment.Id;
         }
-        //Cancel Appointment 
-        public async Task CancelAppointmentAsync(int appointmentId)
+
+        // =========================
+        // Cancel Appointment
+        // =========================
+        public async Task CancelAppointmentAsync(
+            int appointmentId,
+            int hospitalId)
         {
             var appointment = await _context.Appointments
-                .FirstOrDefaultAsync(a => a.Id == appointmentId);
+                .FirstOrDefaultAsync(a =>
+                    a.Id == appointmentId &&
+                    a.HospitalId == hospitalId);
 
             if (appointment == null)
                 throw new Exception("Appointment not found");
 
             appointment.Status = AppointmentStatus.Cancelled;
-
             await _context.SaveChangesAsync();
         }
 
-        //RescheduleAppointment
+        // =========================
+        // Reschedule Appointment
+        // =========================
         public async Task RescheduleAppointmentAsync(
-    int appointmentId,
-    RescheduleDateTimeDto dto)   // لاحظي DTO جديد
+            int appointmentId,
+            RescheduleDateTimeDto dto,
+            int hospitalId)
         {
             var appointment = await _context.Appointments
-                .FirstOrDefaultAsync(a => a.Id == appointmentId);
+                .FirstOrDefaultAsync(a =>
+                    a.Id == appointmentId &&
+                    a.HospitalId == hospitalId);
 
             if (appointment == null)
                 throw new Exception("Appointment not found");
 
-            // ✅ نغير اليوم والوقت بس
             appointment.Date = DateOnly.FromDateTime(dto.Date);
             appointment.Time = TimeOnly.Parse(dto.Time);
-
-            // الحالة تفضل New
             appointment.Status = AppointmentStatus.New;
 
             await _context.SaveChangesAsync();
         }
 
-
-
-        public async Task<AppointmentDetailsDto> GetAppointmentByIdAsync(int appointmentId)
+        // =========================
+        // Get Appointment Details
+        // =========================
+        public async Task<AppointmentDetailsDto> GetAppointmentByIdAsync(
+            int appointmentId,
+            int hospitalId)
         {
             var query =
                 from a in _context.Appointments
@@ -133,6 +159,7 @@ namespace MedScope.Infrastructure.Services
                     on a.Doctor.UserId equals doctorUser.Id
 
                 where a.Id == appointmentId
+                      && a.HospitalId == hospitalId
 
                 select new AppointmentDetailsDto
                 {
@@ -161,11 +188,5 @@ namespace MedScope.Infrastructure.Services
 
             return result;
         }
-
-
-
-
-
     }
 }
-

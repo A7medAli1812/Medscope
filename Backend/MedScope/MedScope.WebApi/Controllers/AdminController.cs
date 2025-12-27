@@ -4,12 +4,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MedScope.Application.DTOs.Admin;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace MedScope.WebApi.Controllers
 {
     [ApiController]
     [Route("api/admin/users")]
+    // 🔒 مؤقتًا مفتوحة – لاحقًا تتحول SuperAdmin
+    // [Authorize(Roles = "SuperAdmin")]
     public class AdminController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -31,8 +33,15 @@ namespace MedScope.WebApi.Controllers
         // =========================
         [HttpPost("create-admin")]
         public async Task<IActionResult> CreateAdmin([FromBody] CreateAdminDto dto)
-
         {
+            // 1️⃣ تأكد إن المستشفى موجودة
+            var hospitalExists = await _context.Hospitals
+                .AnyAsync(h => h.Id == dto.HospitalId);
+
+            if (!hospitalExists)
+                return BadRequest("Invalid HospitalId");
+
+            // 2️⃣ إنشاء اليوزر
             var user = new ApplicationUser
             {
                 UserName = dto.Email,
@@ -45,14 +54,17 @@ namespace MedScope.WebApi.Controllers
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
 
+            // 3️⃣ تأكد إن Role Admin موجود
             if (!await _roleManager.RoleExistsAsync("Admin"))
                 await _roleManager.CreateAsync(new IdentityRole("Admin"));
 
             await _userManager.AddToRoleAsync(user, "Admin");
 
+            // 4️⃣ ربط Admin بالمستشفى
             _context.Admins.Add(new Domain.Entities.Admin
             {
-                UserId = user.Id
+                UserId = user.Id,
+                HospitalId = dto.HospitalId
             });
 
             await _context.SaveChangesAsync();

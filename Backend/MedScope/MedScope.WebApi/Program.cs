@@ -74,8 +74,24 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
+// 🔥 الحل الحاسم لمشكلة 404 الوهمي
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Events.OnRedirectToLogin = context =>
+    {
+        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+        return Task.CompletedTask;
+    };
+
+    options.Events.OnRedirectToAccessDenied = context =>
+    {
+        context.Response.StatusCode = StatusCodes.Status403Forbidden;
+        return Task.CompletedTask;
+    };
+});
+
 // =======================
-// JWT Authentication 🔐 (المهم هنا)
+// JWT Authentication 🔐
 // =======================
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -96,10 +112,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(settings.Key)
             ),
-            RoleClaimType = ClaimTypes.Role, // ✅ السطر الحاسم
+            RoleClaimType = ClaimTypes.Role,
             NameClaimType = ClaimTypes.NameIdentifier
-
-
         };
     });
 
@@ -123,15 +137,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseRouting();  // ← ⚠️ ضيف السطر ده!
-
-
+app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 
-
 app.Run();
-
