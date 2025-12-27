@@ -18,6 +18,7 @@ namespace MedScope.Infrastructure.Identity
         public string GenerateToken(
             ApplicationUser user,
             IList<string> roles,
+            int hospitalId,                 // ✅ دخلنا HospitalId
             out DateTime expiresAt)
         {
             var claims = new List<Claim>
@@ -28,7 +29,10 @@ namespace MedScope.Infrastructure.Identity
                 new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}")
             };
 
-            // 👈 دي أهم حتة
+            // ✅ Claim الخاصة بالمستشفى (Multi-Hospital)
+            claims.Add(new Claim("HospitalId", hospitalId.ToString()));
+
+            // ✅ Roles
             foreach (var role in roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));

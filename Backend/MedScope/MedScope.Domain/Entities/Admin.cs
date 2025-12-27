@@ -8,5 +8,7 @@
 
         // بيانات إضافية
         public string? Department { get; set; }
+        public int HospitalId { get; set; }
+        public Hospital Hospital { get; set; }
     }
 }

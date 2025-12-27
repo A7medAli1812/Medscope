@@ -4,28 +4,27 @@ namespace MedScope.Application.Abstractions.Appointments
 {
     public interface IAppointmentService
     {
-        // existing
-        Task<List<AdminAppointmentDto>> GetNewAppointmentsAsync();
+        Task<List<AdminAppointmentDto>> GetNewAppointmentsAsync(int hospitalId);
 
-        // new - Create Appointment
-        Task<int> CreateAppointmentAsync(CreateAppointmentDto dto);
+        Task<int> CreateAppointmentAsync(
+            CreateAppointmentDto dto,
+            int hospitalId
+        );
 
-
-        Task CancelAppointmentAsync(int appointmentId);
+        Task CancelAppointmentAsync(
+            int appointmentId,
+            int hospitalId
+        );
 
         Task RescheduleAppointmentAsync(
-     int appointmentId,
-     RescheduleDateTimeDto dto
- );
+            int appointmentId,
+            RescheduleDateTimeDto dto,
+            int hospitalId
+        );
 
-        Task<AppointmentDetailsDto> GetAppointmentByIdAsync(int appointmentId);
-
-
-
-
+        Task<AppointmentDetailsDto> GetAppointmentByIdAsync(
+            int appointmentId,
+            int hospitalId
+        );
     }
-
 }
-
-
-

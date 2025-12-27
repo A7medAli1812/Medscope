@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace MedScope.WebApi.Controllers
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-
     [ApiController]
     [Route("api/admin/appointments")]
     public class AdminAppointmentsController : ControllerBase
@@ -19,61 +18,88 @@ namespace MedScope.WebApi.Controllers
             _appointmentService = appointmentService;
         }
 
+        // 🔑 Helper صغير نستخدمه في كل الأكشنز
+        private int CurrentHospitalId =>
+            int.Parse(User.FindFirst("HospitalId")!.Value);
+
+        // =========================
         // GET /api/admin/appointments/new
+        // =========================
         [HttpGet("new")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<List<AdminAppointmentDto>>> GetNewAppointments()
         {
-            var result = await _appointmentService.GetNewAppointmentsAsync();
+            var hospitalId = CurrentHospitalId;
+
+            var result =
+                await _appointmentService.GetNewAppointmentsAsync(hospitalId);
+
             return Ok(result);
         }
 
+        // =========================
         // POST /api/admin/appointments
+        // =========================
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateAppointment(
             [FromBody] CreateAppointmentDto dto)
         {
+            var hospitalId = CurrentHospitalId;
+
             var appointmentId =
-                await _appointmentService.CreateAppointmentAsync(dto);
+                await _appointmentService.CreateAppointmentAsync(dto, hospitalId);
+
             return Ok(new
             {
                 message = "Appointment created successfully",
                 appointmentId
             });
         }
+
+        // =========================
         // PUT /api/admin/appointments/{id}/cancel
+        // =========================
         [HttpPut("{id}/cancel")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CancelAppointment(int id)
         {
-            await _appointmentService.CancelAppointmentAsync(id);
+            var hospitalId = CurrentHospitalId;
+
+            await _appointmentService.CancelAppointmentAsync(id, hospitalId);
+
             return Ok("Appointment cancelled successfully");
         }
 
-        //PUT /api/admin/appointments/{id}/reschedule
+        // =========================
         // PUT /api/admin/appointments/{id}/reschedule
+        // =========================
         [HttpPut("{id}/reschedule")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> RescheduleAppointment(
             int id,
             [FromBody] RescheduleDateTimeDto dto)
         {
-            await _appointmentService.RescheduleAppointmentAsync(id, dto);
+            var hospitalId = CurrentHospitalId;
+
+            await _appointmentService.RescheduleAppointmentAsync(id, dto, hospitalId);
+
             return Ok("Appointment rescheduled successfully");
         }
 
-
-        // GET: api/admin/appointments/{id}
+        // =========================
+        // GET /api/admin/appointments/{id}
+        // =========================
         [HttpGet("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<AppointmentDetailsDto>> GetAppointmentById(int id)
         {
-            var result = await _appointmentService.GetAppointmentByIdAsync(id);
+            var hospitalId = CurrentHospitalId;
+
+            var result =
+                await _appointmentService.GetAppointmentByIdAsync(id, hospitalId);
+
             return Ok(result);
         }
-
-
-
-
     }
 }
