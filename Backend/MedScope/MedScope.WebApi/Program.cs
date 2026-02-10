@@ -98,6 +98,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     {
         var settings = builder.Configuration
             .GetSection("AuthSettings")
+            .GetSection("AuthSettings")
             .Get<AuthSettings>();
 
         options.TokenValidationParameters = new TokenValidationParameters
