@@ -1,0 +1,220 @@
+.home-container {
+    color: #333;
+}
+
+.home-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.page-title {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.notification-icon {
+    position: relative;
+    font-size: 1.2rem;
+    color: #555;
+    cursor: pointer;
+}
+
+.notification-icon .dot {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 8px;
+    height: 8px;
+    background-color: #ef4444;
+    border-radius: 50%;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.user-role {
+    font-size: 0.8rem;
+    color: #777;
+}
+
+/* Main Hospital Card */
+.hospital-card {
+    background-color: #084668;
+    color: white;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.card-icon {
+    font-size: 1.5rem;
+    color: #38bdf8;
+}
+
+.card-header h2 {
+    font-size: 1.4rem;
+    margin: 0;
+}
+
+.card-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4rem;
+}
+
+.hospital-details,
+.specialties-section {
+    flex: 1;
+    min-width: 300px;
+}
+
+.hospital-details h3,
+.specialties-section h3 {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    color: #bae6fd;
+}
+
+.detail-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+}
+
+.detail-row i {
+    width: 20px;
+    text-align: center;
+    color: #38bdf8;
+}
+
+.specialties-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem 2rem;
+}
+
+.specialty-item {
+    display: flex;
+    align-items: center;
+    font-size: 0.95rem;
+}
+
+.bullet {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: #38bdf8;
+    border-radius: 50%;
+    margin-right: 0.8rem;
+}
+
+html[dir="rtl"] .bullet {
+    margin-right: 0;
+    margin-left: 0.8rem;
+}
+
+.bottom-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.status-card {
+    background-color: #084668;
+    border-radius: 12px;
+    padding: 2rem;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 200px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.icon-circle {
+    width: 50px;
+    height: 50px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.icon-circle i {
+    font-size: 1.5rem;
+    color: #38bdf8;
+}
+
+.status-card p {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    color: #e0f2fe;
+}
+
+.status-card h4 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.big-number {
+    font-size: 1.8rem !important;
+    font-weight: bold;
+    color: white !important;
+}
+
+/* Response Breakpoints */
+@media (max-width: 768px) {
+    .bottom-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .card-content {
+        flex-direction: column;
+        gap: 2rem;
+    }
+}
