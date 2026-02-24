@@ -8,7 +8,8 @@
         public string PatientName { get; set; }
         public int PatientAge { get; set; }
         public string DoctorName { get; set; }
-        public string VisitType { get; set; }
+        public string? VisitType { get; set; }
+        public string? Specialty { get; set; }
     }
 }
 

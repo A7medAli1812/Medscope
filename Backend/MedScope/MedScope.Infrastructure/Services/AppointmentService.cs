@@ -19,7 +19,13 @@ namespace MedScope.Infrastructure.Services
         // =========================
         // Get New Appointments (Admin)
         // =========================
-        public async Task<List<AdminAppointmentDto>> GetNewAppointmentsAsync(int hospitalId)
+        public async Task<(List<AdminAppointmentDto> Data, int TotalCount)>
+            GetNewAppointmentsAsync(
+                int hospitalId,
+                int page,
+                int pageSize,
+                string? search,
+                DateOnly? date)
         {
             var query =
                 from a in _context.Appointments
@@ -41,17 +47,96 @@ namespace MedScope.Infrastructure.Services
                     Date = a.Date,
                     Time = a.Time,
                     VisitType = a.VisitType,
-
-                    PatientName =
-                        patientUser.FirstName + " " + patientUser.LastName,
-
+                    Specialty = null, // 🔥 عشان new مفيهوش specialty
+                    PatientName = patientUser.FirstName + " " + patientUser.LastName,
                     PatientAge = a.PatientAge,
-
-                    DoctorName =
-                        doctorUser.FirstName + " " + doctorUser.LastName
+                    DoctorName = doctorUser.FirstName + " " + doctorUser.LastName
                 };
 
-            return await query.ToListAsync();
+            // 🔎 Search
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(x =>
+                    x.PatientName.Contains(search) ||
+                    x.DoctorName.Contains(search));
+            }
+
+            // 📅 Filter by Date
+            if (date.HasValue)
+            {
+                query = query.Where(x => x.Date == date.Value);
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var data = await query
+                .OrderByDescending(x => x.Date)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (data, totalCount);
+        }
+
+        // =========================
+        // Get Completed Appointments (Admin)
+        // =========================
+        public async Task<(List<AdminAppointmentDto> Data, int TotalCount)>
+            GetCompletedAppointmentsAsync(
+                int hospitalId,
+                int page,
+                int pageSize,
+                string? search,
+                DateOnly? date)
+        {
+            var query =
+                from a in _context.Appointments
+                    .Include(a => a.Patient)
+                    .Include(a => a.Doctor)
+
+                join patientUser in _context.Users
+                    on a.Patient.UserId equals patientUser.Id
+
+                join doctorUser in _context.Users
+                    on a.Doctor.UserId equals doctorUser.Id
+
+                where a.Status == AppointmentStatus.Completed
+                      && a.HospitalId == hospitalId
+
+                select new AdminAppointmentDto
+                {
+                    AppointmentId = a.Id,
+                    Date = a.Date,
+                    Time = a.Time,
+                    PatientName = patientUser.FirstName + " " + patientUser.LastName,
+                    PatientAge = a.PatientAge,
+                    DoctorName = doctorUser.FirstName + " " + doctorUser.LastName,
+                    Specialty = a.Doctor.Specialty   // 👈 هنا الفرق
+                };
+
+            // 🔎 Search
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(x =>
+                    x.PatientName.Contains(search) ||
+                    x.DoctorName.Contains(search));
+            }
+
+            // 📅 Filter by Date
+            if (date.HasValue)
+            {
+                query = query.Where(x => x.Date == date.Value);
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var data = await query
+                .OrderByDescending(x => x.Date)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (data, totalCount);
         }
 
         // =========================
@@ -61,7 +146,6 @@ namespace MedScope.Infrastructure.Services
             CreateAppointmentDto dto,
             int hospitalId)
         {
-            // 🔒 Doctor لازم يكون من نفس المستشفى
             var doctor = await _context.Doctors
                 .FirstOrDefaultAsync(d =>
                     d.Id == dto.DoctorId &&
@@ -82,13 +166,10 @@ namespace MedScope.Infrastructure.Services
                 DoctorId = dto.DoctorId,
                 Date = DateOnly.FromDateTime(dto.Date),
                 Time = TimeOnly.Parse(dto.Time),
-
                 PatientAge = dto.PatientAge,
                 VisitType = dto.VisitType,
                 Notes = dto.Notes,
                 Status = AppointmentStatus.New,
-
-                // 🔥 Multi-Hospital
                 HospitalId = hospitalId
             };
 
@@ -141,6 +222,25 @@ namespace MedScope.Infrastructure.Services
         }
 
         // =========================
+        // Complete Appointment
+        // =========================
+        public async Task CompleteAppointmentAsync(
+            int appointmentId,
+            int hospitalId)
+        {
+            var appointment = await _context.Appointments
+                .FirstOrDefaultAsync(a =>
+                    a.Id == appointmentId &&
+                    a.HospitalId == hospitalId);
+
+            if (appointment == null)
+                throw new Exception("Appointment not found");
+
+            appointment.Status = AppointmentStatus.Completed;
+            await _context.SaveChangesAsync();
+        }
+
+        // =========================
         // Get Appointment Details
         // =========================
         public async Task<AppointmentDetailsDto> GetAppointmentByIdAsync(
@@ -164,18 +264,12 @@ namespace MedScope.Infrastructure.Services
                 select new AppointmentDetailsDto
                 {
                     AppointmentId = a.Id,
-
                     PatientId = a.PatientId,
-                    PatientName =
-                        patientUser.FirstName + " " + patientUser.LastName,
-
+                    PatientName = patientUser.FirstName + " " + patientUser.LastName,
                     DoctorId = a.DoctorId,
-                    DoctorName =
-                        doctorUser.FirstName + " " + doctorUser.LastName,
-
+                    DoctorName = doctorUser.FirstName + " " + doctorUser.LastName,
                     Date = a.Date,
                     Time = a.Time,
-
                     PatientAge = a.PatientAge,
                     VisitType = a.VisitType,
                     Notes = a.Notes
