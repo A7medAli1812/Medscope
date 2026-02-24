@@ -6,7 +6,7 @@ namespace MedScope.Infrastructure.Seed
     {
         public static async Task SeedAsync(RoleManager<IdentityRole> roleManager)
         {
-            string[] roles = { "Patient", "Doctor", "Admin" };
+            string[] roles = { "Patient", "Doctor", "Admin" , "SuperAdmin" };
 
             foreach (var role in roles)
             {
@@ -18,3 +18,4 @@ namespace MedScope.Infrastructure.Seed
         }
     }
 }
+    

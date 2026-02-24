@@ -25,24 +25,62 @@ namespace MedScope.Infrastructure.Seed
                 await userManager.CreateAsync(admin, "Admin@123");
                 await userManager.AddToRoleAsync(admin, "Admin");
             }
+            // ============================
+            // 🔥 Super Admin
+            // ============================
 
-            // ===== Doctor =====
-            var doctorEmail = "doctor@medscope.com";
-            var doctor = await userManager.FindByEmailAsync(doctorEmail);
+            var superAdminEmail = "superadmin@medscope.com";
+            var existingSuperAdmin = await userManager.FindByEmailAsync(superAdminEmail);
 
-            if (doctor == null)
+            if (existingSuperAdmin == null)
             {
-                doctor = new ApplicationUser
+                var superAdminUser = new ApplicationUser
                 {
-                    UserName = doctorEmail,
-                    Email = doctorEmail,
-                    FirstName = "Default",
-                    LastName = "Doctor",
+                    UserName = superAdminEmail,
+                    Email = superAdminEmail,
+                    FirstName = "System",
+                    LastName = "SuperAdmin",
                     EmailConfirmed = true
                 };
 
-                await userManager.CreateAsync(doctor, "Doctor@123");
-                await userManager.AddToRoleAsync(doctor, "Doctor");
+                var createResult = await userManager.CreateAsync(superAdminUser, "SuperAdmin@123");
+
+                if (!createResult.Succeeded)
+                {
+                    foreach (var error in createResult.Errors)
+                    {
+                        Console.WriteLine(error.Description);
+                    }
+                    return;
+                }
+
+                var roleResult = await userManager.AddToRoleAsync(superAdminUser, "SuperAdmin");
+
+                if (!roleResult.Succeeded)
+                {
+                    foreach (var error in roleResult.Errors)
+                    {
+                        Console.WriteLine(error.Description);
+                    }
+                    // ===== Doctor =====
+                    var doctorEmail = "doctor@medscope.com";
+                    var doctor = await userManager.FindByEmailAsync(doctorEmail);
+
+                    if (doctor == null)
+                    {
+                        doctor = new ApplicationUser
+                        {
+                            UserName = doctorEmail,
+                            Email = doctorEmail,
+                            FirstName = "Default",
+                            LastName = "Doctor",
+                            EmailConfirmed = true
+                        };
+
+                        await userManager.CreateAsync(doctor, "Doctor@123");
+                        await userManager.AddToRoleAsync(doctor, "Doctor");
+                    }
+                }
             }
         }
     }
