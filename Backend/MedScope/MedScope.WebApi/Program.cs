@@ -1,6 +1,8 @@
-﻿using MedScope.Infrastructure;
+﻿using MedScope.Application;                 // ✅ مهم
+using MedScope.Infrastructure;
 using MedScope.Infrastructure.Identity;
 using MedScope.Infrastructure.Persistence;
+using MedScope.Infrastructure.Seed;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +15,7 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 // =======================
-// Controllers + Enums
+// Controllers + Enum as String
 // =======================
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -21,7 +23,7 @@ builder.Services.AddControllers()
     );
 
 // =======================
-// Swagger + JWT 🔐
+// Swagger + JWT
 // =======================
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -39,7 +41,7 @@ builder.Services.AddSwaggerGen(c =>
         Scheme = "bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Enter JWT token like: Bearer {token}"
+        Description = "Enter: Bearer {your token}"
     });
 
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -74,56 +76,46 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
-// 🔥 الحل الحاسم لمشكلة 404 الوهمي
-builder.Services.ConfigureApplicationCookie(options =>
+// =======================
+// JWT Authentication
+// =======================
+builder.Services.AddAuthentication(options =>
 {
-    options.Events.OnRedirectToLogin = context =>
-    {
-        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-        return Task.CompletedTask;
-    };
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    var settings = builder.Configuration
+        .GetSection("AuthSettings")
+        .Get<AuthSettings>();
 
-    options.Events.OnRedirectToAccessDenied = context =>
+    options.TokenValidationParameters = new TokenValidationParameters
     {
-        context.Response.StatusCode = StatusCodes.Status403Forbidden;
-        return Task.CompletedTask;
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+
+        ValidIssuer = settings!.Issuer,
+        ValidAudience = settings.Audience,
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(settings.Key)
+        ),
+
+        RoleClaimType = ClaimTypes.Role,
+        NameClaimType = ClaimTypes.NameIdentifier
     };
 });
 
 // =======================
-// JWT Authentication 🔐
+// Application + Infrastructure Layers
 // =======================
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        var settings = builder.Configuration
-            .GetSection("AuthSettings")
-            .Get<AuthSettings>();
-
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-
-            ValidIssuer = settings!.Issuer,
-            ValidAudience = settings.Audience,
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(settings.Key)
-            ),
-            RoleClaimType = ClaimTypes.Role,
-            NameClaimType = ClaimTypes.NameIdentifier
-        };
-    });
-
-// =======================
-// Infrastructure Layer
-// =======================
+builder.Services.AddApplicationLayer();       // 🔥 مهم جداً
 builder.Services.AddInfrastructureLayer(builder.Configuration);
 
 // =======================
-// Build app
+// Build App
 // =======================
 var app = builder.Build();
 
@@ -137,11 +129,24 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseRouting();
 
-app.UseAuthentication();
+app.UseAuthentication();   // لازم قبل Authorization
 app.UseAuthorization();
 
 app.MapControllers();
+
+// =======================
+// Seed Roles & Users
+// =======================
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+
+    await SeedRoles.SeedAsync(roleManager);
+    await SeedUsers.SeedAsync(userManager);
+}
 
 app.Run();

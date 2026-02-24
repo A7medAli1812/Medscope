@@ -1,6 +1,8 @@
-﻿using MedScope.Application.Interfaces;
-using MedScope.Application.Abstractions.Appointments;
+﻿using MedScope.Application.Abstractions.Appointments;
+using MedScope.Application.Abstractions.Persistence;
+using MedScope.Application.Interfaces;
 using MedScope.Infrastructure.Identity;
+using MedScope.Infrastructure.Persistence;
 using MedScope.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,6 +29,7 @@ namespace MedScope.Infrastructure
             // Appointments
             // =========================
             services.AddScoped<IAppointmentService, AppointmentService>();
+            services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
 
             return services;
         }
