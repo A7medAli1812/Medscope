@@ -20,11 +20,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
-        // ✅ Enum يطلع String بدل رقم
         options.JsonSerializerOptions.Converters
             .Add(new JsonStringEnumConverter());
 
-        // ✅ يخفي أي null من الريسبونس
         options.JsonSerializerOptions.DefaultIgnoreCondition =
             JsonIgnoreCondition.WhenWritingNull;
     });
@@ -93,6 +91,8 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
+    options.MapInboundClaims = false; // 🔥 مهم
+
     var settings = builder.Configuration
         .GetSection("AuthSettings")
         .Get<AuthSettings>();

@@ -69,6 +69,13 @@ namespace MedScope.Infrastructure.Persistence
                 .WithOne()
                 .HasForeignKey<SuperAdmin>(s => s.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            // =======================
+            // BloodBank Unique Constraint 🔥
+            // =======================
+            builder.Entity<BloodBank>()
+                .HasIndex(b => new { b.BloodType, b.HospitalId })
+                .IsUnique();
         }
 
         // =======================

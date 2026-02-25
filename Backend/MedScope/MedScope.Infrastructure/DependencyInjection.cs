@@ -1,4 +1,5 @@
 ﻿using MedScope.Application.Abstractions.Appointments;
+using MedScope.Application.Abstractions.Blood;          // 👈 ضيفناه
 using MedScope.Application.Abstractions.Persistence;
 using MedScope.Application.Interfaces;
 using MedScope.Infrastructure.Identity;
@@ -29,6 +30,15 @@ namespace MedScope.Infrastructure
             // Appointments
             // =========================
             services.AddScoped<IAppointmentService, AppointmentService>();
+
+            // =========================
+            // Blood Bank  👈 ده كان ناقص
+            // =========================
+            services.AddScoped<IBloodBankService, BloodBankService>();
+
+            // =========================
+            // DbContext Interface
+            // =========================
             services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
             services.AddScoped<IPatientService, PatientService>();
 
@@ -36,4 +46,3 @@ namespace MedScope.Infrastructure
         }
     }
 }
-
