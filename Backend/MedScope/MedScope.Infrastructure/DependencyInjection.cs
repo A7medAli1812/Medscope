@@ -30,6 +30,7 @@ namespace MedScope.Infrastructure
             // =========================
             services.AddScoped<IAppointmentService, AppointmentService>();
             services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
+            services.AddScoped<IPatientService, PatientService>();
 
             return services;
         }
