@@ -1,14 +1,15 @@
-﻿namespace MedScope.Application.DTOs.Doctor
+﻿using MedScope.Domain.Enums;
+
+namespace MedScope.Application.DTOs.Doctor
 {
     public class CreateDoctorDto
     {
-        public string Email { get; set; } = null!;
-        public string Password { get; set; } = null!;
-
-        public string FirstName { get; set; } = null!;
-        public string LastName { get; set; } = null!;
-
-        public string Specialty { get; set; } = null!;
-        public string LicenseNumber { get; set; } = null!;
+        public string FullName { get; set; }
+        public string Email { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Password { get; set; }
+        public string Specialty { get; set; }
+        public Gender Gender { get; set; }   // Male / Female
+        public string Status { get; set; }   // Active / Inactive
     }
 }

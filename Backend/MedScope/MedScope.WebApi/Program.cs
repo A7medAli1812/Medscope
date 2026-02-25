@@ -1,4 +1,4 @@
-﻿using MedScope.Application;                 // ✅ مهم
+﻿using MedScope.Application;
 using MedScope.Infrastructure;
 using MedScope.Infrastructure.Identity;
 using MedScope.Infrastructure.Persistence;
@@ -15,12 +15,19 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 // =======================
-// Controllers + Enum as String
+// Controllers + JSON Settings 🔥
 // =======================
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
-        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter())
-    );
+    {
+        // ✅ Enum يطلع String بدل رقم
+        options.JsonSerializerOptions.Converters
+            .Add(new JsonStringEnumConverter());
+
+        // ✅ يخفي أي null من الريسبونس
+        options.JsonSerializerOptions.DefaultIgnoreCondition =
+            JsonIgnoreCondition.WhenWritingNull;
+    });
 
 // =======================
 // Swagger + JWT
@@ -109,9 +116,9 @@ builder.Services.AddAuthentication(options =>
 });
 
 // =======================
-// Application + Infrastructure Layers
+// Application + Infrastructure
 // =======================
-builder.Services.AddApplicationLayer();       // 🔥 مهم جداً
+builder.Services.AddApplicationLayer();
 builder.Services.AddInfrastructureLayer(builder.Configuration);
 
 // =======================
@@ -130,7 +137,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();   // لازم قبل Authorization
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
