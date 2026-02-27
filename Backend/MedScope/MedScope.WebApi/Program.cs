@@ -1,4 +1,4 @@
-﻿using MedScope.Application;                 // ✅ مهم
+﻿using MedScope.Application;
 using MedScope.Infrastructure;
 using MedScope.Infrastructure.Identity;
 using MedScope.Infrastructure.Persistence;
@@ -111,7 +111,7 @@ builder.Services.AddAuthentication(options =>
 // =======================
 // Application + Infrastructure Layers
 // =======================
-builder.Services.AddApplicationLayer();       // 🔥 مهم جداً
+builder.Services.AddApplicationLayer();
 builder.Services.AddInfrastructureLayer(builder.Configuration);
 
 // =======================
@@ -130,8 +130,28 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();   // لازم قبل Authorization
+app.UseAuthentication();
 app.UseAuthorization();
+
+// 🔥 Custom Unauthorized / Forbidden Response
+app.UseStatusCodePages(async context =>
+{
+    var response = context.HttpContext.Response;
+
+    if (response.StatusCode == 403)
+    {
+        response.ContentType = "application/json";
+        await response.WriteAsync(
+            "{\"message\": \"Unauthorized - Admin access only\"}");
+    }
+
+    if (response.StatusCode == 401)
+    {
+        response.ContentType = "application/json";
+        await response.WriteAsync(
+            "{\"message\": \"Unauthorized - Please login\"}");
+    }
+});
 
 app.MapControllers();
 
