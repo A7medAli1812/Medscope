@@ -13,4 +13,8 @@
     public DateTime? DateOfBirth { get; set; }
 
     public string BloodGroup { get; set; }  // ✅
+    public DateTime Date { get; set; }
+    public int NewPatients { get; set; }
+    public int OldPatients { get; set; }
+
 }

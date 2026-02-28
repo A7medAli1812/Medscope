@@ -32,6 +32,15 @@ namespace MedScope.Infrastructure
             services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
             services.AddScoped<IPatientService, PatientService>();
 
+            // =========================
+            // Dashboard 🔥
+            // =========================
+            services.AddScoped<IDashboardService, DashboardService>();
+            services.AddScoped<IPatientsChartService, PatientsChartService>();
+
+
+
+
             return services;
         }
     }
