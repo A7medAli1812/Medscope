@@ -8,9 +8,6 @@
 	<ItemGroup>
 		<ProjectReference Include="..\MedScope.Domain\MedScope.Domain.csproj" />
 	</ItemGroup>
-  <ItemGroup>
-    <Folder Include="Common\" />
-  </ItemGroup>
 
   <PropertyGroup>
 	  <TargetFramework>net9.0</TargetFramework>
