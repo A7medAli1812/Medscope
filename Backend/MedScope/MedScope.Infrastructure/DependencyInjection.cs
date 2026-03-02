@@ -2,11 +2,13 @@
 using MedScope.Application.Abstractions.Blood;          // 👈 ضيفناه
 using MedScope.Application.Abstractions.Persistence;
 using MedScope.Application.Interfaces;
+using MedScope.Application.Interfaces.Doctor;
 using MedScope.Infrastructure.Identity;
 using MedScope.Infrastructure.Persistence;
 using MedScope.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MedScope.Application.Interfaces.Doctor;
 
 namespace MedScope.Infrastructure
 {
@@ -29,8 +31,7 @@ namespace MedScope.Infrastructure
             // =========================
             // Appointments
             // =========================
-            services.AddScoped<IAppointmentService, AppointmentService>();
-
+            services.AddScoped<IAppointmentService, AppointmentService>(); 
             // =========================
             // Blood Bank  👈 ده كان ناقص
             // =========================
@@ -49,6 +50,10 @@ namespace MedScope.Infrastructure
             services.AddScoped<IPatientsChartService, PatientsChartService>();
 
 
+            // =========================
+            // Doctor 🔥
+            // =========================
+            services.AddScoped<IDoctorAppointmentService, DoctorAppointmentService>();
 
 
             return services;
