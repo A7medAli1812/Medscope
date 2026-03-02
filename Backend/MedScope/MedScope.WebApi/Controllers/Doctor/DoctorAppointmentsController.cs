@@ -9,7 +9,7 @@ namespace MedScope.WebApi.Controllers
 {
     [Route("api/doctor/appointments")]
     [ApiController]
-    [Authorize] // 🔥 مهم
+    [Authorize(Roles = "Doctor")] // 🔥 Doctor only
     public class DoctorAppointmentsController : ControllerBase
     {
         private readonly IDoctorAppointmentService _appointmentService;
@@ -32,13 +32,11 @@ namespace MedScope.WebApi.Controllers
             [FromQuery] string view,
             [FromQuery] int page = 1)
         {
-            // 🔥 نجيب userId من التوكن
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (string.IsNullOrEmpty(userId))
                 return Unauthorized();
 
-            // 🔥 نجيب doctorId من الداتا بيز
             var doctorId = await _context.Doctors
                 .Where(d => d.UserId == userId)
                 .Select(d => d.Id)
@@ -47,12 +45,39 @@ namespace MedScope.WebApi.Controllers
             if (doctorId == 0)
                 return NotFound("Doctor not found");
 
-            // 🔥 ننادي على الـ service
             var result = await _appointmentService.GetUpcomingAppointmentsAsync(
                 doctorId,
                 date,
                 view,
                 page);
+
+            return Ok(result);
+        }
+
+        // ===========================
+        // 🔥 Visit Details (secure)
+        // ===========================
+        [HttpGet("visit-details/{appointmentId}")]
+        public async Task<IActionResult> GetVisitDetails(int appointmentId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
+
+            var doctorId = await _context.Doctors
+                .Where(d => d.UserId == userId)
+                .Select(d => d.Id)
+                .FirstOrDefaultAsync();
+
+            if (doctorId == 0)
+                return NotFound("Doctor not found");
+
+            var result = await _appointmentService
+                .GetAppointmentVisitDetailsAsync(appointmentId, doctorId);
+
+            if (result == null)
+                return NotFound("Appointment not found");
 
             return Ok(result);
         }
