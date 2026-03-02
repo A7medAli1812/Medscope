@@ -13,6 +13,9 @@ public class DoctorAppointmentService : IDoctorAppointmentService
         _context = context;
     }
 
+    // ===============================
+    // 🔹 Upcoming Appointments
+    // ===============================
     public async Task<PaginatedResult<DoctorUpcomingAppointmentsDto>> GetUpcomingAppointmentsAsync(
         int doctorId,
         DateOnly date,
@@ -24,7 +27,7 @@ public class DoctorAppointmentService : IDoctorAppointmentService
         var query = from a in _context.Appointments
                     join p in _context.Patients on a.PatientId equals p.Id
                     join u in _context.Users on p.UserId equals u.Id into userGroup
-                    from u in userGroup.DefaultIfEmpty() // 👈 حل null
+                    from u in userGroup.DefaultIfEmpty()
                     join h in _context.Hospitals on a.HospitalId equals h.Id
                     where a.DoctorId == doctorId
                     select new
@@ -32,7 +35,7 @@ public class DoctorAppointmentService : IDoctorAppointmentService
                         a,
                         PatientName = u != null
                             ? (u.FirstName + " " + u.LastName)
-                            : "Unknown Patient", // 👈 fallback
+                            : "Unknown Patient",
                         HospitalName = h.Name
                     };
 
@@ -65,10 +68,13 @@ public class DoctorAppointmentService : IDoctorAppointmentService
             .Select(x => new DoctorUpcomingAppointmentsDto
             {
                 AppointmentId = x.a.Id,
-                Time = x.a.Time.ToString(),
+                Time = x.a.Time.ToString("hh:mm tt"),
                 Date = x.a.Date.ToString(),
                 PatientName = x.PatientName,
+
+                // ✅ من جدول Appointment
                 PatientAge = x.a.PatientAge,
+
                 VisitType = x.a.VisitType,
                 HospitalName = x.HospitalName
             })
@@ -80,5 +86,40 @@ public class DoctorAppointmentService : IDoctorAppointmentService
             CurrentPage = page,
             TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
         };
+    }
+
+    // ===============================
+    // 🔹 Visit Details
+    // ===============================
+    public async Task<AppointmentVisitDetailsDto> GetAppointmentVisitDetailsAsync(int appointmentId, int doctorId)
+    {
+        var result = await (
+            from a in _context.Appointments
+
+            join p in _context.Patients on a.PatientId equals p.Id
+            join u in _context.Users on p.UserId equals u.Id
+            join h in _context.Hospitals on a.HospitalId equals h.Id
+
+            where a.Id == appointmentId && a.DoctorId == doctorId
+
+            select new AppointmentVisitDetailsDto
+            {
+                AppointmentId = a.Id,
+
+                PatientName = u.FirstName + " " + u.LastName,
+                PhoneNumber = u.PhoneNumber,
+
+                // ✅ من جدول Appointment 
+                PatientAge = a.PatientAge,
+
+                Date = a.Date.ToString(),
+                Time = a.Time.ToString("hh:mm tt"),
+
+                VisitType = a.VisitType.ToString(),
+                HospitalName = h.Name
+            }
+        ).FirstOrDefaultAsync();
+
+        return result;
     }
 }
