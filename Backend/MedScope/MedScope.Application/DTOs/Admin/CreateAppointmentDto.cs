@@ -5,7 +5,7 @@
         public int PatientId { get; set; }
         public int DoctorId { get; set; }
 
-        public DateTime Date { get; set; }
+        public DateOnly Date { get; set; }
         public string Time { get; set; } = null!;
 
         public int PatientAge { get; set; }

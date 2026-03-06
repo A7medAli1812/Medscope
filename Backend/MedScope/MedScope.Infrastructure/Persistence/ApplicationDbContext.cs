@@ -28,6 +28,12 @@ namespace MedScope.Infrastructure.Persistence
         public DbSet<MedicalRecord> MedicalRecords { get; set; }
         public DbSet<Hospital> Hospitals { get; set; }
         public DbSet<SuperAdmin> SuperAdmins { get; set; }
+        public DbSet<ChronicDisease> ChronicDiseases { get; set; }
+        public DbSet<SurgicalHistory> SurgicalHistories { get; set; }
+        public DbSet<Medication> Medications { get; set; }
+        public DbSet<Allergy> Allergies { get; set; }
+
+        public DbSet<ApplicationUser> Users { get; set; }
 
         // =======================
         // Fluent API

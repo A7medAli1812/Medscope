@@ -120,7 +120,7 @@ builder.Services.AddAuthentication(options =>
 // =======================
 builder.Services.AddApplicationLayer();
 builder.Services.AddInfrastructureLayer(builder.Configuration);
-
+builder.Services.AddHttpContextAccessor();
 // =======================
 // Build App
 // =======================

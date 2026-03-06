@@ -164,7 +164,7 @@ namespace MedScope.Infrastructure.Services
             {
                 PatientId = dto.PatientId,
                 DoctorId = dto.DoctorId,
-                Date = DateOnly.FromDateTime(dto.Date),
+                Date = dto.Date,
                 Time = TimeOnly.Parse(dto.Time),
                 PatientAge = dto.PatientAge,
                 VisitType = dto.VisitType,
