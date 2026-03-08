@@ -18,23 +18,78 @@ namespace MedScope.WebApi.Controllers
             _appointmentService = appointmentService;
         }
 
-        // 🔑 Helper صغير نستخدمه في كل الأكشنز
-        private int CurrentHospitalId =>
-            int.Parse(User.FindFirst("HospitalId")!.Value);
+        // 🔑 Helper
+        private int CurrentHospitalId
+        {
+            get
+            {
+                var hospitalClaim = User.FindFirst("HospitalId");
+
+                if (hospitalClaim == null)
+                    throw new Exception("HospitalId claim is missing from token");
+
+                return int.Parse(hospitalClaim.Value);
+            }
+        }
 
         // =========================
         // GET /api/admin/appointments/new
         // =========================
         [HttpGet("new")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<List<AdminAppointmentDto>>> GetNewAppointments()
+        public async Task<IActionResult> GetNewAppointments(
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10,
+            [FromQuery] string? search = null,
+            [FromQuery] DateOnly? date = null)
         {
             var hospitalId = CurrentHospitalId;
 
-            var result =
-                await _appointmentService.GetNewAppointmentsAsync(hospitalId);
+            var result = await _appointmentService
+                .GetNewAppointmentsAsync(
+                    hospitalId,
+                    page,
+                    pageSize,
+                    search,
+                    date);
 
-            return Ok(result);
+            return Ok(new
+            {
+                totalCount = result.TotalCount,
+                page,
+                pageSize,
+                data = result.Data
+            });
+        }
+
+        // =========================
+        // GET /api/admin/appointments/completed
+        // =========================
+        [HttpGet("completed")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetCompletedAppointments(
+            int page = 1,
+            int pageSize = 10,
+            string? search = null,
+            DateOnly? date = null)
+        {
+            var hospitalId = CurrentHospitalId;
+
+            var result = await _appointmentService
+                .GetCompletedAppointmentsAsync(
+                    hospitalId,
+                    page,
+                    pageSize,
+                    search,
+                    date);
+
+            return Ok(new
+            {
+                totalCount = result.TotalCount,
+                page,
+                pageSize,
+                data = result.Data
+            });
         }
 
         // =========================
@@ -45,16 +100,30 @@ namespace MedScope.WebApi.Controllers
         public async Task<IActionResult> CreateAppointment(
             [FromBody] CreateAppointmentDto dto)
         {
-            var hospitalId = CurrentHospitalId;
-
-            var appointmentId =
-                await _appointmentService.CreateAppointmentAsync(dto, hospitalId);
-
-            return Ok(new
+            try
             {
-                message = "Appointment created successfully",
-                appointmentId
-            });
+                if (dto == null)
+                    return BadRequest("Invalid appointment data");
+
+                var hospitalId = CurrentHospitalId;
+
+                var appointmentId =
+                    await _appointmentService.CreateAppointmentAsync(dto, hospitalId);
+
+                return Ok(new
+                {
+                    message = "Appointment created successfully",
+                    appointmentId
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    message = "Error creating appointment",
+                    error = ex.Message
+                });
+            }
         }
 
         // =========================
@@ -85,6 +154,21 @@ namespace MedScope.WebApi.Controllers
             await _appointmentService.RescheduleAppointmentAsync(id, dto, hospitalId);
 
             return Ok("Appointment rescheduled successfully");
+        }
+
+        // =========================
+        // PUT /api/admin/appointments/{id}/complete
+        // =========================
+        [HttpPut("{id}/complete")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> CompleteAppointment(int id)
+        {
+            var hospitalId = CurrentHospitalId;
+
+            await _appointmentService
+                .CompleteAppointmentAsync(id, hospitalId);
+
+            return Ok("Appointment marked as completed");
         }
 
         // =========================

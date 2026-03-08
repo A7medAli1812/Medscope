@@ -11,4 +11,5 @@
     public Hospital Hospital { get; set; }
 
     public ICollection<Appointment> Appointments { get; set; }
+
 }

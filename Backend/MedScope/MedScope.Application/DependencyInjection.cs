@@ -14,4 +14,5 @@ namespace MedScope.Application
             return services;
         }
     }
+
 }
