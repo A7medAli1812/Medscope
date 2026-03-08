@@ -3,12 +3,14 @@ using MedScope.Application.Abstractions.Blood;          // 👈 ضيفناه
 using MedScope.Application.Abstractions.Persistence;
 using MedScope.Application.Interfaces;
 using MedScope.Application.Interfaces.Doctor;
+using MedScope.Application.Interfaces.Doctor;
 using MedScope.Infrastructure.Identity;
 using MedScope.Infrastructure.Persistence;
 using MedScope.Infrastructure.Services;
+using MedScope.Infrastructure.Services.Doctor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MedScope.Application.Interfaces.Doctor;
+
 
 namespace MedScope.Infrastructure
 {
@@ -54,8 +56,9 @@ namespace MedScope.Infrastructure
             // Doctor 🔥
             // =========================
             services.AddScoped<IDoctorAppointmentService, DoctorAppointmentService>();
-
-
+            services.AddScoped<IMedicalHistoryService, MedicalHistoryService>();
+            services.AddScoped<IDoctorPatientsListService, DoctorPatientsService>();
+            services.AddScoped<IDoctorPatientRecordService, DoctorPatientRecordService>();
             return services;
         }
     }

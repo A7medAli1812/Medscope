@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MedScope.Domain.Entities;
+using DoctorEntity = Doctor;
 
 namespace MedScope.WebApi.Controllers
 {
@@ -70,7 +72,7 @@ namespace MedScope.WebApi.Controllers
                 await _userManager.UpdateAsync(user);
             }
 
-            _context.Doctors.Add(new Doctor
+            _context.Doctors.Add(new DoctorEntity
             {
                 UserId = user.Id,
                 Specialty = dto.Specialty,
