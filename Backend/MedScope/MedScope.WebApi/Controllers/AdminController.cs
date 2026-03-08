@@ -10,8 +10,6 @@ namespace MedScope.WebApi.Controllers
 {
     [ApiController]
     [Route("api/admin/users")]
-    // 🔒 مؤقتًا مفتوحة – لاحقًا تتحول SuperAdmin
-    // [Authorize(Roles = "SuperAdmin")]
     public class AdminController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -31,17 +29,24 @@ namespace MedScope.WebApi.Controllers
         // =========================
         // CREATE ADMIN
         // =========================
+        [Authorize(Roles = "SuperAdmin")]
         [HttpPost("create-admin")]
         public async Task<IActionResult> CreateAdmin([FromBody] CreateAdminDto dto)
         {
-            // 1️⃣ تأكد إن المستشفى موجودة
+            // 1️⃣ التأكد إن المستشفى موجودة
             var hospitalExists = await _context.Hospitals
                 .AnyAsync(h => h.Id == dto.HospitalId);
 
             if (!hospitalExists)
                 return BadRequest("Invalid HospitalId");
 
-            // 2️⃣ إنشاء اليوزر
+            //  التأكد إن الإيميل مش موجود
+            var existingUser = await _userManager.FindByEmailAsync(dto.Email);
+
+            if (existingUser != null)
+                return BadRequest("Email already exists");
+
+            //  إنشاء اليوزر
             var user = new ApplicationUser
             {
                 UserName = dto.Email,
@@ -51,16 +56,26 @@ namespace MedScope.WebApi.Controllers
             };
 
             var result = await _userManager.CreateAsync(user, dto.Password);
+
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
 
-            // 3️⃣ تأكد إن Role Admin موجود
+            // 4️⃣ التأكد إن Role Admin موجود
             if (!await _roleManager.RoleExistsAsync("Admin"))
-                await _roleManager.CreateAsync(new IdentityRole("Admin"));
+            {
+                var roleResult = await _roleManager.CreateAsync(new IdentityRole("Admin"));
 
-            await _userManager.AddToRoleAsync(user, "Admin");
+                if (!roleResult.Succeeded)
+                    return BadRequest(roleResult.Errors);
+            }
 
-            // 4️⃣ ربط Admin بالمستشفى
+            //  إضافة اليوزر للرول
+            var addToRoleResult = await _userManager.AddToRoleAsync(user, "Admin");
+
+            if (!addToRoleResult.Succeeded)
+                return BadRequest(addToRoleResult.Errors);
+
+            //  ربط الأدمن بالمستشفى
             _context.Admins.Add(new Domain.Entities.Admin
             {
                 UserId = user.Id,
@@ -69,7 +84,11 @@ namespace MedScope.WebApi.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Ok("Admin created successfully");
+            // رجوع Response ناجح
+            return Ok(new
+            {
+                message = "Admin created successfully"
+            });
         }
     }
 }
