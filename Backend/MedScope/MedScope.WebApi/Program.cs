@@ -28,6 +28,23 @@ builder.Services.AddControllers()
     });
 
 // =======================
+// 🔐 CORS
+// =======================
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy =>
+        {
+            policy.WithOrigins(
+                "https://medscope-v3.vercel.app",
+                "http://localhost:5174"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+        });
+});
+
+// =======================
 // Swagger + JWT
 // =======================
 builder.Services.AddEndpointsApiExplorer();
@@ -68,11 +85,16 @@ builder.Services.AddSwaggerGen(c =>
 // =======================
 // DbContext
 // =======================
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")
-    )
-);
+    options.UseSqlServer(connectionString, sqlServerOptions =>
+    {
+        sqlServerOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(30),
+            errorNumbersToAdd: null);
+    }));
 
 // =======================
 // Identity
@@ -91,7 +113,7 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
-    options.MapInboundClaims = false; // 🔥 مهم
+    options.MapInboundClaims = false;
 
     var settings = builder.Configuration
         .GetSection("AuthSettings")
@@ -131,11 +153,15 @@ var app = builder.Build();
 // =======================
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
 }
 
+app.UseSwagger();
+app.UseSwaggerUI();
+
 app.UseHttpsRedirection();
+
+// 🔐 تفعيل CORS
+app.UseCors("AllowFrontend");
 
 app.UseAuthentication();
 app.UseAuthorization();
