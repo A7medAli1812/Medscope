@@ -8,17 +8,11 @@
 
         public int? PatientId { get; set; }
         public Patient? Patient { get; set; }
-<<<<<<< HEAD
 
-=======
->>>>>>> origin/Backend-yousef
         public int HospitalId { get; set; }
         public Hospital Hospital { get; set; } = null!;
 
 
-<<<<<<< HEAD
 
-=======
->>>>>>> origin/Backend-yousef
     }
 }

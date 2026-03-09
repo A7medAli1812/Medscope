@@ -10,13 +10,7 @@ namespace MedScope.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
-                name: "HospitalId",
-                table: "Beds",
-                type: "int",
-                nullable: false,
-                defaultValue: 0);
-
+           
             migrationBuilder.CreateIndex(
                 name: "IX_Beds_HospitalId",
                 table: "Beds",
@@ -42,9 +36,7 @@ namespace MedScope.Infrastructure.Migrations
                 name: "IX_Beds_HospitalId",
                 table: "Beds");
 
-            migrationBuilder.DropColumn(
-                name: "HospitalId",
-                table: "Beds");
+            
         }
     }
 }
