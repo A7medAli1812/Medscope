@@ -35,7 +35,7 @@ builder.Services.AddCors(options =>
     {
         policy
             // .AllowAnyOrigin()
-            .WithOrigins("http://localhost:5173")
+            .WithOrigins("http://localhost:5174", "http://localhost:5173", "https://vercel.com/ziadalshahats-projects/medscope-v3")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
@@ -96,10 +96,7 @@ builder.Services.AddSwaggerGen(c =>
 // DbContext
 // =======================
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")
-    )
-);
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // =======================
 // Identity
