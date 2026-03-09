@@ -13,7 +13,13 @@ import Home from "./pages/Home";
 import Patients from "./pages/Patients";
 import Appointments from "./pages/Appointments";
 import Doctors from "./pages/Doctors";
-import DashboardPage from "./pages/Dashboard"; // Renamed to avoid confusion with the Layout or Route concept widely
+import DashboardPage from "./pages/Dashboard";
+import BedManagement from "./pages/BedManagement";
+import BloodBank from "./pages/BloodBank";
+import MultiHospitalView from "./pages/MultiHospitalView"; 
+import NewAppointment from "./pages/new-appointment";
+import NewDoctor from "./pages/new-doctor";
+// Renamed to avoid confusion with the Layout or Route concept widely
 
 import "./App.css";
 
@@ -81,6 +87,9 @@ function App() {
           <Route path="/blood-bank" element={<BloodBank />} />
           <Route path="/multi-hospital-view" element={<MultiHospitalView />} />
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/new-appointment" element={<NewAppointment />} />
+          <Route path="/new-doctor" element={<NewDoctor />} />
+         
         </Route>
       </Routes>
     </Router>

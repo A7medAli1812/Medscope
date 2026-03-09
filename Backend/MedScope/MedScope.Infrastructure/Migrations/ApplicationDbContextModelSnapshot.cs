@@ -269,6 +269,8 @@ namespace MedScope.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("HospitalId");
+
                     b.HasIndex("PatientId");
 
                     b.ToTable("Beds");
@@ -784,9 +786,17 @@ namespace MedScope.Infrastructure.Migrations
 
             modelBuilder.Entity("MedScope.Domain.Entities.Bed", b =>
                 {
+                    b.HasOne("Hospital", "Hospital")
+                        .WithMany()
+                        .HasForeignKey("HospitalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Patient", "Patient")
                         .WithMany()
                         .HasForeignKey("PatientId");
+
+                    b.Navigation("Hospital");
 
                     b.Navigation("Patient");
                 });

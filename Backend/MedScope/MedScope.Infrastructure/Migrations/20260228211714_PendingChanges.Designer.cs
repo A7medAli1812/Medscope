@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MedScope.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260225111047_AddHospitalIdToBeds")]
-    partial class AddHospitalIdToBeds
+    [Migration("20260228211714_PendingChanges")]
+    partial class PendingChanges
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -115,42 +115,6 @@ namespace MedScope.Infrastructure.Migrations
                     b.ToTable("Doctors");
                 });
 
-            modelBuilder.Entity("Hospital", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("HospitalNumber")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Website")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Hospitals");
-                });
-
             modelBuilder.Entity("MedScope.Domain.Entities.Admin", b =>
                 {
                     b.Property<int>("Id")
@@ -197,7 +161,7 @@ namespace MedScope.Infrastructure.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("HospitalId")
+                    b.Property<int?>("HospitalId")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsOccupied")
@@ -217,6 +181,8 @@ namespace MedScope.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("HospitalId");
 
                     b.HasIndex("PatientId");
 
@@ -253,6 +219,54 @@ namespace MedScope.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("BloodBanks");
+                });
+
+            modelBuilder.Entity("MedScope.Domain.Entities.Hospital", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("HospitalNumber")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("LastModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Website")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Hospitals");
                 });
 
             modelBuilder.Entity("MedScope.Domain.Entities.MedicalRecord", b =>
@@ -552,17 +566,11 @@ namespace MedScope.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("BloodGroup")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("datetime2");
@@ -587,19 +595,19 @@ namespace MedScope.Infrastructure.Migrations
                     b.HasOne("Doctor", "Doctor")
                         .WithMany("Appointments")
                         .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Hospital", "Hospital")
-                        .WithMany()
+                    b.HasOne("MedScope.Domain.Entities.Hospital", "Hospital")
+                        .WithMany("Appointments")
                         .HasForeignKey("HospitalId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Patient", "Patient")
-                        .WithMany()
+                        .WithMany("Appointments")
                         .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Doctor");
@@ -611,7 +619,7 @@ namespace MedScope.Infrastructure.Migrations
 
             modelBuilder.Entity("Doctor", b =>
                 {
-                    b.HasOne("Hospital", "Hospital")
+                    b.HasOne("MedScope.Domain.Entities.Hospital", "Hospital")
                         .WithMany("Doctors")
                         .HasForeignKey("HospitalId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -628,7 +636,7 @@ namespace MedScope.Infrastructure.Migrations
 
             modelBuilder.Entity("MedScope.Domain.Entities.Admin", b =>
                 {
-                    b.HasOne("Hospital", "Hospital")
+                    b.HasOne("MedScope.Domain.Entities.Hospital", "Hospital")
                         .WithMany("Admins")
                         .HasForeignKey("HospitalId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -645,9 +653,15 @@ namespace MedScope.Infrastructure.Migrations
 
             modelBuilder.Entity("MedScope.Domain.Entities.Bed", b =>
                 {
+                    b.HasOne("MedScope.Domain.Entities.Hospital", "Hospital")
+                        .WithMany("Beds")
+                        .HasForeignKey("HospitalId");
+
                     b.HasOne("Patient", "Patient")
                         .WithMany()
                         .HasForeignKey("PatientId");
+
+                    b.Navigation("Hospital");
 
                     b.Navigation("Patient");
                 });
@@ -737,11 +751,20 @@ namespace MedScope.Infrastructure.Migrations
                     b.Navigation("Appointments");
                 });
 
-            modelBuilder.Entity("Hospital", b =>
+            modelBuilder.Entity("MedScope.Domain.Entities.Hospital", b =>
                 {
                     b.Navigation("Admins");
 
+                    b.Navigation("Appointments");
+
+                    b.Navigation("Beds");
+
                     b.Navigation("Doctors");
+                });
+
+            modelBuilder.Entity("Patient", b =>
+                {
+                    b.Navigation("Appointments");
                 });
 #pragma warning restore 612, 618
         }
