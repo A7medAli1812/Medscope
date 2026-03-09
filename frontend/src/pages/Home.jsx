@@ -1,99 +1,175 @@
-import React from "react";
+import React, { useState } from "react";
+import axiosInstance from "../api/axios";
 import "./Home.css";
 
 const Home = () => {
+
+    const [hospital] = useState({
+        name: "Al Haya",
+        hospitalName: "Metropolitan General Hospital",
+        doctors: 125,
+        departments: 18,
+        phone: "(555)123-4567",
+        email: "info@metrogeneralhospital.com",
+        website: "www.metrogeneralhospital.com"
+    });
+
+    const [notifications] = useState(3);
+
+    const specialties = [
+        "Cardiology",
+        "Neurology",
+        "Orthopedics",
+        "Pediatrics",
+        "Emergency Medicine",
+        "Internal Medicine",
+        "Dermatology",
+        "Radiology"
+    ];
+
     return (
         <div className="home-container">
-            {/* Top Header Section */}
+
+            {/* Header */}
             <div className="home-header">
+
                 <h1 className="page-title">Home</h1>
+
                 <div className="user-profile">
+
                     <div className="notification-icon">
                         <span className="dot"></span>
                         <i className="fas fa-bell"></i>
                     </div>
+
                     <div className="user-info">
-                        {/* Using a placeholder for the avatar image if you don't have one */}
-                        <img src="https://ui-avatars.com/api/?name=Jonitha+Admin&background=0D8ABC&color=fff" alt="User" className="user-avatar" />
+
+                        <img
+                            src="https://ui-avatars.com/api/?name=Jonitha+Admin&background=0D8ABC&color=fff"
+                            alt="User"
+                            className="user-avatar"
+                        />
+
                         <div className="user-text">
                             <span className="user-name">Jonitha</span>
                             <span className="user-role">Admin</span>
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
 
-            {/* Main Hospital Card */}
+
+            {/* Hospital Card */}
+
             <div className="hospital-card">
+
                 <div className="card-header">
+
                     <i className="fas fa-hospital-alt card-icon"></i>
-                    <h2>Al Haya</h2>
+                    <h2>{hospital.name}</h2>
+
                 </div>
 
+
                 <div className="card-content">
+
                     <div className="hospital-details">
-                        <h3>Metropolitan General Hospital</h3>
+
+                        <h3>{hospital.hospitalName}</h3>
 
                         <div className="detail-row">
                             <i className="fas fa-user-md"></i>
-                            <span>125 Doctors</span>
+                            <span>{hospital.doctors} Doctors</span>
                         </div>
 
                         <div className="detail-row">
                             <i className="fas fa-building"></i>
-                            <span>18 Medical Departments</span>
+                            <span>{hospital.departments} Medical Departments</span>
                         </div>
 
                         <div className="detail-row">
                             <i className="fas fa-phone-alt"></i>
-                            <span>(555)123-4567</span>
+                            <span>{hospital.phone}</span>
                         </div>
 
                         <div className="detail-row">
                             <i className="fas fa-envelope"></i>
-                            <span>info@metrogeneralhospital.com</span>
+                            <span>{hospital.email}</span>
                         </div>
 
                         <div className="detail-row">
                             <i className="fas fa-globe"></i>
-                            <span>www.metrogeneralhospitalcom</span>
+                            <span>{hospital.website}</span>
                         </div>
+
                     </div>
+
+
+
+                    {/* Specialties */}
 
                     <div className="specialties-section">
+
                         <h3>Available Specialties</h3>
+
                         <div className="specialties-grid">
-                            <div className="specialty-item"><span className="bullet"></span>Cardiology</div>
-                            <div className="specialty-item"><span className="bullet"></span>Neurology</div>
-                            <div className="specialty-item"><span className="bullet"></span>Orthopedics</div>
-                            <div className="specialty-item"><span className="bullet"></span>Pediatrics</div>
-                            <div className="specialty-item"><span className="bullet"></span>Emergency Medicine</div>
-                            <div className="specialty-item"><span className="bullet"></span>Internal Medicine</div>
-                            <div className="specialty-item"><span className="bullet"></span>DermatoLogy</div>
-                            <div className="specialty-item"><span className="bullet"></span>RadioLogy</div>
+
+                            {specialties.map((item, index) => (
+
+                                <div className="specialty-item" key={index}>
+
+                                    <span className="bullet"></span>
+
+                                    {item}
+
+                                </div>
+
+                            ))}
+
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
 
+
+
             {/* Bottom Cards */}
+
             <div className="bottom-cards">
+
                 <div className="status-card">
+
                     <div className="icon-circle">
                         <i className="fas fa-hospital-user"></i>
                     </div>
-                    <p>Metropolitan General</p>
+
+                    <p>{hospital.hospitalName}</p>
+
                     <h4>Your Hospital</h4>
+
                 </div>
 
+
                 <div className="status-card">
+
                     <div className="icon-circle">
                         <i className="fas fa-bell"></i>
                     </div>
-                    <p className="big-number">3</p>
+
+                    <p className="big-number">{notifications}</p>
+
                     <p>New Notifications</p>
+
                 </div>
+
             </div>
+
         </div>
     );
 };
