@@ -19,8 +19,18 @@ namespace MedScope.WebApi.Controllers
         }
 
         // 🔑 Helper
-        private int CurrentHospitalId =>
-            int.Parse(User.FindFirst("HospitalId")!.Value);
+        private int CurrentHospitalId
+        {
+            get
+            {
+                var hospitalClaim = User.FindFirst("HospitalId");
+
+                if (hospitalClaim == null)
+                    throw new Exception("HospitalId claim is missing from token");
+
+                return int.Parse(hospitalClaim.Value);
+            }
+        }
 
         // =========================
         // GET /api/admin/appointments/new
@@ -28,10 +38,10 @@ namespace MedScope.WebApi.Controllers
         [HttpGet("new")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetNewAppointments(
-     [FromQuery] int page = 1,
-     [FromQuery] int pageSize = 10,
-     [FromQuery] string? search = null,
-     [FromQuery] DateOnly? date = null)
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10,
+            [FromQuery] string? search = null,
+            [FromQuery] DateOnly? date = null)
         {
             var hospitalId = CurrentHospitalId;
 
@@ -51,6 +61,7 @@ namespace MedScope.WebApi.Controllers
                 data = result.Data
             });
         }
+
         // =========================
         // GET /api/admin/appointments/completed
         // =========================
@@ -89,16 +100,30 @@ namespace MedScope.WebApi.Controllers
         public async Task<IActionResult> CreateAppointment(
             [FromBody] CreateAppointmentDto dto)
         {
-            var hospitalId = CurrentHospitalId;
-
-            var appointmentId =
-                await _appointmentService.CreateAppointmentAsync(dto, hospitalId);
-
-            return Ok(new
+            try
             {
-                message = "Appointment created successfully",
-                appointmentId
-            });
+                if (dto == null)
+                    return BadRequest("Invalid appointment data");
+
+                var hospitalId = CurrentHospitalId;
+
+                var appointmentId =
+                    await _appointmentService.CreateAppointmentAsync(dto, hospitalId);
+
+                return Ok(new
+                {
+                    message = "Appointment created successfully",
+                    appointmentId
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    message = "Error creating appointment",
+                    error = ex.Message
+                });
+            }
         }
 
         // =========================

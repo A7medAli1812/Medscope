@@ -15,7 +15,34 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 // =======================
-// Controllers + JSON Settings 🔥
+// Bind AuthSettings
+// =======================
+builder.Services.Configure<AuthSettings>(
+    builder.Configuration.GetSection("AuthSettings"));
+
+// =======================
+// Register JwtTokenGenerator
+// =======================
+builder.Services.AddScoped<JwtTokenGenerator>();
+
+// =======================
+// CORS (Allow All)
+// =======================
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy
+            // .AllowAnyOrigin()
+            .WithOrigins("http://localhost:5174", "http://localhost:5173", "https://vercel.com/ziadalshahats-projects/medscope-v3")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+// =======================
+// Controllers + JSON
 // =======================
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -28,7 +55,7 @@ builder.Services.AddControllers()
     });
 
 // =======================
-// Swagger + JWT
+// Swagger
 // =======================
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -69,10 +96,7 @@ builder.Services.AddSwaggerGen(c =>
 // DbContext
 // =======================
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")
-    )
-);
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // =======================
 // Identity
@@ -91,7 +115,7 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
-    options.MapInboundClaims = false; // 🔥 مهم
+    options.MapInboundClaims = false;
 
     var settings = builder.Configuration
         .GetSection("AuthSettings")
@@ -121,19 +145,25 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddApplicationLayer();
 builder.Services.AddInfrastructureLayer(builder.Configuration);
 builder.Services.AddHttpContextAccessor();
+<<<<<<< HEAD
+=======
+
+>>>>>>> branch-tasneemm
 // =======================
 // Build App
-// =======================
+//=======================
 var app = builder.Build();
 
 // =======================
 // Middleware
 // =======================
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseDeveloperExceptionPage();
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
+// تفعيل CORS
+app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 
@@ -147,13 +177,20 @@ app.MapControllers();
 // =======================
 using (var scope = app.Services.CreateScope())
 {
-    var services = scope.ServiceProvider;
+    try
+    {
+        var services = scope.ServiceProvider;
 
-    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
 
-    await SeedRoles.SeedAsync(roleManager);
-    await SeedUsers.SeedAsync(userManager);
+        await SeedRoles.SeedAsync(roleManager);
+        await SeedUsers.SeedAsync(userManager);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Seed Error: " + ex.Message);
+    }
 }
 
-app.Run();
+app.Run(); 
