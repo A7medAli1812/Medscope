@@ -145,10 +145,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddApplicationLayer();
 builder.Services.AddInfrastructureLayer(builder.Configuration);
 builder.Services.AddHttpContextAccessor();
-<<<<<<< HEAD
-=======
 
->>>>>>> branch-tasneemm
 // =======================
 // Build App
 //=======================
