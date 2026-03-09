@@ -167,6 +167,26 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// 🔥 Custom Unauthorized / Forbidden Response
+app.UseStatusCodePages(async context =>
+{
+    var response = context.HttpContext.Response;
+
+    if (response.StatusCode == 403)
+    {
+        response.ContentType = "application/json";
+        await response.WriteAsync(
+            "{\"message\": \"Unauthorized - Admin access only\"}");
+    }
+
+    if (response.StatusCode == 401)
+    {
+        response.ContentType = "application/json";
+        await response.WriteAsync(
+            "{\"message\": \"Unauthorized - Please login\"}");
+    }
+});
+
 app.MapControllers();
 
 // =======================

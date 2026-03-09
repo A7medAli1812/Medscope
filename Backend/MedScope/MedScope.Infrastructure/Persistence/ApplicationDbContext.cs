@@ -5,6 +5,7 @@ using MedScope.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace MedScope.Infrastructure.Persistence
 {
     public class ApplicationDbContext

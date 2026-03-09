@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace MedScope.WebApi.Controllers.SuperAdmin
 {
-    [Authorize]
+    [Authorize(Roles = "SuperAdmin")]
     [Route("api/super-admin")]
     [ApiController]
     public class SuperAdminController : ControllerBase
