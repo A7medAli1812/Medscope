@@ -59,6 +59,8 @@ namespace MedScope.Infrastructure
             services.AddScoped<IMedicalHistoryService, MedicalHistoryService>();
             services.AddScoped<IDoctorPatientsListService, DoctorPatientsService>();
             services.AddScoped<IDoctorPatientRecordService, DoctorPatientRecordService>();
+            services.AddScoped<IDoctorPatientDeleteService, DoctorPatientDeleteService>();
+            services.AddScoped<IDoctorPatientNotesService, DoctorPatientNotesService>();
             return services;
         }
     }
