@@ -4,7 +4,6 @@ using MedScope.Application.DTOs.SuperAdmin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 
 namespace MedScope.WebApi.Controllers.SuperAdmin
 {
@@ -100,17 +99,5 @@ namespace MedScope.WebApi.Controllers.SuperAdmin
 
             return Ok(result);
         }
-        [AllowAnonymous]
-        [HttpGet("test-auth")]
-        public IActionResult TestAuth()
-        {
-            return Ok(new
-            {
-                IsAuthenticated = User.Identity?.IsAuthenticated,
-                Name = User.Identity?.Name,
-                Role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value,
-                HospitalId = User.Claims.FirstOrDefault(c => c.Type == "HospitalId")?.Value
-            });
-        }
     }
-    }
+}

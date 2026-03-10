@@ -53,7 +53,9 @@ namespace MedScope.Application.Features.SuperAdmin
                 HospitalNumber = dto.HospitalNumber,
                 Phone = dto.Phone,
                 Email = dto.Email,
-                Website = dto.Website
+                Website = dto.Website ,
+                City = dto.City,
+                Address = dto.Address
             };
 
             await _context.Hospitals.AddAsync(hospital);

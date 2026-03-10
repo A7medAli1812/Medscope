@@ -1,6 +1,5 @@
 ﻿using MedScope.Application.Abstractions.Blood;
 using MedScope.Application.DTOs.BloodBank;
-using MedScope.Domain.Entities;
 using MedScope.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,9 +27,9 @@ namespace MedScope.Infrastructure.Services
                     BloodType = x.BloodType,
                     Quantity = x.Quantity
                 })
-                .ToListAsync();   // هنا خلصنا SQL
+                .ToListAsync();
 
-            // هنا بقى C# عادي
+            // Calculate Status
             foreach (var item in data)
             {
                 item.Status = GetStatus(item.Quantity);
@@ -40,45 +39,7 @@ namespace MedScope.Infrastructure.Services
         }
 
         // =============================
-        // Add New Blood Type
-        // =============================
-        public async Task AddAsync(CreateBloodBankDto dto, int hospitalId)
-        {
-            // 🔒 Null check
-            if (dto == null)
-                throw new Exception("Invalid request");
-
-            // 🔒 Validation
-            if (string.IsNullOrWhiteSpace(dto.BloodType))
-                throw new Exception("Blood type is required");
-
-            if (dto.Quantity < 0)
-                throw new Exception("Quantity cannot be negative");
-
-            // 🔥 Normalize input (مهم جدًا)
-            var normalizedBloodType = dto.BloodType.Trim().ToUpper();
-
-            // 🔍 Check duplicate (after normalize)
-            var exists = await _context.BloodBanks
-                .AnyAsync(x => x.BloodType == normalizedBloodType
-                            && x.HospitalId == hospitalId);
-
-            if (exists)
-                throw new Exception("Blood type already exists for this hospital");
-
-            var entity = new BloodBank
-            {
-                BloodType = normalizedBloodType,
-                Quantity = dto.Quantity,
-                HospitalId = hospitalId
-            };
-
-            await _context.BloodBanks.AddAsync(entity);
-            await _context.SaveChangesAsync();
-        }
-
-        // =============================
-        // Increase Quantity (Secure)
+        // Increase Quantity
         // =============================
         public async Task IncreaseAsync(int id, int hospitalId)
         {
@@ -94,7 +55,7 @@ namespace MedScope.Infrastructure.Services
         }
 
         // =============================
-        // Decrease Quantity (Secure)
+        // Decrease Quantity
         // =============================
         public async Task DecreaseAsync(int id, int hospitalId)
         {
