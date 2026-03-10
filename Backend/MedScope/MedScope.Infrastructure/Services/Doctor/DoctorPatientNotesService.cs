@@ -1,4 +1,5 @@
-﻿using MedScope.Application.DTOs.Doctor.Notes;
+﻿using MedScope.Application.DTOs.Doctor;
+using MedScope.Application.DTOs.Doctor.Notes;
 using MedScope.Application.Interfaces.Doctor;
 using MedScope.Domain.Entities;
 using MedScope.Infrastructure.Persistence;
@@ -15,6 +16,9 @@ namespace MedScope.Infrastructure.Services.Doctor
             _context = context;
         }
 
+        // =========================
+        // Add Note
+        // =========================
         public async Task<bool> AddPatientNote(int patientId, string doctorUserId, AddPatientNoteDto dto)
         {
             var doctorId = await _context.Doctors
@@ -46,6 +50,35 @@ namespace MedScope.Infrastructure.Services.Doctor
             await _context.SaveChangesAsync();
 
             return true;
+        }
+
+        // =========================
+        // Get Patient Notes
+        // =========================
+        public async Task<List<DoctorNoteDto>> GetPatientNotes(int patientId, string doctorUserId)
+        {
+            var doctorId = await _context.Doctors
+                .Where(d => d.UserId == doctorUserId)
+                .Select(d => d.Id)
+                .FirstOrDefaultAsync();
+
+            if (doctorId == 0)
+                throw new Exception("Doctor not found");
+
+            var notes = await _context.DoctorNotes
+                .Where(n => n.PatientId == patientId && n.DoctorId == doctorId)
+                .Select(n => new DoctorNoteDto
+                {
+                    Id = n.Id,
+                    Date = DateOnly.FromDateTime(n.Date),
+                    Diagnosis = n.Diagnosis,
+                    TreatmentPlan = n.TreatmentPlan,
+                    FollowUp = n.FollowUp
+                })
+                .OrderByDescending(n => n.Date)
+                .ToListAsync();
+
+            return notes;
         }
     }
 }
