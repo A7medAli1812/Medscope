@@ -12,11 +12,13 @@ namespace MedScope.Application.DTOs.Patient
 
         public int UpcomingAppointmentsCount { get; set; }
 
-        public int MedicalReportsCount { get; set; }
+        public int MedicalRecordsCount { get; set; }
 
         public List<PatientAppointmentDto> UpcomingAppointments { get; set; } = new();
 
-        public List<PatientReportDto> MedicalReports { get; set; } = new();
+        public List<PatientReportDto> MedicalRecords { get; set; } = new();
+
+        public List<PatientUpdateDto> Updates { get; set; }
     }
 
    

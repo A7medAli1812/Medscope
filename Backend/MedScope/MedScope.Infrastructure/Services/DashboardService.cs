@@ -46,7 +46,6 @@ public class DashboardService : IDashboardService
                   && !d.IsDeleted
             select a;
 
-        // ✅ تعديل هنا (Soft Delete)
         var totalDoctors = await _context.Doctors
             .CountAsync(d => d.HospitalId == hospitalId && !d.IsDeleted);
 
@@ -135,6 +134,9 @@ public class DashboardService : IDashboardService
             .Select(p => p.Id)
             .FirstOrDefaultAsync();
 
+        // =========================
+        // Upcoming Appointments
+        // =========================
         var appointments = await (
             from a in _context.Appointments
             join d in _context.Doctors on a.DoctorId equals d.Id
@@ -153,13 +155,55 @@ public class DashboardService : IDashboardService
             .Take(3)
             .ToListAsync();
 
+        // =========================
+        // Medical Records (Doctor Notes)
+        // =========================
+        var records = await _context.MedicalRecords
+            .Where(r => r.PatientId == patientId)
+            .OrderByDescending(r => r.RecordDate)
+            .Take(3)
+            .Select(r => new PatientReportDto
+            {
+                Title = r.Notes,
+                Date = r.RecordDate,
+                Status = "Ready"
+            })
+            .ToListAsync();
+
+        // =========================
+        // Updates
+        // =========================
+        var updates = new List<PatientUpdateDto>();
+
+        if (appointments.Any())
+        {
+            updates.Add(new PatientUpdateDto
+            {
+                Message = "Appointment reminder for tomorrow",
+                Time = "2 hours ago"
+            });
+        }
+
+        if (records.Any())
+        {
+            updates.Add(new PatientUpdateDto
+            {
+                Message = "New doctor note added",
+                Time = "1 day ago"
+            });
+        }
+
         return new PatientDashboardDto
         {
             PatientName = user.FirstName + " " + user.LastName,
+
             UpcomingAppointmentsCount = appointments.Count,
-            MedicalReportsCount = 0,
+            MedicalRecordsCount = records.Count,
+
             UpcomingAppointments = appointments,
-            MedicalReports = new List<PatientReportDto>()
+            MedicalRecords = records,
+
+            Updates = updates
         };
     }
 }
