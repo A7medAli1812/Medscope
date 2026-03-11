@@ -69,6 +69,8 @@ namespace MedScope.Infrastructure
             services.AddScoped<IDoctorPatientNotesService, DoctorPatientNotesService>();
             services.AddScoped<IDoctorPatientNoteUpdateService, DoctorPatientNoteUpdateService>();
 
+            services.AddScoped<IDoctorWorkingHoursService, DoctorWorkingHoursService>();
+
             return services;
         }
     }
