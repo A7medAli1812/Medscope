@@ -41,6 +41,12 @@ namespace MedScope.Infrastructure.Persistence
         public DbSet<DoctorWorkingHours> DoctorWorkingHours { get; set; }
 
         // =======================
+        // Chatbot Messages
+        // =======================
+
+        public DbSet<ChatMessage> ChatMessages { get; set; }
+
+        // =======================
         // Fluent API
         // =======================
 
@@ -98,7 +104,7 @@ namespace MedScope.Infrastructure.Persistence
                 .OnDelete(DeleteBehavior.NoAction);
 
             // =======================
-            // BloodBank Unique Constraint 🔥
+            // BloodBank Unique Constraint
             // =======================
 
             builder.Entity<BloodBank>()
@@ -109,6 +115,7 @@ namespace MedScope.Infrastructure.Persistence
         // =======================
         // Auditing
         // =======================
+
         public override Task<int> SaveChangesAsync(
             CancellationToken cancellationToken = default)
         {

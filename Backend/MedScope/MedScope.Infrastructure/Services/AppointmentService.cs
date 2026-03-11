@@ -151,18 +151,54 @@ namespace MedScope.Infrastructure.Services
             if (doctor == null)
                 throw new Exception("Doctor does not belong to your hospital");
 
-            var patientExists =
-                await _context.Patients.AnyAsync(p => p.Id == dto.PatientId);
+            var patient = await _context.Patients
+                .FirstOrDefaultAsync(p => p.Id == dto.PatientId);
 
-            if (!patientExists)
+            if (patient == null)
                 throw new Exception("Patient not found");
+
+            var appointmentTime = TimeOnly.Parse(dto.Time);
+
+            var appointmentDateTime = dto.Date.ToDateTime(appointmentTime);
+
+            // 1️⃣ منع الحجز في الماضي
+            if (appointmentDateTime <= DateTime.Now)
+                throw new Exception("Cannot book appointment in the past");
+
+            // 2️⃣ منع حجز نفس الموعد مرتين
+            var exists = await _context.Appointments
+                .AnyAsync(a =>
+                    a.DoctorId == dto.DoctorId &&
+                    a.Date == dto.Date &&
+                    a.Time == appointmentTime &&
+                    a.Status != AppointmentStatus.Cancelled);
+
+            if (exists)
+                throw new Exception("This time slot is already booked");
+
+            // 3️⃣ التأكد أن الموعد داخل ساعات عمل الدكتور
+            var day = dto.Date.DayOfWeek.ToString();
+
+            var workingHours = await _context.DoctorWorkingHours
+                .FirstOrDefaultAsync(w =>
+                    w.DoctorId == dto.DoctorId &&
+                    w.Day == day);
+
+            if (workingHours == null)
+                throw new Exception("Doctor does not work on this day");
+
+            var from = TimeOnly.FromTimeSpan(workingHours.From);
+            var to = TimeOnly.FromTimeSpan(workingHours.To);
+
+            if (appointmentTime < from || appointmentTime >= to)
+                throw new Exception("Appointment outside doctor working hours");
 
             var appointment = new Appointment
             {
                 PatientId = dto.PatientId,
                 DoctorId = dto.DoctorId,
                 Date = dto.Date,
-                Time = TimeOnly.Parse(dto.Time),
+                Time = appointmentTime,
                 PatientAge = dto.PatientAge,
                 VisitType = dto.VisitType,
                 Notes = dto.Notes,
@@ -171,6 +207,7 @@ namespace MedScope.Infrastructure.Services
             };
 
             _context.Appointments.Add(appointment);
+
             await _context.SaveChangesAsync();
 
             return appointment.Id;
@@ -425,26 +462,37 @@ namespace MedScope.Infrastructure.Services
         // =========================
         public async Task<DoctorSlotDto> GetDoctorAvailableSlotsAsync(int doctorId, DateOnly date)
         {
-            // المواعيد المحجوزة بالفعل
+            var day = date.DayOfWeek.ToString();
+
+            var workingHours = await _context.DoctorWorkingHours
+                .FirstOrDefaultAsync(w => w.DoctorId == doctorId && w.Day == day);
+
+            if (workingHours == null)
+                throw new Exception("Doctor does not work on this day");
+
+            var from = TimeOnly.FromTimeSpan(workingHours.From);
+            var to = TimeOnly.FromTimeSpan(workingHours.To);
+
+            var duration = workingHours.AppointmentDuration;
+
+            var allSlots = new List<TimeOnly>();
+
+            var current = from;
+
+            while (current < to)
+            {
+                allSlots.Add(current);
+                current = current.AddMinutes(duration);
+            }
+
             var bookedTimes = await _context.Appointments
-                .Where(a => a.DoctorId == doctorId
-                    && a.Date == date
-                    && a.Status != AppointmentStatus.Cancelled)
+                .Where(a =>
+                    a.DoctorId == doctorId &&
+                    a.Date == date &&
+                    a.Status != AppointmentStatus.Cancelled)
                 .Select(a => a.Time)
                 .ToListAsync();
 
-            // كل المواعيد الممكنة (كل 30 دقيقة)
-            var allSlots = new List<TimeOnly>
-    {
-                     new TimeOnly(9,0),
-                     new TimeOnly(9,30),
-                     new TimeOnly(10,0),
-                     new TimeOnly(10,30),
-                     new TimeOnly(11,0),
-                    new TimeOnly(11,30)
-    };
-
-            // إزالة المواعيد المحجوزة
             var availableSlots = allSlots
                 .Where(t => !bookedTimes.Contains(t))
                 .ToList();
@@ -453,6 +501,54 @@ namespace MedScope.Infrastructure.Services
             {
                 Date = date,
                 AvailableTimes = availableSlots
+            };
+        }
+        public async Task<List<DoctorScheduleDto>> GetDoctorScheduleAsync(int doctorId)
+        {
+            return await _context.DoctorWorkingHours
+                .Where(w => w.DoctorId == doctorId)
+                .Select(w => new DoctorScheduleDto
+                {
+                    Day = w.Day,
+                    From = TimeOnly.FromTimeSpan(w.From),
+                    To = TimeOnly.FromTimeSpan(w.To)
+                })
+                .OrderBy(w => w.Day)
+                .ToListAsync();
+        }
+        public async Task<AppointmentReviewDto> GetAppointmentReviewAsync(int doctorId, DateOnly date, TimeOnly time, int patientId)
+        {
+            var doctor = await _context.Doctors
+                .Include(d => d.Hospital)
+                .FirstOrDefaultAsync(d => d.Id == doctorId);
+
+            var patient = await _context.Patients
+                .FirstOrDefaultAsync(p => p.Id == patientId);
+
+            if (doctor == null || patient == null)
+                throw new Exception("Invalid data");
+
+            var doctorUser = await _context.Users
+                .FirstOrDefaultAsync(u => u.Id == doctor.UserId);
+
+            var patientUser = await _context.Users
+                .FirstOrDefaultAsync(u => u.Id == patient.UserId);
+
+            if (doctorUser == null || patientUser == null)
+                throw new Exception("User not found");
+
+            return new AppointmentReviewDto
+            {
+                PatientName = patientUser.FirstName + " " + patientUser.LastName,
+                Phone = patientUser.PhoneNumber,
+                Email = patientUser.Email,
+
+                DoctorName = doctorUser.FirstName + " " + doctorUser.LastName,
+                Specialty = doctor.Specialty,
+                HospitalName = doctor.Hospital.Name,
+
+                Date = date,
+                Time = time
             };
         }
     }
