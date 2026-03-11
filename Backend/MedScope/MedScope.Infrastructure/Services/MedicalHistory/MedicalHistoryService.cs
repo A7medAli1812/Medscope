@@ -1,30 +1,30 @@
-﻿using MedScope.Application.DTOs.MedicalHistory;
+﻿using System.Security.Claims;
+using MedScope.Application.DTOs.MedicalHistory;
 using MedScope.Application.Interfaces;
+using MedScope.Domain.Entities;
 using MedScope.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using System.Numerics;
-using System.Security.Claims;
 
 namespace MedScope.Infrastructure.Services
 {
     public class MedicalHistoryService : IMedicalHistoryService
-{
-    private readonly ApplicationDbContext _context;
-    private readonly IHttpContextAccessor _httpContextAccessor;
-
-    public MedicalHistoryService(
-        ApplicationDbContext context,
-        IHttpContextAccessor httpContextAccessor)
     {
-        _context = context;
-        _httpContextAccessor = httpContextAccessor;
-    }
+        private readonly ApplicationDbContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public MedicalHistoryService(
+            ApplicationDbContext context,
+            IHttpContextAccessor httpContextAccessor)
+        {
+            _context = context;
+            _httpContextAccessor = httpContextAccessor;
+        }
 
         // 🔐 Helper Method للتحقق من ملكية الحجز
         private async Task<int> ValidateAppointmentAndGetPatientId(int appointmentId)
         {
-            var userId = _httpContextAccessor.HttpContext.User
+            var userId = _httpContextAccessor.HttpContext?.User
                 .FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             var doctor = await _context.Doctors
@@ -46,66 +46,118 @@ namespace MedScope.Infrastructure.Services
         }
 
         public async Task AddChronicDiseaseAsync(int appointmentId, AddChronicDiseaseDto dto)
-    {
-        var patientId = await ValidateAppointmentAndGetPatientId(appointmentId);
-
-        var entity = new ChronicDisease
         {
-            PatientId = patientId,
-            DiseaseName = dto.DiseaseName,
-            Date = dto.Date.ToDateTime(TimeOnly.MinValue)
-        };
+            var patientId = await ValidateAppointmentAndGetPatientId(appointmentId);
 
-        _context.ChronicDiseases.Add(entity);
-        await _context.SaveChangesAsync();
-    }
+            var entity = new ChronicDisease
+            {
+                PatientId = patientId,
+                DiseaseName = dto.DiseaseName,
+                Date = dto.Date.ToDateTime(TimeOnly.MinValue)
+            };
 
-    public async Task AddSurgicalHistoryAsync(int appointmentId, AddSurgicalHistoryDto dto)
-    {
-        var patientId = await ValidateAppointmentAndGetPatientId(appointmentId);
+            _context.ChronicDiseases.Add(entity);
+            await _context.SaveChangesAsync();
+        }
 
-        var entity = new SurgicalHistory
+        public async Task AddSurgicalHistoryAsync(int appointmentId, AddSurgicalHistoryDto dto)
         {
-            PatientId = patientId,
-            Surgery = dto.Surgery,
-            Notes = dto.Notes,
-            Date = dto.Date.ToDateTime(TimeOnly.MinValue)
-        };
+            var patientId = await ValidateAppointmentAndGetPatientId(appointmentId);
 
-        _context.SurgicalHistories.Add(entity);
-        await _context.SaveChangesAsync();
-    }
+            var entity = new SurgicalHistory
+            {
+                PatientId = patientId,
+                Surgery = dto.Surgery,
+                Notes = dto.Notes,
+                Date = dto.Date.ToDateTime(TimeOnly.MinValue)
+            };
 
-    public async Task AddMedicationAsync(int appointmentId, AddMedicationDto dto)
-    {
-        var patientId = await ValidateAppointmentAndGetPatientId(appointmentId);
+            _context.SurgicalHistories.Add(entity);
+            await _context.SaveChangesAsync();
+        }
 
-        var entity = new Medication
+        public async Task AddMedicationAsync(int appointmentId, AddMedicationDto dto)
         {
-            PatientId = patientId,
-            Name = dto.Name,
-            Frequency = dto.Frequency,
-            Date = dto.Date.ToDateTime(TimeOnly.MinValue)
-        };
+            var patientId = await ValidateAppointmentAndGetPatientId(appointmentId);
 
-        _context.Medications.Add(entity);
-        await _context.SaveChangesAsync();
-    }
+            var entity = new Medication
+            {
+                PatientId = patientId,
+                Name = dto.Name,
+                Frequency = dto.Frequency,
+                Date = dto.Date.ToDateTime(TimeOnly.MinValue)
+            };
 
-    public async Task AddAllergyAsync(int appointmentId, AddAllergyDto dto)
-    {
-        var patientId = await ValidateAppointmentAndGetPatientId(appointmentId);
+            _context.Medications.Add(entity);
+            await _context.SaveChangesAsync();
+        }
 
-        var entity = new Allergy
+        public async Task AddAllergyAsync(int appointmentId, AddAllergyDto dto)
         {
-            PatientId = patientId,
-            AllergyName = dto.AllergyName,
-            Reaction = dto.Reaction,
-            Date = dto.Date.ToDateTime(TimeOnly.MinValue)
-        };
+            var patientId = await ValidateAppointmentAndGetPatientId(appointmentId);
 
-        _context.Allergies.Add(entity);
-        await _context.SaveChangesAsync();
+            var entity = new Allergy
+            {
+                PatientId = patientId,
+                AllergyName = dto.AllergyName,
+                Reaction = dto.Reaction,
+                Date = dto.Date.ToDateTime(TimeOnly.MinValue)
+            };
+
+            _context.Allergies.Add(entity);
+            await _context.SaveChangesAsync();
+        }
+
+        // 🩺 Get Patient Medical History
+        public async Task<PatientMedicalHistoryDto> GetPatientMedicalHistoryAsync(string userId)
+        {
+            var patientData = await (from p in _context.Patients
+                                     join u in _context.Users
+                                     on p.UserId equals u.Id
+                                     where p.UserId == userId
+                                     select new
+                                     {
+                                         Patient = p,
+                                         User = u
+                                     }).FirstOrDefaultAsync();
+
+            if (patientData == null)
+                return null!;
+
+            var patientId = patientData.Patient.Id;
+
+            var chronicDiseases = await _context.ChronicDiseases
+                .Where(x => x.PatientId == patientId)
+                .Select(x => x.DiseaseName)
+                .ToListAsync();
+
+            var surgeries = await _context.SurgicalHistories
+                .Where(x => x.PatientId == patientId)
+                .Select(x => x.Surgery)
+                .ToListAsync();
+
+            var medications = await _context.Medications
+                .Where(x => x.PatientId == patientId)
+                .Select(x => x.Name)
+                .ToListAsync();
+
+            var allergies = await _context.Allergies
+                .Where(x => x.PatientId == patientId)
+                .Select(x => x.AllergyName)
+                .ToListAsync();
+
+            return new PatientMedicalHistoryDto
+            {
+                FullName = patientData.User.FirstName + " " + patientData.User.LastName,
+                Email = patientData.User.Email,
+                PhoneNumber = patientData.User.PhoneNumber,
+                BloodGroup = patientData.Patient.BloodGroup,
+
+                ChronicDiseases = chronicDiseases,
+                Surgeries = surgeries,
+                Medications = medications,
+                Allergies = allergies
+            };
+        }
     }
-}
 }

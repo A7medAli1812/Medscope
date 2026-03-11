@@ -17,5 +17,6 @@ namespace MedScope.Application.Abstractions.Blood
 
         // تقليل الكمية (Arrow Down)
         Task DecreaseAsync(int id, int hospitalId);
+        Task<List<HospitalBloodBankDto>> GetAllHospitalsBloodAsync();
     }
 }

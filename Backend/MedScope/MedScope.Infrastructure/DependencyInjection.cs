@@ -1,8 +1,7 @@
 ﻿using MedScope.Application.Abstractions.Appointments;
-using MedScope.Application.Abstractions.Blood;          // 👈 ضيفناه
+using MedScope.Application.Abstractions.Blood;
 using MedScope.Application.Abstractions.Persistence;
 using MedScope.Application.Interfaces;
-using MedScope.Application.Interfaces.Doctor;
 using MedScope.Application.Interfaces.Doctor;
 using MedScope.Infrastructure.Identity;
 using MedScope.Infrastructure.Persistence;
@@ -10,7 +9,6 @@ using MedScope.Infrastructure.Services;
 using MedScope.Infrastructure.Services.Doctor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
 
 namespace MedScope.Infrastructure
 {
@@ -33,9 +31,10 @@ namespace MedScope.Infrastructure
             // =========================
             // Appointments
             // =========================
-            services.AddScoped<IAppointmentService, AppointmentService>(); 
+            services.AddScoped<IAppointmentService, AppointmentService>();
+
             // =========================
-            // Blood Bank  👈 ده كان ناقص
+            // Blood Bank
             // =========================
             services.AddScoped<IBloodBankService, BloodBankService>();
 
@@ -43,25 +42,33 @@ namespace MedScope.Infrastructure
             // DbContext Interface
             // =========================
             services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
+
+            // =========================
+            // Patient
+            // =========================
             services.AddScoped<IPatientService, PatientService>();
 
             // =========================
-            // Dashboard 🔥
+            // Dashboard
             // =========================
             services.AddScoped<IDashboardService, DashboardService>();
             services.AddScoped<IPatientsChartService, PatientsChartService>();
 
+            // =========================
+            // Medical History
+            // =========================
+            services.AddScoped<IMedicalHistoryService, MedicalHistoryService>();
 
             // =========================
-            // Doctor 🔥
+            // Doctor
             // =========================
             services.AddScoped<IDoctorAppointmentService, DoctorAppointmentService>();
-            services.AddScoped<IMedicalHistoryService, MedicalHistoryService>();
             services.AddScoped<IDoctorPatientsListService, DoctorPatientsService>();
             services.AddScoped<IDoctorPatientRecordService, DoctorPatientRecordService>();
             services.AddScoped<IDoctorPatientDeleteService, DoctorPatientDeleteService>();
             services.AddScoped<IDoctorPatientNotesService, DoctorPatientNotesService>();
             services.AddScoped<IDoctorPatientNoteUpdateService, DoctorPatientNoteUpdateService>();
+
             return services;
         }
     }

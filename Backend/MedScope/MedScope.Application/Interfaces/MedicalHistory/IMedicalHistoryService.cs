@@ -1,4 +1,5 @@
-﻿using MedScope.Application.DTOs.MedicalHistory;
+﻿using MedScope.Application.DTOs.Doctor.PatientRecord;
+using MedScope.Application.DTOs.MedicalHistory;
 namespace MedScope.Application.Interfaces
 {
     public interface IMedicalHistoryService
@@ -10,5 +11,6 @@ namespace MedScope.Application.Interfaces
         Task AddMedicationAsync(int appointmentId, AddMedicationDto dto);
 
         Task AddAllergyAsync(int appointmentId, AddAllergyDto dto);
+        Task<PatientMedicalHistoryDto> GetPatientMedicalHistoryAsync(string userId);
     }
 }

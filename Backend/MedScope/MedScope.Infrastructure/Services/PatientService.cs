@@ -25,8 +25,8 @@ public class PatientService : IPatientService
     // =========================
     public async Task<object> GetPatientsAsync(PatientQueryParams query)
     {
-        var patientsQuery = from p in _context.Patients
-                            join u in _context.Users
+        var patientsQuery = from p in _context.Patients.AsNoTracking()
+                            join u in _context.Users.AsNoTracking()
                             on p.UserId equals u.Id
                             where !p.IsDeleted
                             select new
@@ -86,14 +86,12 @@ public class PatientService : IPatientService
     // =========================
     public async Task<bool> UpdatePatientAsync(int patientId, UpdatePatientDto dto)
     {
-        var patient = await _context.Patients
-            .FirstOrDefaultAsync(p => p.Id == patientId);
+        var patient = await _context.Patients.FindAsync(patientId);
 
         if (patient == null)
             return false;
 
-        var user = await _context.Users
-            .FirstOrDefaultAsync(u => u.Id == patient.UserId);
+        var user = await _context.Users.FindAsync(patient.UserId);
 
         if (user == null)
             return false;
@@ -110,10 +108,10 @@ public class PatientService : IPatientService
         if (!string.IsNullOrEmpty(dto.PhoneNumber))
             user.PhoneNumber = dto.PhoneNumber;
 
-        if (!string.IsNullOrEmpty(dto.Gender))
+        if (!string.IsNullOrEmpty(dto.Gender) &&
+            Enum.TryParse<Gender>(dto.Gender, true, out var gender))
         {
-            if (Enum.TryParse<Gender>(dto.Gender, out var gender))
-                user.Gender = gender;
+            user.Gender = gender;
         }
 
         if (dto.DateOfBirth.HasValue)
@@ -135,14 +133,12 @@ public class PatientService : IPatientService
     // =========================
     public async Task<bool> DeletePatientAsync(int patientId)
     {
-        var patient = await _context.Patients
-            .FirstOrDefaultAsync(p => p.Id == patientId);
+        var patient = await _context.Patients.FindAsync(patientId);
 
         if (patient == null)
             return false;
 
         patient.IsDeleted = true;
-
         patient.LastModifiedAt = DateTime.UtcNow;
         patient.LastModifiedBy = "Admin";
 
@@ -156,8 +152,8 @@ public class PatientService : IPatientService
     // =========================
     public async Task<PatientDetailsDto?> GetPatientByIdAsync(int id)
     {
-        var patient = await (from p in _context.Patients
-                             join u in _context.Users
+        var patient = await (from p in _context.Patients.AsNoTracking()
+                             join u in _context.Users.AsNoTracking()
                              on p.UserId equals u.Id
                              where p.Id == id && !p.IsDeleted
                              select new PatientDetailsDto
@@ -178,30 +174,26 @@ public class PatientService : IPatientService
     // =========================
     // GET PROFILE
     // =========================
-    public async Task<PatientProfileDto> GetProfileAsync(string userId)
+    public async Task<PatientProfileDto?> GetProfileAsync(string userId)
     {
-        var profile = await (from p in _context.Patients
-                             join u in _context.Users
-                             on p.UserId equals u.Id
-                             where p.UserId == userId && !p.IsDeleted
-                             select new PatientProfileDto
-                             {
-                                 FullName = u.FirstName + " " + u.LastName,
-                                 Email = u.Email,
-                                 PhoneNumber = u.PhoneNumber,
-                                 Address = u.Address,
-                                 BloodGroup = p.BloodGroup,
-
-                                 PatientId = p.Id,
-                                 RegistrationDate = u.CreatedAt,
-                                 AccountStatus = "Active",
-                                 LastLogin = u.LastLogin,
-
-                                 EmailNotifications = u.EmailNotifications,
-                                 AppointmentReminders = u.AppointmentReminders
-                             }).FirstOrDefaultAsync();
-
-        return profile;
+        return await (from p in _context.Patients.AsNoTracking()
+                      join u in _context.Users.AsNoTracking()
+                      on p.UserId equals u.Id
+                      where p.UserId == userId && !p.IsDeleted
+                      select new PatientProfileDto
+                      {
+                          FullName = u.FirstName + " " + u.LastName,
+                          Email = u.Email,
+                          PhoneNumber = u.PhoneNumber,
+                          Address = u.Address,
+                          BloodGroup = p.BloodGroup,
+                          PatientId = p.Id,
+                          RegistrationDate = u.CreatedAt,
+                          AccountStatus = "Active",
+                          LastLogin = u.LastLogin,
+                          EmailNotifications = u.EmailNotifications,
+                          AppointmentReminders = u.AppointmentReminders
+                      }).FirstOrDefaultAsync();
     }
 
     // =========================
@@ -215,8 +207,7 @@ public class PatientService : IPatientService
         if (patient == null)
             return false;
 
-        var user = await _context.Users
-            .FirstOrDefaultAsync(u => u.Id == userId);
+        var user = await _context.Users.FindAsync(userId);
 
         if (user == null)
             return false;
@@ -246,8 +237,7 @@ public class PatientService : IPatientService
     // =========================
     public async Task<bool> UpdateNotificationSettingsAsync(string userId, UpdateNotificationSettingsDto dto)
     {
-        var user = await _context.Users
-            .FirstOrDefaultAsync(u => u.Id == userId);
+        var user = await _context.Users.FindAsync(userId);
 
         if (user == null)
             return false;
@@ -278,6 +268,7 @@ public class PatientService : IPatientService
 
         return result.Succeeded;
     }
+
     // =========================
     // DELETE ACCOUNT (SOFT DELETE)
     // =========================

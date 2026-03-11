@@ -14,9 +14,9 @@ namespace MedScope.Infrastructure.Services
             _context = context;
         }
 
-        // =============================
-        // Get All Blood Types (Per Hospital)
-        // =============================
+        // =========================================
+        // Get All Blood Types For Specific Hospital
+        // =========================================
         public async Task<List<BloodBankDto>> GetAllAsync(int hospitalId)
         {
             var data = await _context.BloodBanks
@@ -29,7 +29,6 @@ namespace MedScope.Infrastructure.Services
                 })
                 .ToListAsync();
 
-            // Calculate Status
             foreach (var item in data)
             {
                 item.Status = GetStatus(item.Quantity);
@@ -38,9 +37,38 @@ namespace MedScope.Infrastructure.Services
             return data;
         }
 
-        // =============================
+        // =========================================
+        // Get Blood Banks For ALL Hospitals (Patient View)
+        // =========================================
+        public async Task<List<HospitalBloodBankDto>> GetAllHospitalsBloodAsync()
+        {
+            var hospitals = await _context.Hospitals
+                .Include(h => h.BloodBanks)
+                .ToListAsync();
+
+            var result = hospitals.Select(h => new HospitalBloodBankDto
+            {
+                HospitalId = h.Id,
+                HospitalName = h.Name,
+                Address = h.Address,
+                Phone = h.Phone,
+
+                BloodTypes = h.BloodBanks.Select(b => new BloodBankDto
+                {
+                    Id = b.Id,
+                    BloodType = b.BloodType,
+                    Quantity = b.Quantity,
+                    Status = GetStatus(b.Quantity)
+                }).ToList()
+
+            }).ToList();
+
+            return result;
+        }
+
+        // =========================================
         // Increase Quantity
-        // =============================
+        // =========================================
         public async Task IncreaseAsync(int id, int hospitalId)
         {
             var blood = await _context.BloodBanks
@@ -54,9 +82,9 @@ namespace MedScope.Infrastructure.Services
             await _context.SaveChangesAsync();
         }
 
-        // =============================
+        // =========================================
         // Decrease Quantity
-        // =============================
+        // =========================================
         public async Task DecreaseAsync(int id, int hospitalId)
         {
             var blood = await _context.BloodBanks
@@ -73,9 +101,9 @@ namespace MedScope.Infrastructure.Services
             await _context.SaveChangesAsync();
         }
 
-        // =============================
+        // =========================================
         // Status Logic
-        // =============================
+        // =========================================
         private string GetStatus(int quantity)
         {
             if (quantity == 0)
