@@ -38,6 +38,8 @@ namespace MedScope.Infrastructure.Persistence
 
         public DbSet<ApplicationUser> Users { get; set; }
 
+        public DbSet<DoctorWorkingHours> DoctorWorkingHours { get; set; }
+
         // =======================
         // Fluent API
         // =======================
