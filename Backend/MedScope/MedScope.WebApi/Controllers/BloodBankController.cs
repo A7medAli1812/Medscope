@@ -30,26 +30,7 @@ namespace MedScope.WebApi.Controllers
         }
 
         // =============================
-        // Add New Blood Type
-        // =============================
-        [HttpPost]
-        public async Task<IActionResult> Add(CreateBloodBankDto dto)
-        {
-            try
-            {
-                var hospitalId = GetHospitalIdFromUser();
-                await _service.AddAsync(dto, hospitalId);
-
-                return Created("", new { message = "Blood type added successfully" });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-        }
-
-        // =============================
-        // Increase Quantity (Arrow Up)
+        // Increase Quantity
         // =============================
         [HttpPut("{id}/increase")]
         public async Task<IActionResult> Increase(int id)
@@ -60,7 +41,7 @@ namespace MedScope.WebApi.Controllers
         }
 
         // =============================
-        // Decrease Quantity (Arrow Down)
+        // Decrease Quantity
         // =============================
         [HttpPut("{id}/decrease")]
         public async Task<IActionResult> Decrease(int id)

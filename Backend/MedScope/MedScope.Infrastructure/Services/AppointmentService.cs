@@ -1,5 +1,6 @@
 ﻿using MedScope.Application.Abstractions.Appointments;
 using MedScope.Application.DTOs.Admin;
+using MedScope.Application.DTOs.Patient;
 using MedScope.Domain.Entities;
 using MedScope.Domain.Enums;
 using MedScope.Infrastructure.Persistence;
@@ -47,13 +48,12 @@ namespace MedScope.Infrastructure.Services
                     Date = a.Date,
                     Time = a.Time,
                     VisitType = a.VisitType,
-                    Specialty = null, // 🔥 عشان new مفيهوش specialty
+                    Specialty = null,
                     PatientName = patientUser.FirstName + " " + patientUser.LastName,
                     PatientAge = a.PatientAge,
                     DoctorName = doctorUser.FirstName + " " + doctorUser.LastName
                 };
 
-            // 🔎 Search
             if (!string.IsNullOrEmpty(search))
             {
                 query = query.Where(x =>
@@ -61,7 +61,6 @@ namespace MedScope.Infrastructure.Services
                     x.DoctorName.Contains(search));
             }
 
-            // 📅 Filter by Date
             if (date.HasValue)
             {
                 query = query.Where(x => x.Date == date.Value);
@@ -111,10 +110,9 @@ namespace MedScope.Infrastructure.Services
                     PatientName = patientUser.FirstName + " " + patientUser.LastName,
                     PatientAge = a.PatientAge,
                     DoctorName = doctorUser.FirstName + " " + doctorUser.LastName,
-                    Specialty = a.Doctor.Specialty   // 👈 هنا الفرق
+                    Specialty = a.Doctor.Specialty
                 };
 
-            // 🔎 Search
             if (!string.IsNullOrEmpty(search))
             {
                 query = query.Where(x =>
@@ -122,7 +120,6 @@ namespace MedScope.Infrastructure.Services
                     x.DoctorName.Contains(search));
             }
 
-            // 📅 Filter by Date
             if (date.HasValue)
             {
                 query = query.Where(x => x.Date == date.Value);
@@ -180,7 +177,7 @@ namespace MedScope.Infrastructure.Services
         }
 
         // =========================
-        // Cancel Appointment
+        // Cancel Appointment (Admin)
         // =========================
         public async Task CancelAppointmentAsync(
             int appointmentId,
@@ -281,6 +278,182 @@ namespace MedScope.Infrastructure.Services
                 throw new Exception("Appointment not found");
 
             return result;
+        }
+
+        // =========================
+        // Get Upcoming Appointments (Patient)
+        // =========================
+        public async Task<List<PatientAppointmentDto>> GetUpcomingAppointmentsForPatient(int patientId)
+        {
+            var query =
+                from a in _context.Appointments
+                    .Include(a => a.Doctor)
+                    .Include(a => a.Hospital)
+
+                join doctorUser in _context.Users
+                    on a.Doctor.UserId equals doctorUser.Id
+
+                where a.PatientId == patientId
+                 && a.Status != AppointmentStatus.Cancelled
+                 && a.Status != AppointmentStatus.Completed
+
+                select new PatientAppointmentDto
+                {
+                    Id = a.Id,
+                    DoctorName = doctorUser.FirstName + " " + doctorUser.LastName,
+                    Specialty = a.Doctor.Specialty,
+                    HospitalName = a.Hospital.Name,
+                    VisitType = a.VisitType,
+                    Date = a.Date.ToDateTime(a.Time),
+                    Time = a.Time,
+                    Status = a.Status
+                };
+
+            return await query
+                .OrderBy(x => x.Date)
+                .ToListAsync();
+        }
+
+        // =========================
+        // Get Past Appointments (Patient)
+        // =========================
+        public async Task<List<PatientAppointmentDto>> GetPastAppointmentsForPatient(int patientId)
+        {
+            var query =
+                from a in _context.Appointments
+                    .Include(a => a.Doctor)
+                    .Include(a => a.Hospital)
+
+                join doctorUser in _context.Users
+                    on a.Doctor.UserId equals doctorUser.Id
+
+                where a.PatientId == patientId
+                      && a.Status == AppointmentStatus.Completed
+
+                select new PatientAppointmentDto
+                {
+                    Id = a.Id,
+                    DoctorName = doctorUser.FirstName + " " + doctorUser.LastName,
+                    Specialty = a.Doctor.Specialty,
+                    HospitalName = a.Hospital.Name,
+                    VisitType = a.VisitType,
+                    Date = a.Date.ToDateTime(a.Time),
+                    Time = a.Time,
+                    Status = a.Status
+                };
+
+            return await query
+                .OrderByDescending(x => x.Date)
+                .ToListAsync();
+        }
+
+        // =========================
+        // Cancel Appointment (Patient)
+        // =========================
+        public async Task CancelAppointmentForPatient(int appointmentId, int patientId)
+        {
+            var appointment = await _context.Appointments
+                .FirstOrDefaultAsync(a =>
+                    a.Id == appointmentId &&
+                    a.PatientId == patientId);
+
+            if (appointment == null)
+                throw new Exception("Appointment not found");
+
+            if (appointment.Status == AppointmentStatus.Completed)
+                throw new Exception("Completed appointment cannot be cancelled");
+
+            appointment.Status = AppointmentStatus.Cancelled;
+
+            await _context.SaveChangesAsync();
+        }
+
+  
+
+        public async Task<List<HospitalForBookingDto>> GetHospitalsForBookingAsync()
+        {
+            return await _context.Hospitals
+                .Select(h => new HospitalForBookingDto
+                {
+                    Id = h.Id,
+                    Name = h.Name,
+                   
+                })
+                .OrderBy(h => h.Name)
+                .ToListAsync();
+        }
+
+        // =========================
+        // Get Specialties (Booking Step 1)
+        // =========================
+        public async Task<List<string>> GetSpecialtiesAsync()
+        {
+            return await _context.Doctors
+                .Where(d => !string.IsNullOrEmpty(d.Specialty))
+                .Select(d => d.Specialty)
+                .Distinct()
+                .OrderBy(s => s)
+                .ToListAsync();
+        }
+
+        public async Task<List<DoctorForBookingDto>> GetDoctorsBySpecialtyAsync(string specialty, int hospitalId)
+        {
+            var query =
+                from d in _context.Doctors
+                    .Include(d => d.Hospital)
+
+                join doctorUser in _context.Users
+                    on d.UserId equals doctorUser.Id
+
+                where d.Specialty == specialty
+                      && d.HospitalId == hospitalId
+
+                select new DoctorForBookingDto
+                {
+                    Id = d.Id,
+                    Name = doctorUser.FirstName + " " + doctorUser.LastName,
+                    Specialty = d.Specialty,
+                    HospitalName = d.Hospital.Name
+                };
+
+            return await query
+                .OrderBy(d => d.Name)
+                .ToListAsync();
+        }
+        // =========================
+        // Get Doctor Available Slots (Booking Step 3)
+        // =========================
+        public async Task<DoctorSlotDto> GetDoctorAvailableSlotsAsync(int doctorId, DateOnly date)
+        {
+            // المواعيد المحجوزة بالفعل
+            var bookedTimes = await _context.Appointments
+                .Where(a => a.DoctorId == doctorId
+                    && a.Date == date
+                    && a.Status != AppointmentStatus.Cancelled)
+                .Select(a => a.Time)
+                .ToListAsync();
+
+            // كل المواعيد الممكنة (كل 30 دقيقة)
+            var allSlots = new List<TimeOnly>
+    {
+                     new TimeOnly(9,0),
+                     new TimeOnly(9,30),
+                     new TimeOnly(10,0),
+                     new TimeOnly(10,30),
+                     new TimeOnly(11,0),
+                    new TimeOnly(11,30)
+    };
+
+            // إزالة المواعيد المحجوزة
+            var availableSlots = allSlots
+                .Where(t => !bookedTimes.Contains(t))
+                .ToList();
+
+            return new DoctorSlotDto
+            {
+                Date = date,
+                AvailableTimes = availableSlots
+            };
         }
     }
 }

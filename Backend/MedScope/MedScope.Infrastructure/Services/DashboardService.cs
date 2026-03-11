@@ -1,4 +1,5 @@
 ﻿using MedScope.Application.DTOs;
+using MedScope.Application.DTOs.Patient;
 using MedScope.Application.Interfaces;
 using MedScope.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Http;
@@ -18,6 +19,9 @@ public class DashboardService : IDashboardService
         _httpContextAccessor = httpContextAccessor;
     }
 
+    // =========================
+    // 🏥 ADMIN DASHBOARD
+    // =========================
     public async Task<DashboardDto> GetDashboardAsync(int month, int? day)
     {
         var userId = _httpContextAccessor.HttpContext.User
@@ -34,43 +38,31 @@ public class DashboardService : IDashboardService
 
         var hospitalId = admin.HospitalId;
 
-        // =========================
-        // 📊 BASE QUERY
-        // =========================
         var baseAppointmentsQuery =
             from a in _context.Appointments
             join d in _context.Doctors on a.DoctorId equals d.Id
             where a.HospitalId == hospitalId
                   && d.HospitalId == hospitalId
+                  && !d.IsDeleted
             select a;
 
-        // =========================
-        // 📊 CARDS
-        // =========================
-
         var totalDoctors = await _context.Doctors
-            .CountAsync(d => d.HospitalId == hospitalId);
+            .CountAsync(d => d.HospitalId == hospitalId && !d.IsDeleted);
 
         var totalBeds = await _context.Beds
             .CountAsync(b => b.HospitalId == hospitalId);
 
         var appointmentsCount = await baseAppointmentsQuery.CountAsync();
 
-        // total patients (distinct)
         var totalPatients = await baseAppointmentsQuery
             .Select(a => a.PatientId)
             .Distinct()
             .CountAsync();
 
-        // new patients = عنده حجز واحد بس في المستشفى
         var newPatients = await baseAppointmentsQuery
             .GroupBy(a => a.PatientId)
             .Where(g => g.Count() == 1)
             .CountAsync();
-
-        // =========================
-        // 📊 DOCTOR STATS (FILTER BY MONTH / DAY)
-        // =========================
 
         var doctorQuery =
             from a in _context.Appointments
@@ -78,10 +70,10 @@ public class DashboardService : IDashboardService
             join u in _context.Users on d.UserId equals u.Id
             where a.HospitalId == hospitalId
                   && d.HospitalId == hospitalId
+                  && !d.IsDeleted
                   && a.Date.Month == month
             select new { a, d, u };
 
-        // filter by day (optional)
         if (day.HasValue)
         {
             doctorQuery = doctorQuery
@@ -116,10 +108,6 @@ public class DashboardService : IDashboardService
             .OrderByDescending(x => x.Count)
             .ToList();
 
-        // =========================
-        // 📦 FINAL RESPONSE
-        // =========================
-
         return new DashboardDto
         {
             TotalBeds = totalBeds,
@@ -127,6 +115,95 @@ public class DashboardService : IDashboardService
             AppointmentsCount = appointmentsCount,
             NewPatients = newPatients,
             DoctorStats = doctorStats
+        };
+    }
+
+    // =========================
+    // 👤 PATIENT DASHBOARD
+    // =========================
+    public async Task<PatientDashboardDto> GetPatientDashboardAsync(string userId)
+    {
+        var user = await _context.Users
+            .FirstOrDefaultAsync(u => u.Id == userId);
+
+        if (user == null)
+            throw new Exception("User not found");
+
+        int patientId = await _context.Patients
+            .Where(p => p.UserId == userId)
+            .Select(p => p.Id)
+            .FirstOrDefaultAsync();
+
+        // =========================
+        // Upcoming Appointments
+        // =========================
+        var appointments = await (
+            from a in _context.Appointments
+            join d in _context.Doctors on a.DoctorId equals d.Id
+            join u in _context.Users on d.UserId equals u.Id
+            where a.PatientId == patientId
+                  && !d.IsDeleted
+                  && a.Date >= DateOnly.FromDateTime(DateTime.Now)
+            orderby a.Date
+            select new PatientAppointmentDto
+            {
+                DoctorName = u.FirstName + " " + u.LastName,
+                Specialty = d.Specialty,
+                Date = a.Date.ToDateTime(TimeOnly.MinValue),
+                Status = a.Status
+            })
+            .Take(3)
+            .ToListAsync();
+
+        // =========================
+        // Medical Records (Doctor Notes)
+        // =========================
+        var records = await _context.MedicalRecords
+            .Where(r => r.PatientId == patientId)
+            .OrderByDescending(r => r.RecordDate)
+            .Take(3)
+            .Select(r => new PatientReportDto
+            {
+                Title = r.Notes,
+                Date = r.RecordDate,
+                Status = "Ready"
+            })
+            .ToListAsync();
+
+        // =========================
+        // Updates
+        // =========================
+        var updates = new List<PatientUpdateDto>();
+
+        if (appointments.Any())
+        {
+            updates.Add(new PatientUpdateDto
+            {
+                Message = "Appointment reminder for tomorrow",
+                Time = "2 hours ago"
+            });
+        }
+
+        if (records.Any())
+        {
+            updates.Add(new PatientUpdateDto
+            {
+                Message = "New doctor note added",
+                Time = "1 day ago"
+            });
+        }
+
+        return new PatientDashboardDto
+        {
+            PatientName = user.FirstName + " " + user.LastName,
+
+            UpcomingAppointmentsCount = appointments.Count,
+            MedicalRecordsCount = records.Count,
+
+            UpcomingAppointments = appointments,
+            MedicalRecords = records,
+
+            Updates = updates
         };
     }
 }
