@@ -80,7 +80,23 @@ namespace MedScope.WebApi.Controllers.Patient
 
             return Ok(doctors);
         }
+        [HttpGet("doctor-schedule/{doctorId}")]
+        public async Task<IActionResult> GetDoctorSchedule(int doctorId)
+        {
+            var result = await _appointmentService.GetDoctorScheduleAsync(doctorId);
 
+            return Ok(result);
+        }
+
+        [HttpGet("review")]
+        public async Task<IActionResult> GetReview(int doctorId, DateOnly date, TimeOnly time)
+        {
+            var patientId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+            var result = await _appointmentService.GetAppointmentReviewAsync(doctorId, date, time, patientId);
+
+            return Ok(result);
+        }
 
     }
 }

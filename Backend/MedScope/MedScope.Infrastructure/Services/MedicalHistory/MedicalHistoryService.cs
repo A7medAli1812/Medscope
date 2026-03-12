@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using MedScope.Application.DTOs.MedicalHistory;
+using MedScope.Application.DTOs.Patient;
 using MedScope.Application.Interfaces;
 using MedScope.Domain.Entities;
 using MedScope.Infrastructure.Persistence;
@@ -146,6 +147,19 @@ namespace MedScope.Infrastructure.Services
                 .Select(x => x.AllergyName)
                 .ToListAsync();
 
+            // 🧾 Visits / Doctor Notes
+            var visits = await _context.DoctorNotes
+                .Where(x => x.PatientId == patientId)
+                .OrderByDescending(x => x.CreatedAt)
+                .Select(x => new PatientVisitDto
+                {
+                    Date = x.CreatedAt,
+                    Diagnosis = x.Diagnosis,
+                    TreatmentPlan = x.TreatmentPlan,
+                    FollowUp = x.FollowUp
+                })
+                .ToListAsync();
+
             return new PatientMedicalHistoryDto
             {
                 FullName = patientData.User.FirstName + " " + patientData.User.LastName,
@@ -153,11 +167,42 @@ namespace MedScope.Infrastructure.Services
                 PhoneNumber = patientData.User.PhoneNumber,
                 BloodGroup = patientData.Patient.BloodGroup,
 
+                ChronicDiseasesCount = chronicDiseases.Count,
+                SurgeriesCount = surgeries.Count,
+                MedicationsCount = medications.Count,
+                AllergiesCount = allergies.Count,
+
                 ChronicDiseases = chronicDiseases,
                 Surgeries = surgeries,
                 Medications = medications,
-                Allergies = allergies
+                Allergies = allergies,
+
+                Visits = visits
             };
+        }
+
+        // 📋 Get Patient Notes (Tab Notes)
+        public async Task<List<PatientNoteDto>> GetPatientNotesAsync(string userId)
+        {
+            var patient = await _context.Patients
+                .FirstOrDefaultAsync(p => p.UserId == userId);
+
+            if (patient == null)
+                return new List<PatientNoteDto>();
+
+            var notes = await _context.DoctorNotes
+                .Where(x => x.PatientId == patient.Id)
+                .OrderByDescending(x => x.CreatedAt)
+                .Select(x => new PatientNoteDto
+                {
+                    Date = x.CreatedAt,
+                    Diagnosis = x.Diagnosis,
+                    TreatmentPlan = x.TreatmentPlan,
+                    FollowUp = x.FollowUp
+                })
+                .ToListAsync();
+
+            return notes;
         }
     }
 }
