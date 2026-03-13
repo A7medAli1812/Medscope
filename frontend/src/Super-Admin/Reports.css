@@ -1,0 +1,237 @@
+.reports-page {
+  padding: 30px;
+}
+
+.reports-header {
+  margin-bottom: 25px;
+}
+
+.reports-title {
+  font-size: 28px;
+  color: #1e4f73;
+  margin-bottom: 5px;
+}
+
+.reports-subtitle {
+  font-size: 14px;
+  color: #7a9bb5;
+}
+
+.reports-card {
+  background: #004F781A;
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.chart-section {
+  padding: 10px 0;
+}
+
+.divider {
+  height: 1px;
+  background: #d9e5ef;
+  margin: 30px 0;
+}
+
+.chart-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.chart-title {
+  font-size: 18px;
+  color: #1e4f73;
+  font-weight: 600;
+}
+
+.chart-filters {
+  display: flex;
+  gap: 10px;
+}
+
+.chart-filter {
+  border: 1px solid #1e4f73;
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 13px;
+  color: #1e4f73;
+  background: white;
+  cursor: pointer;
+  outline: none;
+}
+
+.chart-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.total-label {
+  font-size: 14px;
+  color: #1e4f73;
+}
+
+.total-label strong {
+  font-weight: 700;
+}
+
+.chart-legend-inline {
+  display: flex;
+  gap: 16px;
+  font-size: 13px;
+  color: #1e4f73;
+  align-items: center;
+}
+
+.chart-legend-inline span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+/* Pie */
+.pie-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.pie-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 100px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #1e4f73;
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+.page-btn {
+  background: transparent;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 14px;
+  color: #1e4f73;
+  cursor: pointer;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-btn:hover {
+  background: #d9e5ef;
+}
+
+.page-btn.active {
+  background: #1e4f73;
+  color: white;
+}
+
+.page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.page-btn.nav-btn {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  width: auto;
+  height: auto;
+  padding: 0 4px;
+  font-size: 14px;
+  color: #1e4f73;
+}
+
+.page-btn.nav-btn:hover {
+  background: transparent;
+  text-decoration: underline;
+}
+
+/* Export buttons */
+.export-btns {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.export-btn {
+  padding: 10px 24px;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  transition: 0.2s;
+}
+
+.export-btn.excel {
+  background: #1e4f73;
+  color: white;
+}
+
+.export-btn.excel:hover {
+  background: #004f78;
+}
+
+.export-btn.pdf {
+  background: #8FA9BE;
+  color: white;
+}
+
+.export-btn.pdf:hover {
+  background: #6c8ea4;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .reports-page {
+    padding: 15px;
+  }
+
+  .pie-wrapper {
+    flex-direction: column;
+  }
+
+  .chart-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
