@@ -40,3 +40,4 @@ terraform.rc
 node_modules/
 .env
 dist/
+/Backend/MedScope/MedScope.WebApi/appsettings.Development.json
