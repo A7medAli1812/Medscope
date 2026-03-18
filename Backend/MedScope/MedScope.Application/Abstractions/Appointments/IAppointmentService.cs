@@ -89,5 +89,6 @@ namespace MedScope.Application.Abstractions.Appointments
         Task<DoctorSlotDto> GetDoctorAvailableSlotsAsync(int doctorId, DateOnly date);
         Task<List<DoctorScheduleDto>> GetDoctorScheduleAsync(int doctorId);
         Task<AppointmentReviewDto> GetAppointmentReviewAsync(int doctorId, DateOnly date, TimeOnly time, int patientId);
+        Task<List<DateOnly>> GetDoctorAvailableDatesAsync(int doctorId, int daysAhead = 7);
     }
 }

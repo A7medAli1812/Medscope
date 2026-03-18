@@ -493,8 +493,20 @@ namespace MedScope.Infrastructure.Services
                 .Select(a => a.Time)
                 .ToListAsync();
 
+            var now = DateTime.UtcNow.AddHours(2); // توقيت مصر
+
             var availableSlots = allSlots
                 .Where(t => !bookedTimes.Contains(t))
+                .Where(t =>
+                {
+                    // لو التاريخ مش النهارده → رجع كل المواعيد
+                    if (date != DateOnly.FromDateTime(now))
+                        return true;
+
+                    // لو النهارده → رجع اللي بعد الوقت الحالي بس
+                    var slotDateTime = date.ToDateTime(t);
+                    return slotDateTime > now;
+                })
                 .ToList();
 
             return new DoctorSlotDto
@@ -550,6 +562,33 @@ namespace MedScope.Infrastructure.Services
                 Date = date,
                 Time = time
             };
+        }
+        public async Task<List<DateOnly>> GetDoctorAvailableDatesAsync(int doctorId, int daysAhead = 7)
+        {
+            // 1️⃣ هات أيام شغل الدكتور
+            var workingDays = await _context.DoctorWorkingHours
+                .Where(w => w.DoctorId == doctorId)
+                .Select(w => w.Day)
+                .ToListAsync();
+
+            var availableDates = new List<DateOnly>();
+
+            var today = DateTime.Today;
+
+            // 2️⃣ لف على الأيام الجاية
+            for (int i = 0; i < daysAhead; i++)
+            {
+                var date = DateOnly.FromDateTime(today.AddDays(i));
+                var dayName = date.DayOfWeek.ToString();
+
+                // 3️⃣ لو اليوم ده من أيام شغل الدكتور
+                if (workingDays.Contains(dayName))
+                {
+                    availableDates.Add(date);
+                }
+            }
+
+            return availableDates;
         }
     }
 }
