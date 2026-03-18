@@ -3,6 +3,7 @@ using MedScope.Application.Interfaces.Doctor;
 using MedScope.Domain.Entities;
 using MedScope.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace MedScope.Infrastructure.Services.Doctor
 {
@@ -25,21 +26,33 @@ namespace MedScope.Infrastructure.Services.Doctor
             if (doctorId == 0)
                 throw new Exception("Doctor not found");
 
-            // حذف الإعدادات القديمة
             var existing = _context.DoctorWorkingHours
                 .Where(x => x.DoctorId == doctorId);
 
             _context.DoctorWorkingHours.RemoveRange(existing);
 
-            // إضافة الجديدة
             foreach (var day in dto.WorkingDays)
             {
+                // ✅ نخلي parsing flexible بدل strict
+                var fromInput = day.From?.Trim();
+                var toInput = day.To?.Trim();
+
+                if (!DateTime.TryParse(fromInput, CultureInfo.InvariantCulture, DateTimeStyles.None, out var parsedFrom))
+                {
+                    throw new Exception($"Invalid From time format: {day.From}");
+                }
+
+                if (!DateTime.TryParse(toInput, CultureInfo.InvariantCulture, DateTimeStyles.None, out var parsedTo))
+                {
+                    throw new Exception($"Invalid To time format: {day.To}");
+                }
+
                 var entity = new DoctorWorkingHours
                 {
                     DoctorId = doctorId,
-                    Day = day.Day,
-                    From = day.From.ToTimeSpan(),
-                    To = day.To.ToTimeSpan(),
+                    Day = day.Day.Trim().ToLower(),
+                    From = parsedFrom.TimeOfDay,
+                    To = parsedTo.TimeOfDay,
                     AppointmentDuration = dto.AppointmentDuration
                 };
 

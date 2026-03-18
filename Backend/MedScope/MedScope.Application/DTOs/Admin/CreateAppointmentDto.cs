@@ -5,9 +5,8 @@
         public int PatientId { get; set; }
         public int DoctorId { get; set; }
 
+        public string Time { get; set; }
         public DateOnly Date { get; set; }
-        public string Time { get; set; } = null!;
-
         public int PatientAge { get; set; }
 
         public string VisitType { get; set; } = string.Empty;

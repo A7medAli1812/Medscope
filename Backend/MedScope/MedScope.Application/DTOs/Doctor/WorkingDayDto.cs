@@ -3,7 +3,7 @@
     public class WorkingDayDto
     {
         public string Day { get; set; } = null!; // Sunday, Monday...
-        public TimeOnly From { get; set; }
-        public TimeOnly To { get; set; }
+        public string From { get; set; }
+        public string To { get; set; }
     }
 }
