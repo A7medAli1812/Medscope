@@ -140,8 +140,8 @@ namespace MedScope.Infrastructure.Services
         // Create Appointment
         // =========================
         public async Task<int> CreateAppointmentAsync(
-            CreateAppointmentDto dto,
-            int hospitalId)
+    CreateAppointmentDto dto,
+    int hospitalId)
         {
             var doctor = await _context.Doctors
                 .FirstOrDefaultAsync(d =>
@@ -157,10 +157,32 @@ namespace MedScope.Infrastructure.Services
             if (patient == null)
                 throw new Exception("Patient not found");
 
-            var appointmentTime = TimeOnly.Parse(dto.Time);
+            // ✅ تعديل 1: تأمين قراءة الوقت
+            // if (!TimeOnly.TryParse(dto.Time, out var appointmentTime))
+            // throw new Exception("Invalid time format");
+            TimeOnly appointmentTime;
+
+            // نحاول الأول AM/PM
+            if (DateTime.TryParseExact(
+                    dto.Time.ToUpper(),
+                    "hh:mm tt",
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    System.Globalization.DateTimeStyles.None,
+                    out var parsedAmPm))
+            {
+                appointmentTime = TimeOnly.FromDateTime(parsedAmPm);
+            }
+            // لو مش AM/PM نحاول 24-hour
+            else if (TimeOnly.TryParse(dto.Time, out var parsed24))
+            {
+                appointmentTime = parsed24;
+            }
+            else
+            {
+                throw new Exception("Invalid time format. Use 'hh:mm AM/PM' or 'HH:mm'");
+            }
 
             var appointmentDateTime = dto.Date.ToDateTime(appointmentTime);
-
             // 1️⃣ منع الحجز في الماضي
             if (appointmentDateTime <= DateTime.Now)
                 throw new Exception("Cannot book appointment in the past");
@@ -169,20 +191,20 @@ namespace MedScope.Infrastructure.Services
             var exists = await _context.Appointments
                 .AnyAsync(a =>
                     a.DoctorId == dto.DoctorId &&
-                    a.Date == dto.Date &&
+                  a.Date == dto.Date &&
                     a.Time == appointmentTime &&
                     a.Status != AppointmentStatus.Cancelled);
 
             if (exists)
                 throw new Exception("This time slot is already booked");
 
-            // 3️⃣ التأكد أن الموعد داخل ساعات عمل الدكتور
-            var day = dto.Date.DayOfWeek.ToString();
+            // ✅ تعديل 2: توحيد صيغة اليوم
+            var day = dto.Date.DayOfWeek.ToString().ToLower().Trim();
 
             var workingHours = await _context.DoctorWorkingHours
                 .FirstOrDefaultAsync(w =>
                     w.DoctorId == dto.DoctorId &&
-                    w.Day == day);
+                    w.Day.ToLower().Trim() == day);
 
             if (workingHours == null)
                 throw new Exception("Doctor does not work on this day");
@@ -190,6 +212,7 @@ namespace MedScope.Infrastructure.Services
             var from = TimeOnly.FromTimeSpan(workingHours.From);
             var to = TimeOnly.FromTimeSpan(workingHours.To);
 
+            // ✅ تعديل 3: validation مضبوط 100%
             if (appointmentTime < from || appointmentTime >= to)
                 throw new Exception("Appointment outside doctor working hours");
 
