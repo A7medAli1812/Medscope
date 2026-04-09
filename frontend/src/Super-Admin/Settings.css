@@ -1,0 +1,200 @@
+.settings-page {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.settings-title {
+  font-size: 28px;
+  color: #1e4f73;
+  margin-bottom: 5px;
+}
+
+.settings-subtitle {
+  font-size: 14px;
+  color: #7a9bb5;
+}
+
+.settings-card {
+  background: #004F781A;
+  border-radius: 15px;
+  padding: 25px 30px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.card-title {
+  font-size: 20px;
+  color: #1e4f73;
+  font-weight: 600;
+}
+
+.edit-btn {
+  background: #1e4f73;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.edit-btn:hover {
+  background: #004f78;
+}
+
+.edit-btn.save {
+  background: #27ae60;
+}
+
+.edit-btn.save:hover {
+  background: #219a52;
+}
+
+/* Info Grid */
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.info-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.info-field label {
+  font-size: 13px;
+  color: #c0392b;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.info-field p {
+  font-size: 15px;
+  color: #1e4f73;
+  margin: 0;
+  padding: 10px 14px;
+  background: white;
+  border-radius: 10px;
+  border: 1px solid #d9e5ef;
+}
+
+.info-field p.readonly {
+  color: #7a9bb5;
+  cursor: not-allowed;
+}
+
+.info-field input {
+  font-size: 15px;
+  color: #1e4f73;
+  padding: 10px 14px;
+  background: white;
+  border-radius: 10px;
+  border: 1px solid #1e4f73;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Password Grid */
+.pass-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.info-field.full {
+  grid-column: 1 / -1;
+}
+
+.pass-msg {
+  font-size: 13px;
+  margin-bottom: 15px;
+  padding: 8px 14px;
+  border-radius: 8px;
+}
+
+.pass-msg.success {
+  background: #eafaf1;
+  color: #27ae60;
+}
+
+.pass-msg.error {
+  background: #fdecea;
+  color: #c0392b;
+}
+
+/* Notifications */
+.notif-section {
+  margin-top: 15px;
+}
+
+.notif-label {
+  font-size: 15px;
+  color: #c0392b;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+.notif-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  background: white;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #1e4f73;
+  border: 1px solid #d9e5ef;
+}
+
+/* Toggle */
+.toggle {
+  width: 36px;
+  height: 36px;
+  border: 2px solid #d9e5ef;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+  background: white;
+}
+
+.toggle.on {
+  background: #1e4f73;
+  border-color: #1e4f73;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .settings-page {
+    padding: 15px;
+  }
+
+  .info-grid,
+  .pass-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .info-field.full {
+    grid-column: 1;
+  }
+}
