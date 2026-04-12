@@ -12,5 +12,6 @@ namespace MedScope.Application.Features.BedManagement
     {
         public string BedNumber { get; set; } = null!;
         public string Ward { get; set; } = null!;
+        public int HospitalId { get; set; }
     }
 }

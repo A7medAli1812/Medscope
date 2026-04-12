@@ -49,14 +49,15 @@ namespace MedScope.Infrastructure.Services
             var result = hospitals.Select(h => new HospitalBloodBankDto
             {
                 HospitalId = h.Id,
-                HospitalName = h.Name,
-                Address = h.Address,
-                Phone = h.Phone,
+
+                HospitalName = h.Name ?? "",
+                Address = h.Address ?? "",
+                Phone = h.Phone ?? "",
 
                 BloodTypes = h.BloodBanks.Select(b => new BloodBankDto
                 {
                     Id = b.Id,
-                    BloodType = b.BloodType,
+                    BloodType = b.BloodType ?? "",
                     Quantity = b.Quantity,
                     Status = GetStatus(b.Quantity)
                 }).ToList()

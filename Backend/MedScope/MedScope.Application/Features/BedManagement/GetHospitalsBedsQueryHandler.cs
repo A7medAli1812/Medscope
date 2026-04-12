@@ -27,38 +27,38 @@ namespace MedScope.Application.Features.BedManagement
 
             return hospitals.Select(h => new HospitalBedsDto
             {
-                HospitalName = h.Name,
+                HospitalName = h.Name ?? "",
 
                 Beds = new List<BedManagementDto>
+        {
+            new BedManagementDto
             {
-                new BedManagementDto
-                {
-                    Ward = "Total Beds",
-                    TotalBeds = h.Beds.Count(),
-                    UsedBeds = h.Beds.Count(b => b.IsOccupied)
-                },
+                Ward = "Total Beds",
+                TotalBeds = h.Beds?.Count() ?? 0,
+                UsedBeds = h.Beds?.Count(b => b.IsOccupied) ?? 0
+            },
 
-                new BedManagementDto
-                {
-                    Ward = "ICU Beds",
-                    TotalBeds = h.Beds.Count(b => b.Ward == "ICU"),
-                    UsedBeds = h.Beds.Count(b => b.Ward == "ICU" && b.IsOccupied)
-                },
+            new BedManagementDto
+            {
+                Ward = "ICU Beds",
+                TotalBeds = h.Beds?.Count(b => b.Ward == "ICU") ?? 0,
+                UsedBeds = h.Beds?.Count(b => b.Ward == "ICU" && b.IsOccupied) ?? 0
+            },
 
-                new BedManagementDto
-                {
-                    Ward = "Emergency Beds",
-                    TotalBeds = h.Beds.Count(b => b.Ward == "Emergency"),
-                    UsedBeds = h.Beds.Count(b => b.Ward == "Emergency" && b.IsOccupied)
-                },
+            new BedManagementDto
+            {
+                Ward = "Emergency Beds",
+                TotalBeds = h.Beds?.Count(b => b.Ward == "Emergency") ?? 0,
+                UsedBeds = h.Beds?.Count(b => b.Ward == "Emergency" && b.IsOccupied) ?? 0
+            },
 
-                new BedManagementDto
-                {
-                    Ward = "Pediatric Beds",
-                    TotalBeds = h.Beds.Count(b => b.Ward == "Pediatric"),
-                    UsedBeds = h.Beds.Count(b => b.Ward == "Pediatric" && b.IsOccupied)
-                }
+            new BedManagementDto
+            {
+                Ward = "Pediatric Beds",
+                TotalBeds = h.Beds?.Count(b => b.Ward == "Pediatric") ?? 0,
+                UsedBeds = h.Beds?.Count(b => b.Ward == "Pediatric" && b.IsOccupied) ?? 0
             }
+        }
             }).ToList();
         }
     }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAgesmmFhY4EuHyQidEo/QIgAAAAACAAAAAAAQZgAAAAEAACAAAAB5SgmnefN/+Fugw9ZCt0to0Evjx88dtR8N8/kWXCyUJwAAAAAOgAAAAAIAACAAAABeF79mxhMLK83yGX3hZ7KIEFkwiRhVx02hg23Ud8A77iAAAACMnKliKnn59u13bNUg0jd39Pbrd3kUYfeWR2C+7rfstUAAAADqz9JlQlKCyq/oXWWO8XwP2ixSe5iFSlKYmGhzjYAX2f5RbLdY35uRdHSNCPZQTsBY3tMLBAwIDM0p+ehM2pX5</EncryptedPassword>
+    <History>True|2026-03-08T23:57:54.6220970Z||;True|2026-03-09T01:53:28.1761710+02:00||;True|2026-03-09T01:47:25.7010945+02:00||;True|2026-03-09T01:40:49.2898309+02:00||;True|2026-03-09T01:28:08.3852969+02:00||;True|2026-03-09T00:26:47.5074353+02:00||;True|2026-03-09T00:24:49.0202780+02:00||;True|2026-03-09T00:13:22.6309628+02:00||;True|2026-03-09T00:06:39.9669772+02:00||;True|2026-03-08T23:50:38.5922357+02:00||;True|2026-03-08T23:39:39.9437011+02:00||;True|2026-03-08T23:36:49.0394276+02:00||;True|2026-03-08T23:28:17.4944049+02:00||;True|2026-03-08T23:19:29.7529088+02:00||;True|2026-03-08T23:01:04.7181194+02:00||;True|2026-03-08T22:50:38.9596196+02:00||;True|2026-03-08T22:45:53.9270073+02:00||;True|2026-03-08T22:34:21.2502298+02:00||;True|2026-03-08T22:24:46.7181047+02:00||;True|2026-03-08T22:06:51.2751487+02:00||;True|2026-03-08T22:03:34.4840643+02:00||;True|2026-03-08T22:02:14.9000444+02:00||;True|2026-03-08T21:59:36.4084259+02:00||;True|2026-03-06T22:42:39.6648623+02:00||;True|2026-03-06T21:40:52.1691801+02:00||;True|2026-03-04T14:14:24.8952434+02:00||;True|2026-03-04T12:05:33.2579967+02:00||;True|2026-03-03T03:19:44.8466325+02:00||;True|2026-03-03T03:16:27.8585419+02:00||;True|2026-03-03T03:06:36.1670659+02:00||;False|2026-03-03T02:36:39.2125897+02:00||;True|2026-03-03T02:17:20.0265820+02:00||;True|2026-03-03T01:57:22.2799681+02:00||;True|2026-03-03T01:43:12.2304073+02:00||;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="DefaultConnection">
+      <Value>Server=db43209.databaseasp.net%3b Database=db43209%3b User Id=db43209%3b Password=W+b68Y=m%25wZ5%3b Encrypt=False%3b MultipleActiveResultSets=True%3b</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+</Project>
