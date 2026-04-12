@@ -30,7 +30,7 @@ namespace MedScope.Application.Abstractions.Appointments
         // Create Appointment
         // =========================
         Task<int> CreateAppointmentAsync(
-            CreateAppointmentDto dto,
+            AdminCreateAppointmentDto dto,
             int hospitalId
         );
 
@@ -90,5 +90,7 @@ namespace MedScope.Application.Abstractions.Appointments
         Task<List<DoctorScheduleDto>> GetDoctorScheduleAsync(int doctorId);
         Task<AppointmentReviewDto> GetAppointmentReviewAsync(int doctorId, DateOnly date, TimeOnly time, int patientId);
         Task<List<DateOnly>> GetDoctorAvailableDatesAsync(int doctorId, int daysAhead = 7);
+        Task<int> CreateAppointmentForPatientAsync(string userId, PatientCreateAppointmentDto dto);
+        Task<BookingFormDto> GetBookingFormAsync(string userId);
     }
 }

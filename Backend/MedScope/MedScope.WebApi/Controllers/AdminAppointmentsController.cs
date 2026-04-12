@@ -98,7 +98,7 @@ namespace MedScope.WebApi.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateAppointment(
-            [FromBody] CreateAppointmentDto dto)
+            [FromBody] AdminCreateAppointmentDto dto)
         {
             try
             {

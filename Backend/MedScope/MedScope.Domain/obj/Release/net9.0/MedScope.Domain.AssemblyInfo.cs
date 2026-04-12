@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MedScope.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d72e3f7d77db74e46829325988d6e8ebcfe019ba")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8e40cff4b3607dd12a7d63c049066bff52909c83")]
 [assembly: System.Reflection.AssemblyProductAttribute("MedScope.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MedScope.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,9 +1,13 @@
-﻿using MedScope.Application.Abstractions.Appointments;
+﻿using System.Security.Claims;
+using MedScope.Application.Abstractions.Appointments;
+using MedScope.Application.DTOs.Patient;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
+
 
 namespace MedScope.WebApi.Controllers.Patient
 {
+    [Authorize(Roles = "Patient")]
     [ApiController]
     [Route("api/patient/appointments")]
     public class PatientAppointmentsController : ControllerBase
@@ -94,6 +98,34 @@ namespace MedScope.WebApi.Controllers.Patient
             var patientId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
             var result = await _appointmentService.GetAppointmentReviewAsync(doctorId, date, time, patientId);
+
+            return Ok(result);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateAppointment([FromBody] PatientCreateAppointmentDto dto)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId == null)
+                return Unauthorized();
+
+            var appointmentId = await _appointmentService.CreateAppointmentForPatientAsync(userId, dto);
+
+            return Ok(new
+            {
+                message = "Appointment booked successfully",
+                appointmentId = appointmentId
+            });
+        }
+        [HttpGet("booking-form")]
+        public async Task<IActionResult> GetBookingForm()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
+
+            var result = await _appointmentService.GetBookingFormAsync(userId);
 
             return Ok(result);
         }

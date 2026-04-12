@@ -1,16 +1,17 @@
-﻿using MedScope.Application;
+﻿using System.Security.Claims;
+using System.Text;
+using System.Text.Json.Serialization;
+using MedScope.Application;
 using MedScope.Infrastructure;
 using MedScope.Infrastructure.Identity;
 using MedScope.Infrastructure.Persistence;
 using MedScope.Infrastructure.Seed;
+using MedScope.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Security.Claims;
-using System.Text;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -153,6 +154,7 @@ builder.Services.AddAuthentication(options =>
 // =======================
 builder.Services.AddApplicationLayer();
 builder.Services.AddInfrastructureLayer(builder.Configuration);
+builder.Services.AddScoped<ChatbotService>();
 builder.Services.AddHttpContextAccessor();
 
 // =======================

@@ -1,6 +1,6 @@
 ﻿namespace MedScope.Application.DTOs.Admin
 {
-    public class CreateAppointmentDto
+    public class AdminCreateAppointmentDto
     {
         public int PatientId { get; set; }
         public int DoctorId { get; set; }

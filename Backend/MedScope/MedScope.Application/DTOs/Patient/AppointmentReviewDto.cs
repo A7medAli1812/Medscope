@@ -8,11 +8,6 @@ namespace MedScope.Application.DTOs.Patient
 {
     public class AppointmentReviewDto
     {
-        public string PatientName { get; set; } = string.Empty;
-
-        public string Phone { get; set; } = string.Empty;
-
-        public string Email { get; set; } = string.Empty;
 
         public string DoctorName { get; set; } = string.Empty;
 

@@ -6,6 +6,7 @@ using MedScope.Domain.Enums;
 using MedScope.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace MedScope.Infrastructure.Services
 {
     public class AppointmentService : IAppointmentService
@@ -140,7 +141,7 @@ namespace MedScope.Infrastructure.Services
         // Create Appointment
         // =========================
         public async Task<int> CreateAppointmentAsync(
-    CreateAppointmentDto dto,
+            AdminCreateAppointmentDto dto,
     int hospitalId)
         {
             var doctor = await _context.Doctors
@@ -574,14 +575,9 @@ namespace MedScope.Infrastructure.Services
 
             return new AppointmentReviewDto
             {
-                PatientName = patientUser.FirstName + " " + patientUser.LastName,
-                Phone = patientUser.PhoneNumber,
-                Email = patientUser.Email,
-
                 DoctorName = doctorUser.FirstName + " " + doctorUser.LastName,
                 Specialty = doctor.Specialty,
                 HospitalName = doctor.Hospital.Name,
-
                 Date = date,
                 Time = time
             };
@@ -612,6 +608,94 @@ namespace MedScope.Infrastructure.Services
             }
 
             return availableDates;
+        }
+        public async Task<int> CreateAppointmentForPatientAsync(
+            string userId,
+            PatientCreateAppointmentDto dto)
+        {
+            // 1️⃣ نجيب patient من user
+            var patient = await _context.Patients
+                .FirstOrDefaultAsync(p => p.UserId == userId);
+
+            if (patient == null)
+                throw new Exception("Patient not found");
+
+            // 2️⃣ نجيب الدكتور
+            var doctor = await _context.Doctors
+                .FirstOrDefaultAsync(d => d.Id == dto.DoctorId);
+
+            if (doctor == null)
+                throw new Exception("Doctor not found");
+
+            // 3️⃣ نحول الوقت
+            TimeOnly appointmentTime;
+
+            // نحاول AM/PM
+            if (DateTime.TryParseExact(
+                    dto.Time.ToUpper(),
+                    "hh:mm tt",
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    System.Globalization.DateTimeStyles.None,
+                    out var parsedAmPm))
+            {
+                appointmentTime = TimeOnly.FromDateTime(parsedAmPm);
+            }
+            // لو مش AM/PM نحاول 24-hour
+            else if (TimeOnly.TryParse(dto.Time, out var parsed24))
+            {
+                appointmentTime = parsed24;
+            }
+            else
+            {
+                throw new Exception("Invalid time format. Use 'hh:mm AM/PM' or 'HH:mm'");
+            }
+
+            var appointmentDateTime = dto.Date.ToDateTime(appointmentTime);
+
+            if (appointmentDateTime <= DateTime.Now)
+                throw new Exception("Cannot book in the past");
+
+            // 4️⃣ نتأكد إن مش محجوز
+            var exists = await _context.Appointments.AnyAsync(a =>
+                a.DoctorId == dto.DoctorId &&
+                a.Date == dto.Date &&
+                a.Time == appointmentTime &&
+                a.Status != AppointmentStatus.Cancelled);
+
+            if (exists)
+                throw new Exception("This slot is already booked");
+
+            // 5️⃣ نعمل الحجز
+            var appointment = new Appointment
+            {
+                PatientId = patient.Id,
+                DoctorId = dto.DoctorId,
+                Date = dto.Date,
+                Time = appointmentTime,
+                Notes = dto.AppointmentNotes,
+                Status = AppointmentStatus.New,
+                HospitalId = doctor.HospitalId
+            };
+
+            _context.Appointments.Add(appointment);
+            await _context.SaveChangesAsync();
+
+            return appointment.Id;
+        }
+        public async Task<BookingFormDto> GetBookingFormAsync(string userId)
+        {
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null)
+                throw new Exception("User not found");
+
+            return new BookingFormDto
+            {
+                PatientName = user.FirstName + " " + user.LastName,
+                Phone = user.PhoneNumber,
+                Email = user.Email
+            };
         }
     }
 }

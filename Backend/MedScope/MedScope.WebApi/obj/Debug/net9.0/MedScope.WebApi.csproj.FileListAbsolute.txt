@@ -168,3 +168,9 @@ E:\MedScope\Medscope\Backend\MedScope\MedScope.WebApi\obj\Debug\net9.0\MedScope.
 E:\MedScope\Medscope\Backend\MedScope\MedScope.WebApi\obj\Debug\net9.0\MedScope.WebApi.genruntimeconfig.cache
 E:\MedScope\Medscope\Backend\MedScope\MedScope.WebApi\obj\Debug\net9.0\ref\MedScope.WebApi.dll
 E:\MedScope\Medscope\Backend\MedScope\MedScope.WebApi\obj\Debug\net9.0\swae.build.ex.cache
+E:\MedScope\Medscope\Backend\MedScope\MedScope.WebApi\bin\Debug\net9.0\MediatR.dll
+E:\MedScope\Medscope\Backend\MedScope\MedScope.WebApi\bin\Debug\net9.0\MediatR.Contracts.dll
+E:\MedScope\Medscope\Backend\MedScope\MedScope.WebApi\bin\Debug\net9.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+E:\MedScope\Medscope\Backend\MedScope\MedScope.WebApi\bin\Debug\net9.0\Microsoft.Extensions.Logging.Abstractions.dll
+E:\MedScope\Medscope\Backend\MedScope\MedScope.WebApi\bin\Debug\net9.0\System.Diagnostics.DiagnosticSource.dll
+E:\MedScope\Medscope\Backend\MedScope\MedScope.WebApi\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
