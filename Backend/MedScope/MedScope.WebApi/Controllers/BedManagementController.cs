@@ -27,10 +27,15 @@ namespace MedScope.WebApi.Controllers
 
         // 🔹 إضافة سرير
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateBedCommand command)
+        public async Task<IActionResult> Create(CreateBedCommand command)
         {
-            var result = await _mediator.Send(command);
-            return Ok(result);
+            var bedId = await _mediator.Send(command);
+
+            return Ok(new
+            {
+                message = "Bed created successfully ",
+                bedId = bedId
+            });
         }
 
         // 🔹 حذف سرير
@@ -38,7 +43,7 @@ namespace MedScope.WebApi.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             await _mediator.Send(new DeleteBedCommand(id));
-            return NoContent();
+            return Ok("Bed deleted successfully ");
         }
 
         // 🔹 تغيير حالة السرير
@@ -46,7 +51,11 @@ namespace MedScope.WebApi.Controllers
         public async Task<IActionResult> Toggle(int id)
         {
             await _mediator.Send(new ToggleBedStatusCommand(id));
-            return NoContent();
+
+            return Ok(new
+            {
+                message = "Bed status updated successfully "
+            });
         }
     }
 }
