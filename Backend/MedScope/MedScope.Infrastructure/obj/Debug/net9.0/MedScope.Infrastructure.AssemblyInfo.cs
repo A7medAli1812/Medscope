@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MedScope.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3a35683630b566c9ea3879c8c22bc75f28634cd2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fb742b400a0e7228d218e690203e54507e972ce1")]
 [assembly: System.Reflection.AssemblyProductAttribute("MedScope.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MedScope.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
