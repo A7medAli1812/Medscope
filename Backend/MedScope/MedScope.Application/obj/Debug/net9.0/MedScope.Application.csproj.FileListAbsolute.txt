@@ -1,19 +1,3 @@
-E:\MedScope\Medscope\Backend\MedScope\MedScope.Application\bin\Debug\net9.0\MedScope.Application.deps.json
-E:\MedScope\Medscope\Backend\MedScope\MedScope.Application\bin\Debug\net9.0\MedScope.Application.dll
-E:\MedScope\Medscope\Backend\MedScope\MedScope.Application\bin\Debug\net9.0\MedScope.Application.pdb
-E:\MedScope\Medscope\Backend\MedScope\MedScope.Application\bin\Debug\net9.0\MedScope.Domain.dll
-E:\MedScope\Medscope\Backend\MedScope\MedScope.Application\bin\Debug\net9.0\MedScope.Domain.pdb
-E:\MedScope\Medscope\Backend\MedScope\MedScope.Application\obj\Debug\net9.0\MedScope.Application.csproj.AssemblyReference.cache
-E:\MedScope\Medscope\Backend\MedScope\MedScope.Application\obj\Debug\net9.0\MedScope.Application.GeneratedMSBuildEditorConfig.editorconfig
-E:\MedScope\Medscope\Backend\MedScope\MedScope.Application\obj\Debug\net9.0\MedScope.Application.AssemblyInfoInputs.cache
-E:\MedScope\Medscope\Backend\MedScope\MedScope.Application\obj\Debug\net9.0\MedScope.Application.AssemblyInfo.cs
-E:\MedScope\Medscope\Backend\MedScope\MedScope.Application\obj\Debug\net9.0\MedScope.Application.csproj.CoreCompileInputs.cache
-E:\MedScope\Medscope\Backend\MedScope\MedScope.Application\obj\Debug\net9.0\MedScope.Application.sourcelink.json
-E:\MedScope\Medscope\Backend\MedScope\MedScope.Application\obj\Debug\net9.0\MedScope.DE849E8F.Up2Date
-E:\MedScope\Medscope\Backend\MedScope\MedScope.Application\obj\Debug\net9.0\MedScope.Application.dll
-E:\MedScope\Medscope\Backend\MedScope\MedScope.Application\obj\Debug\net9.0\refint\MedScope.Application.dll
-E:\MedScope\Medscope\Backend\MedScope\MedScope.Application\obj\Debug\net9.0\MedScope.Application.pdb
-E:\MedScope\Medscope\Backend\MedScope\MedScope.Application\obj\Debug\net9.0\ref\MedScope.Application.dll
 D:\graduated project\Medscope\Backend\MedScope\MedScope.Application\bin\Debug\net9.0\MedScope.Application.deps.json
 D:\graduated project\Medscope\Backend\MedScope\MedScope.Application\bin\Debug\net9.0\MedScope.Application.dll
 D:\graduated project\Medscope\Backend\MedScope\MedScope.Application\bin\Debug\net9.0\MedScope.Application.pdb
@@ -30,3 +14,19 @@ D:\graduated project\Medscope\Backend\MedScope\MedScope.Application\obj\Debug\ne
 D:\graduated project\Medscope\Backend\MedScope\MedScope.Application\obj\Debug\net9.0\refint\MedScope.Application.dll
 D:\graduated project\Medscope\Backend\MedScope\MedScope.Application\obj\Debug\net9.0\MedScope.Application.pdb
 D:\graduated project\Medscope\Backend\MedScope\MedScope.Application\obj\Debug\net9.0\ref\MedScope.Application.dll
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Application\bin\Debug\net9.0\MedScope.Application.deps.json
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Application\bin\Debug\net9.0\MedScope.Application.dll
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Application\bin\Debug\net9.0\MedScope.Application.pdb
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Application\bin\Debug\net9.0\MedScope.Domain.dll
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Application\bin\Debug\net9.0\MedScope.Domain.pdb
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Application\obj\Debug\net9.0\MedScope.Application.csproj.AssemblyReference.cache
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Application\obj\Debug\net9.0\MedScope.Application.GeneratedMSBuildEditorConfig.editorconfig
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Application\obj\Debug\net9.0\MedScope.Application.AssemblyInfoInputs.cache
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Application\obj\Debug\net9.0\MedScope.Application.AssemblyInfo.cs
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Application\obj\Debug\net9.0\MedScope.Application.csproj.CoreCompileInputs.cache
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Application\obj\Debug\net9.0\MedScope.Application.sourcelink.json
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Application\obj\Debug\net9.0\MedScope.DE849E8F.Up2Date
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Application\obj\Debug\net9.0\MedScope.Application.dll
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Application\obj\Debug\net9.0\refint\MedScope.Application.dll
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Application\obj\Debug\net9.0\MedScope.Application.pdb
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Application\obj\Debug\net9.0\ref\MedScope.Application.dll

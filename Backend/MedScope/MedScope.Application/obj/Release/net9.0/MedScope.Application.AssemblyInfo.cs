@@ -14,11 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MedScope.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-<<<<<<< HEAD
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+381838e0a08670d6efd7dee49a43afa412e4ba40")]
-=======
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3a35683630b566c9ea3879c8c22bc75f28634cd2")]
->>>>>>> fb742b400a0e7228d218e690203e54507e972ce1
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e67e4a5991e071a09b33b0d139f7a505f0183a33")]
 [assembly: System.Reflection.AssemblyProductAttribute("MedScope.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MedScope.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MedScope.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1ab08a01f819780a1888cbf07e0950aed4382876")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e67e4a5991e071a09b33b0d139f7a505f0183a33")]
 [assembly: System.Reflection.AssemblyProductAttribute("MedScope.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MedScope.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
