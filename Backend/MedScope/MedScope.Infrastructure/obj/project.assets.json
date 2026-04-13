@@ -5907,23 +5907,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\youse\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\Tasneem\\.nuget\\packages\\": {},
+    "E:\\shared component\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\final project\\Medscope\\Backend\\MedScope\\MedScope.Infrastructure\\MedScope.Infrastructure.csproj",
+      "projectUniqueName": "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.Infrastructure\\MedScope.Infrastructure.csproj",
       "projectName": "MedScope.Infrastructure",
-      "projectPath": "E:\\final project\\Medscope\\Backend\\MedScope\\MedScope.Infrastructure\\MedScope.Infrastructure.csproj",
-      "packagesPath": "C:\\Users\\youse\\.nuget\\packages\\",
-      "outputPath": "E:\\final project\\Medscope\\Backend\\MedScope\\MedScope.Infrastructure\\obj\\",
+      "projectPath": "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.Infrastructure\\MedScope.Infrastructure.csproj",
+      "packagesPath": "C:\\Users\\Tasneem\\.nuget\\packages\\",
+      "outputPath": "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        "E:\\shared component\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\youse\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Tasneem\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -5938,11 +5938,11 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "E:\\final project\\Medscope\\Backend\\MedScope\\MedScope.Application\\MedScope.Application.csproj": {
-              "projectPath": "E:\\final project\\Medscope\\Backend\\MedScope\\MedScope.Application\\MedScope.Application.csproj"
+            "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.Application\\MedScope.Application.csproj": {
+              "projectPath": "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.Application\\MedScope.Application.csproj"
             },
-            "E:\\final project\\Medscope\\Backend\\MedScope\\MedScope.Domain\\MedScope.Domain.csproj": {
-              "projectPath": "E:\\final project\\Medscope\\Backend\\MedScope\\MedScope.Domain\\MedScope.Domain.csproj"
+            "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.Domain\\MedScope.Domain.csproj": {
+              "projectPath": "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.Domain\\MedScope.Domain.csproj"
             }
           }
         }
@@ -5957,7 +5957,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.300"
+      "SdkAnalysisLevel": "10.0.100"
     },
     "frameworks": {
       "net9.0": {
@@ -6022,7 +6022,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.312/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.103/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

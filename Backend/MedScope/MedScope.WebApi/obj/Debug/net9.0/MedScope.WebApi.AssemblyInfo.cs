@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MedScope.WebApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fb742b400a0e7228d218e690203e54507e972ce1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6b183c5a1ae8a60fe0e13b74c41ba174a134910e")]
 [assembly: System.Reflection.AssemblyProductAttribute("MedScope.WebApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MedScope.WebApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
