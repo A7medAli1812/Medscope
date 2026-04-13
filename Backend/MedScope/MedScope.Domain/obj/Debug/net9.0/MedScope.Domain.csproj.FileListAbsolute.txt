@@ -1,0 +1,24 @@
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Domain\bin\Debug\net9.0\MedScope.Domain.deps.json
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Domain\bin\Debug\net9.0\MedScope.Domain.dll
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Domain\bin\Debug\net9.0\MedScope.Domain.pdb
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Domain\obj\Debug\net9.0\MedScope.Domain.GeneratedMSBuildEditorConfig.editorconfig
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Domain\obj\Debug\net9.0\MedScope.Domain.AssemblyInfoInputs.cache
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Domain\obj\Debug\net9.0\MedScope.Domain.AssemblyInfo.cs
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Domain\obj\Debug\net9.0\MedScope.Domain.csproj.CoreCompileInputs.cache
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Domain\obj\Debug\net9.0\MedScope.Domain.sourcelink.json
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Domain\obj\Debug\net9.0\MedScope.Domain.dll
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Domain\obj\Debug\net9.0\refint\MedScope.Domain.dll
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Domain\obj\Debug\net9.0\MedScope.Domain.pdb
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Domain\obj\Debug\net9.0\ref\MedScope.Domain.dll
+D:\graduated project\Medscope\Backend\MedScope\MedScope.Domain\bin\Debug\net9.0\MedScope.Domain.deps.json
+D:\graduated project\Medscope\Backend\MedScope\MedScope.Domain\bin\Debug\net9.0\MedScope.Domain.dll
+D:\graduated project\Medscope\Backend\MedScope\MedScope.Domain\bin\Debug\net9.0\MedScope.Domain.pdb
+D:\graduated project\Medscope\Backend\MedScope\MedScope.Domain\obj\Debug\net9.0\MedScope.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\graduated project\Medscope\Backend\MedScope\MedScope.Domain\obj\Debug\net9.0\MedScope.Domain.AssemblyInfoInputs.cache
+D:\graduated project\Medscope\Backend\MedScope\MedScope.Domain\obj\Debug\net9.0\MedScope.Domain.AssemblyInfo.cs
+D:\graduated project\Medscope\Backend\MedScope\MedScope.Domain\obj\Debug\net9.0\MedScope.Domain.csproj.CoreCompileInputs.cache
+D:\graduated project\Medscope\Backend\MedScope\MedScope.Domain\obj\Debug\net9.0\MedScope.Domain.sourcelink.json
+D:\graduated project\Medscope\Backend\MedScope\MedScope.Domain\obj\Debug\net9.0\MedScope.Domain.dll
+D:\graduated project\Medscope\Backend\MedScope\MedScope.Domain\obj\Debug\net9.0\refint\MedScope.Domain.dll
+D:\graduated project\Medscope\Backend\MedScope\MedScope.Domain\obj\Debug\net9.0\MedScope.Domain.pdb
+D:\graduated project\Medscope\Backend\MedScope\MedScope.Domain\obj\Debug\net9.0\ref\MedScope.Domain.dll

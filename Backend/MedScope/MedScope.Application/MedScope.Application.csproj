@@ -2,15 +2,16 @@
 
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="12.1.1" />
+    <PackageReference Include="MediatR" Version="14.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="9.0.0" />
   </ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\MedScope.Domain\MedScope.Domain.csproj" />
+	  <Folder Include="Features\SuperAdmin\Hospitals\Commands\CreateHospital\" />
 	</ItemGroup>
-  <ItemGroup>
-    <Folder Include="Common\" />
-  </ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\MedScope.Domain\MedScope.Domain.csproj" />
+	</ItemGroup>
 
   <PropertyGroup>
 	  <TargetFramework>net9.0</TargetFramework>

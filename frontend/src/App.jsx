@@ -6,16 +6,29 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import SignUpForm from "./pages/SignUpForm";
 import Login from "./pages/LoginForm";
+import SuperAdminLayout from "./components/Superadminlayout";
 
 // Dashboard Imports
+import Hospitalmanagement from "./Super-Admin/Hospitalmanagement";
+import Adminmanagement from "./Super-Admin/Adminmanagement";
+import Reports from "./Super-Admin/Reports";
+import Settings from "./Super-Admin/Settings";
+
 import DashboardLayout from "./components/DashboardLayout";
 import Home from "./pages/Home";
 import Patients from "./pages/Patients";
 import Appointments from "./pages/Appointments";
 import Doctors from "./pages/Doctors";
-import DashboardPage from "./pages/Dashboard"; // Renamed to avoid confusion with the Layout or Route concept widely
+import DashboardPage from "./pages/Dashboard";
+import BedManagement from "./pages/BedManagement";
+import BloodBank from "./pages/BloodBank";
+import MultiHospitalView from "./pages/MultiHospitalView"; 
+import NewAppointment from "./pages/new-appointment";
+import NewDoctor from "./pages/new-doctor";
+// Renamed to avoid confusion with the Layout or Route concept widely
 
 import "./App.css";
+import AdminManagement from "./Super-Admin/Adminmanagement";
 
 // Public Layout Wrapper
 function PublicLayout({ isDarkMode, toggleDarkMode }) {
@@ -64,11 +77,19 @@ function App() {
 
   return (
     <Router>
-      <Routes>
+     <Routes>
+
         {/* Public Routes with Header & Footer */}
         <Route element={<PublicLayout isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />}>
           <Route path="/" element={<Login />} />
           <Route path="/signup" element={<SignUpForm />} />
+        </Route>
+
+        <Route element={<SuperAdminLayout />}>
+        <Route path="/super-admin/hospitals" element={<Hospitalmanagement />} />
+        <Route path="/super-admin/admins" element={<Adminmanagement />} />
+        <Route path="/super-admin/reports" element={<Reports />} />
+        <Route path="/super-admin/settings" element={<Settings />} />
         </Route>
 
         {/* Dashboard Routes with Sidebar only */}
@@ -81,6 +102,9 @@ function App() {
           <Route path="/blood-bank" element={<BloodBank />} />
           <Route path="/multi-hospital-view" element={<MultiHospitalView />} />
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/new-appointment" element={<NewAppointment />} />
+          <Route path="/new-doctor" element={<NewDoctor />} />
+         
         </Route>
       </Routes>
     </Router>

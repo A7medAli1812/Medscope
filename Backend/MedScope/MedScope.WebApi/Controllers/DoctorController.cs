@@ -1,11 +1,13 @@
 ﻿using MedScope.Application.DTOs.Doctor;
 using MedScope.Domain.Entities;
+using MedScope.Domain.Enums;
 using MedScope.Infrastructure.Identity;
 using MedScope.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using DoctorEntity = Doctor;
 
 namespace MedScope.WebApi.Controllers
 {
@@ -52,7 +54,7 @@ namespace MedScope.WebApi.Controllers
                 FirstName = firstName,
                 LastName = lastName,
                 PhoneNumber = dto.PhoneNumber,
-                Gender = dto.Gender   // 👈 Enum direct
+                Gender = dto.Gender
             };
 
             var result = await _userManager.CreateAsync(user, dto.Password);
@@ -70,7 +72,7 @@ namespace MedScope.WebApi.Controllers
                 await _userManager.UpdateAsync(user);
             }
 
-            _context.Doctors.Add(new Doctor
+            _context.Doctors.Add(new DoctorEntity
             {
                 UserId = user.Id,
                 Specialty = dto.Specialty,
@@ -102,7 +104,7 @@ namespace MedScope.WebApi.Controllers
             var query =
                 from d in _context.Doctors
                 join u in _context.Users on d.UserId equals u.Id
-                where d.HospitalId == hospitalId
+                where d.HospitalId == hospitalId && !d.IsDeleted
                 select new { d, u };
 
             if (!string.IsNullOrEmpty(search))
@@ -144,6 +146,74 @@ namespace MedScope.WebApi.Controllers
         }
 
         // =========================
+        // GET DOCTOR BY ID
+        // =========================
+        [HttpGet("{doctorId}")]
+        public async Task<IActionResult> GetDoctorById(int doctorId)
+        {
+            var doctor = await (
+                from d in _context.Doctors
+                join u in _context.Users on d.UserId equals u.Id
+                where d.Id == doctorId
+                select new
+                {
+                    DoctorId = d.Id,
+                    FullName = u.FirstName + " " + u.LastName,
+                    Email = u.Email,
+                    PhoneNumber = u.PhoneNumber,
+                    Specialty = d.Specialty,
+                    Gender = u.Gender,
+                    Status = u.LockoutEnd == null ? "Active" : "Inactive"
+                }
+            ).FirstOrDefaultAsync();
+
+            if (doctor == null)
+                return NotFound("Doctor not found");
+
+            return Ok(doctor);
+        }
+
+        // =========================
+        // UPDATE DOCTOR
+        // =========================
+        [HttpPut("{doctorId}")]
+        public async Task<IActionResult> UpdateDoctor(int doctorId, [FromBody] UpdateDoctorDto dto)
+        {
+            var doctor = await _context.Doctors
+                .FirstOrDefaultAsync(d => d.Id == doctorId);
+
+            if (doctor == null)
+                return NotFound("Doctor not found");
+
+            var user = await _userManager.FindByIdAsync(doctor.UserId);
+
+            if (user == null)
+                return NotFound("User not found");
+
+            var nameParts = dto.FullName.Split(' ');
+            user.FirstName = nameParts[0];
+            user.LastName = nameParts.Length > 1 ? nameParts[1] : "";
+
+            user.Email = dto.Email;
+            user.UserName = dto.Email;
+            user.PhoneNumber = dto.PhoneNumber;
+
+            user.Gender = Enum.Parse<Gender>(dto.Gender);
+
+            doctor.Specialty = dto.Specialty;
+
+            if (dto.Status == "Inactive")
+                user.LockoutEnd = DateTimeOffset.MaxValue;
+            else
+                user.LockoutEnd = null;
+
+            await _userManager.UpdateAsync(user);
+            await _context.SaveChangesAsync();
+
+            return Ok("Doctor updated successfully");
+        }
+
+        // =========================
         // TOGGLE STATUS
         // =========================
         [HttpPatch("toggle-status/{doctorId}")]
@@ -168,6 +238,33 @@ namespace MedScope.WebApi.Controllers
             await _userManager.UpdateAsync(user);
 
             return Ok("Status updated successfully");
+        }
+
+        // =========================
+        // SOFT DELETE DOCTOR
+        // =========================
+        [HttpDelete("{doctorId}")]
+        public async Task<IActionResult> SoftDeleteDoctor(int doctorId)
+        {
+            var doctor = await _context.Doctors
+                .FirstOrDefaultAsync(d => d.Id == doctorId);
+
+            if (doctor == null)
+                return NotFound("Doctor not found");
+
+            doctor.IsDeleted = true;
+
+            var user = await _userManager.FindByIdAsync(doctor.UserId);
+
+            if (user != null)
+            {
+                user.LockoutEnd = DateTimeOffset.MaxValue;
+                await _userManager.UpdateAsync(user);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Ok("Doctor deleted successfully");
         }
     }
 }

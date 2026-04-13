@@ -1,0 +1,262 @@
+.patients-container{
+padding:30px;
+background: #F1F8FF;
+min-height:100vh;
+}
+
+.page-title{
+font-size:24px;
+color:#004F78;
+margin-bottom:20px;
+font-weight:600;
+}
+
+.patients-card{
+
+width:1076px;
+
+background:rgba(0,79,120,0.1);
+
+padding:28px;
+
+border-radius:23px;
+
+box-shadow:
+0 4px 6px rgba(0,0,0,0.05),
+0 10px 15px rgba(0,0,0,0.05);
+
+}
+
+.patients-header{
+margin-bottom:10px;
+}
+
+.patients-header h3{
+font-size:16px;
+color:#004F78;
+border-bottom:2px solid rgba(0,0,0,0.1);
+padding-bottom:8px;
+}
+
+.patients-filters{
+
+display:flex;
+
+gap:16px;
+
+align-items:center;
+
+margin-top:15px;
+
+margin-bottom:20px;
+
+}
+
+/* search */
+
+.search-box{
+
+position:relative;
+
+}
+
+.search-box input{
+
+width:160px;
+
+height:34px;
+
+padding-left:35px;
+
+border-radius:20px;
+
+border:none;
+
+background:#F0F4F8;
+
+outline:none;
+
+}
+
+/* icon */
+
+.search-icon{
+
+position:absolute;
+
+left:10px;
+
+top:50%;
+
+transform:translateY(-50%);
+
+border:2.5px solid #004F78;
+
+border-radius:50%;
+
+padding:3px;
+
+font-size:10px;
+
+color:#004F78;
+
+}
+
+/* filter */
+
+.gender-filter{
+
+height:34px;
+
+padding:0 14px;
+
+border-radius:20px;
+
+border:1px solid #004F78;
+
+background:transparent;
+
+color:#004F78;
+
+cursor:pointer;
+
+}
+
+/* table */
+
+.patients-table{
+width:100%;
+border-collapse:collapse;
+}
+
+.patients-table th{
+
+text-align:left;
+
+padding:12px;
+
+font-size:19px;
+
+color:#004F78;
+
+font-weight:600;
+
+}
+.patients-table tbody tr{
+border-bottom:1px solid #a5bacf;
+}
+
+.patients-table td{
+
+padding:14px 12px;
+font-size:13px;
+color:#3E5F7A;
+}
+
+.patient-name{
+
+display:flex;
+
+align-items:center;
+
+gap:10px;
+
+}
+
+.patient-avatar{
+
+width:34px;
+
+height:34px;
+
+border-radius:50%;
+
+}
+
+/* pagination */
+
+.pagination{
+
+display:flex;
+
+justify-content:flex-end;
+
+align-items:center;
+
+gap:8px;
+
+margin-top:20px;
+
+}
+
+.page-btn{
+
+padding:6px 12px;
+
+border-radius:20px;
+
+border:1px solid #D0DCE7;
+
+background:white;
+
+color:#004F78;
+
+cursor:pointer;
+
+}
+
+.page-number{
+
+width:30px;
+
+height:30px;
+
+border-radius:50%;
+
+border:1px solid #D0DCE7;
+
+background:white;
+
+cursor:pointer;
+
+color:#004F78;
+
+}
+
+.page-number.active{
+
+background:#004F78;
+
+color:white;
+
+border:none;
+
+}
+@media (max-width:1100px){
+
+.patient-table{
+overflow-x:auto;
+}
+
+.patient-controls{
+flex-direction:column;
+align-items:flex-start;
+gap:10px;
+}
+
+}
+
+@media (max-width:768px){
+
+.patient-table th,
+.patient-table td{
+font-size:13px;
+padding:8px;
+}
+
+.pagination{
+flex-wrap:wrap;
+justify-content:center;
+}
+
+}

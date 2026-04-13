@@ -1,36 +1,65 @@
-﻿using MedScope.Application;
+﻿using System.Security.Claims;
+using System.Text;
+using System.Text.Json.Serialization;
+using MedScope.Application;
 using MedScope.Infrastructure;
 using MedScope.Infrastructure.Identity;
 using MedScope.Infrastructure.Persistence;
 using MedScope.Infrastructure.Seed;
+using MedScope.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Security.Claims;
-using System.Text;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // =======================
-// Controllers + JSON Settings 🔥
+// Bind AuthSettings
+// =======================
+builder.Services.Configure<AuthSettings>(
+    builder.Configuration.GetSection("AuthSettings"));
+
+// =======================
+// Register JwtTokenGenerator
+// =======================
+builder.Services.AddScoped<JwtTokenGenerator>();
+
+// =======================
+// CORS (Allow All)
+// =======================
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy
+            .WithOrigins(
+                "http://localhost:5174",
+                "http://localhost:5173",
+                "https://medscope-v3.vercel.app"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+
+// =======================
+// Controllers + JSON
 // =======================
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
-        // ✅ Enum يطلع String بدل رقم
         options.JsonSerializerOptions.Converters
             .Add(new JsonStringEnumConverter());
 
-        // ✅ يخفي أي null من الريسبونس
         options.JsonSerializerOptions.DefaultIgnoreCondition =
             JsonIgnoreCondition.WhenWritingNull;
     });
 
 // =======================
-// Swagger + JWT
+// Swagger
 // =======================
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -66,15 +95,16 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
-
+builder.Services.AddSwaggerGen(c =>
+{
+    c.CustomSchemaIds(type => type.FullName);
+});
 // =======================
 // DbContext
 // =======================
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")
-    )
-);
+        builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // =======================
 // Identity
@@ -88,31 +118,38 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 // =======================
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultAuthenticateScheme =
+        JwtBearerDefaults.AuthenticationScheme;
+
+    options.DefaultChallengeScheme =
+        JwtBearerDefaults.AuthenticationScheme;
 })
 .AddJwtBearer(options =>
 {
+    options.MapInboundClaims = false;
+
     var settings = builder.Configuration
         .GetSection("AuthSettings")
         .Get<AuthSettings>();
 
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
+    options.TokenValidationParameters =
+        new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
 
-        ValidIssuer = settings!.Issuer,
-        ValidAudience = settings.Audience,
-        IssuerSigningKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(settings.Key)
-        ),
+            ValidIssuer = settings!.Issuer,
+            ValidAudience = settings.Audience,
+            IssuerSigningKey =
+                new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(settings.Key)
+                ),
 
-        RoleClaimType = ClaimTypes.Role,
-        NameClaimType = ClaimTypes.NameIdentifier
-    };
+            RoleClaimType = ClaimTypes.Role,
+            NameClaimType = ClaimTypes.NameIdentifier
+        };
 });
 
 // =======================
@@ -120,6 +157,11 @@ builder.Services.AddAuthentication(options =>
 // =======================
 builder.Services.AddApplicationLayer();
 builder.Services.AddInfrastructureLayer(builder.Configuration);
+builder.Services.AddScoped<ChatbotService>();
+builder.Services.AddHttpContextAccessor();
+// =======================pdf
+QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
+
 
 // =======================
 // Build App
@@ -129,31 +171,71 @@ var app = builder.Build();
 // =======================
 // Middleware
 // =======================
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseDeveloperExceptionPage();
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
+app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Custom Unauthorized / Forbidden Response
+app.UseStatusCodePages(async context =>
+{
+    var response = context.HttpContext.Response;
+
+    if (response.StatusCode == 403)
+    {
+        response.ContentType = "application/json";
+        await response.WriteAsync(
+            "{\"message\": \"Unauthorized - Admin access only\"}");
+    }
+
+    if (response.StatusCode == 401)
+    {
+        response.ContentType = "application/json";
+        await response.WriteAsync(
+            "{\"message\": \"Unauthorized - Please login\"}");
+    }
+});
+
 app.MapControllers();
 
 // =======================
-// Seed Roles & Users
+// Seed Roles + Users + BloodBank
 // =======================
 using (var scope = app.Services.CreateScope())
 {
-    var services = scope.ServiceProvider;
+    try
+    {
+        var services = scope.ServiceProvider;
 
-    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+        var roleManager =
+            services.GetRequiredService<RoleManager<IdentityRole>>();
 
-    await SeedRoles.SeedAsync(roleManager);
-    await SeedUsers.SeedAsync(userManager);
+        var userManager =
+            services.GetRequiredService<UserManager<ApplicationUser>>();
+
+        var db =
+            services.GetRequiredService<ApplicationDbContext>();
+
+        // Seed Roles
+        await SeedRoles.SeedAsync(roleManager);
+
+        // Seed Users
+        await SeedUsers.SeedAsync(userManager);
+
+        // 🔴 Seed Blood Types
+        await BloodBankSeeder.SeedAsync(db);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Seed Error: " + ex.Message);
+    }
 }
 
 app.Run();

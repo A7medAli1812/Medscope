@@ -1,0 +1,287 @@
+.appointments-container{
+padding:30px;
+background:#f3f6f9;
+min-height:100vh;
+}
+
+.page-title{
+color:#004F78;
+font-size:22px;
+margin-bottom:15px;
+}
+
+.appointments-card{
+
+width:1076px;
+
+background:rgba(0,79,120,0.1);
+
+padding:30px;
+
+border-radius:23px;
+
+}
+
+/* header */
+
+.appointments-header{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+border-bottom:1px solid #7fa2bf;
+
+padding-bottom:10px;
+
+}
+
+/* tabs */
+
+.tabs{
+display:flex;
+gap:25px;
+}
+
+.tab{
+border:none;
+background:none;
+color:#004F78;
+font-size:14px;
+cursor:pointer;
+padding-bottom:6px;
+}
+
+.tab.active{
+border-bottom:3px solid #004F78;
+font-weight:600;
+}
+
+/* new appointment */
+
+.new-appointment{
+
+background:#004F78;
+
+color:white;
+
+border:none;
+
+padding:8px 16px;
+
+border-radius:20px;
+
+cursor:pointer;
+
+font-size:13px;
+
+}
+
+/* filters */
+
+.filters{
+
+display:flex;
+
+gap:20px;
+
+margin-top:20px;
+
+margin-bottom:20px;
+
+}
+
+.search{
+
+height:34px;
+
+border-radius:20px;
+
+border:none;
+
+padding-left:15px;
+
+background:#e7eef4;
+
+}
+
+.date-filter{
+position:relative;
+}
+
+.date-filter input{
+position:absolute;
+opacity:0;
+width:100%;
+height:100%;
+cursor:pointer;
+}
+
+.filter-btn{
+
+border:1px solid #004F78;
+
+background:transparent;
+
+padding:6px 16px;
+
+border-radius:20px;
+
+color:#004F78;
+
+cursor:pointer;
+
+display:flex;
+
+align-items:center;
+
+gap:6px;
+
+}
+
+/* table */
+
+.appointments-table{
+
+width:100%;
+
+border-collapse:collapse;
+
+margin-top:10px;
+
+}
+
+.appointments-table thead tr{
+border-bottom:1px solid #6f95b5;
+}
+
+.appointments-table tbody tr{
+border-bottom:1px solid #6f95b5;
+}
+
+.appointments-table th{
+
+text-align:left;
+
+padding:12px;
+
+color:#004F78;
+
+font-size:13px;
+
+}
+
+.appointments-table td{
+
+padding:14px 12px;
+
+font-size:13px;
+
+color:#2f5e80;
+
+}
+
+.patient-name{
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+.avatar{
+width:32px;
+height:32px;
+border-radius:50%;
+}
+
+/* actions */
+
+.actions{
+display:flex;
+gap:10px;
+}
+
+.reschedule{
+background:none;
+border:none;
+color:#004F78;
+margin-right: 5PX;
+}
+
+.delete{
+width:28px;
+height:28px;
+border-radius:8px;
+border:1px solid #c13b3b;
+color:#c13b3b;
+background:none;
+cursor:pointer;
+margin-left: 5PX;
+}
+
+/* pagination */
+
+.pagination{
+
+display:flex;
+
+justify-content:flex-end;
+
+gap:8px;
+
+margin-top:20px;
+
+}
+
+.pagination button{
+
+width:30px;
+
+height:30px;
+
+border-radius:50%;
+
+border:none;
+
+background:#d6e1ea;
+
+cursor:pointer;
+
+}
+
+.pagination button.active{
+
+background:#004F78;
+
+color:white;
+
+}
+@media (max-width:1100px){
+
+.appointment-controls{
+flex-direction:column;
+align-items:flex-start;
+gap:12px;
+}
+
+.appointments-table{
+overflow-x:auto;
+}
+
+}
+
+@media (max-width:768px){
+
+.appointments-table th,
+.appointments-table td{
+font-size:12px;
+padding:8px;
+}
+
+.new-appointment-btn{
+width:100%;
+justify-content:center;
+}
+
+}

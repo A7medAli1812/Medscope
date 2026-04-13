@@ -15,32 +15,60 @@ namespace MedScope.WebApi.Controllers
             _authService = authService;
         }
 
+        // =========================
         // REGISTER
+        // =========================
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto dto)
         {
-            var result = await _authService.RegisterAsync(dto);
+            try
+            {
+                var result = await _authService.RegisterAsync(dto);
 
-            if (!result.IsSuccess)
-                return BadRequest(result);
+                if (!result.IsSuccess)
+                    return BadRequest(result);
 
-            return Ok(result);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    message = "Register failed",
+                    error = ex.Message
+                });
+            }
         }
 
+        // =========================
         // LOGIN
+        // =========================
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
-            var result = await _authService.LoginAsync(dto);
+            try
+            {
+                var result = await _authService.LoginAsync(dto);
 
-            if (result == null)
-                return Unauthorized(new
+                if (result == null)
                 {
-                    message = "Invalid email or password"
+                    return Unauthorized(new
+                    {
+                        message = "Invalid email or password"
+                    });
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    message = "Login failed",
+                    error = ex.Message,
+                    stackTrace = ex.StackTrace
                 });
-
-            return Ok(result);
+            }
         }
-
     }
 }

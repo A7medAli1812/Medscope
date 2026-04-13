@@ -1,0 +1,12 @@
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Domain\bin\Release\net9.0\MedScope.Domain.deps.json
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Domain\bin\Release\net9.0\MedScope.Domain.dll
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Domain\bin\Release\net9.0\MedScope.Domain.pdb
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Domain\obj\Release\net9.0\MedScope.Domain.GeneratedMSBuildEditorConfig.editorconfig
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Domain\obj\Release\net9.0\MedScope.Domain.AssemblyInfoInputs.cache
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Domain\obj\Release\net9.0\MedScope.Domain.AssemblyInfo.cs
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Domain\obj\Release\net9.0\MedScope.Domain.csproj.CoreCompileInputs.cache
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Domain\obj\Release\net9.0\MedScope.Domain.sourcelink.json
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Domain\obj\Release\net9.0\MedScope.Domain.dll
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Domain\obj\Release\net9.0\refint\MedScope.Domain.dll
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Domain\obj\Release\net9.0\MedScope.Domain.pdb
+E:\MedScope\Medscope\Backend\MedScope\MedScope.Domain\obj\Release\net9.0\ref\MedScope.Domain.dll
