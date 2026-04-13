@@ -95,7 +95,10 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
-
+builder.Services.AddSwaggerGen(c =>
+{
+    c.CustomSchemaIds(type => type.FullName);
+});
 // =======================
 // DbContext
 // =======================
@@ -156,6 +159,9 @@ builder.Services.AddApplicationLayer();
 builder.Services.AddInfrastructureLayer(builder.Configuration);
 builder.Services.AddScoped<ChatbotService>();
 builder.Services.AddHttpContextAccessor();
+// =======================pdf
+QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
+
 
 // =======================
 // Build App
