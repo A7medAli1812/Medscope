@@ -80,12 +80,12 @@ public class DoctorAppointmentService : IDoctorAppointmentService
             })
             .ToListAsync();
 
-        return new PaginatedResult<DoctorUpcomingAppointmentsDto>
-        {
-            Data = data,
-            CurrentPage = page,
-            TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
-        };
+        return new PaginatedResult<DoctorUpcomingAppointmentsDto>(
+    data,
+    totalCount,
+    page,
+    pageSize
+);
     }
 
     // ===============================

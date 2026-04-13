@@ -5,10 +5,9 @@
         public int Id { get; set; }
 
         public string UserId { get; set; } = null!;
-
-        // بيانات إضافية
         public string? Department { get; set; }
         public int HospitalId { get; set; }
         public Hospital Hospital { get; set; }
+        public bool IsActive { get; set; } = true; // 🔥 مهم
     }
 }
