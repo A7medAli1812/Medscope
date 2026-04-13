@@ -7,6 +7,7 @@ using MedScope.Infrastructure.Identity;
 using MedScope.Infrastructure.Persistence;
 using MedScope.Infrastructure.Services;
 using MedScope.Infrastructure.Services.Doctor;
+using MedScope.Infrastructure.Services.Reports;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -18,6 +19,8 @@ namespace MedScope.Infrastructure
             this IServiceCollection services,
             IConfiguration configuration)
         {
+
+            services.AddScoped<IReportService, ReportService>();
             // =========================
             // Auth
             // =========================
@@ -32,7 +35,8 @@ namespace MedScope.Infrastructure
             // Appointments
             // =========================
             services.AddScoped<IAppointmentService, AppointmentService>();
-
+            // 🔥 Add Identity Service
+            services.AddScoped<IIdentityService, IdentityService>();
             // =========================
             // Blood Bank
             // =========================

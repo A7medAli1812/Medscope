@@ -12,14 +12,15 @@ public class Hospital
     public int HospitalNumber { get; set; }
     public string Type { get; set; }
 
-    // 🆕 Location Information
     public string City { get; set; }
     public string Address { get; set; }
 
+    // 🔥 مهمين جدًا
+    public bool IsActive { get; set; } = true;
+    public bool IsDeleted { get; set; } = false;
+
     public ICollection<Doctor> Doctors { get; set; }
     public ICollection<Admin> Admins { get; set; }
-
     public ICollection<BloodBank> BloodBanks { get; set; }
-
     public ICollection<Bed> Beds { get; set; } = new List<Bed>();
 }

@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.WebApi\\MedScope.WebApi.csproj": {}
+    "D:\\graduated project\\Medscope\\Backend\\MedScope\\MedScope.WebApi\\MedScope.WebApi.csproj": {}
   },
   "projects": {
-    "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.Application\\MedScope.Application.csproj": {
+    "D:\\graduated project\\Medscope\\Backend\\MedScope\\MedScope.Application\\MedScope.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.Application\\MedScope.Application.csproj",
+        "projectUniqueName": "D:\\graduated project\\Medscope\\Backend\\MedScope\\MedScope.Application\\MedScope.Application.csproj",
         "projectName": "MedScope.Application",
-        "projectPath": "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.Application\\MedScope.Application.csproj",
-        "packagesPath": "C:\\Users\\Tasneem\\.nuget\\packages\\",
-        "outputPath": "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.Application\\obj\\",
+        "projectPath": "D:\\graduated project\\Medscope\\Backend\\MedScope\\MedScope.Application\\MedScope.Application.csproj",
+        "packagesPath": "C:\\Users\\Yathrip\\.nuget\\packages\\",
+        "outputPath": "D:\\graduated project\\Medscope\\Backend\\MedScope\\MedScope.Application\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "E:\\shared component\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Tasneem\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Yathrip\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -32,8 +32,8 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.Domain\\MedScope.Domain.csproj": {
-                "projectPath": "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.Domain\\MedScope.Domain.csproj"
+              "D:\\graduated project\\Medscope\\Backend\\MedScope\\MedScope.Domain\\MedScope.Domain.csproj": {
+                "projectPath": "D:\\graduated project\\Medscope\\Backend\\MedScope\\MedScope.Domain\\MedScope.Domain.csproj"
               }
             }
           }
@@ -48,7 +48,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "10.0.100"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net9.0": {
@@ -87,24 +87,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.103/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.309/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.Domain\\MedScope.Domain.csproj": {
+    "D:\\graduated project\\Medscope\\Backend\\MedScope\\MedScope.Domain\\MedScope.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.Domain\\MedScope.Domain.csproj",
+        "projectUniqueName": "D:\\graduated project\\Medscope\\Backend\\MedScope\\MedScope.Domain\\MedScope.Domain.csproj",
         "projectName": "MedScope.Domain",
-        "projectPath": "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.Domain\\MedScope.Domain.csproj",
-        "packagesPath": "C:\\Users\\Tasneem\\.nuget\\packages\\",
-        "outputPath": "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.Domain\\obj\\",
+        "projectPath": "D:\\graduated project\\Medscope\\Backend\\MedScope\\MedScope.Domain\\MedScope.Domain.csproj",
+        "packagesPath": "C:\\Users\\Yathrip\\.nuget\\packages\\",
+        "outputPath": "D:\\graduated project\\Medscope\\Backend\\MedScope\\MedScope.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "E:\\shared component\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Tasneem\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Yathrip\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -131,7 +131,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "10.0.100"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net9.0": {
@@ -152,24 +152,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.103/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.309/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.Infrastructure\\MedScope.Infrastructure.csproj": {
+    "D:\\graduated project\\Medscope\\Backend\\MedScope\\MedScope.Infrastructure\\MedScope.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.Infrastructure\\MedScope.Infrastructure.csproj",
+        "projectUniqueName": "D:\\graduated project\\Medscope\\Backend\\MedScope\\MedScope.Infrastructure\\MedScope.Infrastructure.csproj",
         "projectName": "MedScope.Infrastructure",
-        "projectPath": "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.Infrastructure\\MedScope.Infrastructure.csproj",
-        "packagesPath": "C:\\Users\\Tasneem\\.nuget\\packages\\",
-        "outputPath": "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.Infrastructure\\obj\\",
+        "projectPath": "D:\\graduated project\\Medscope\\Backend\\MedScope\\MedScope.Infrastructure\\MedScope.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\Yathrip\\.nuget\\packages\\",
+        "outputPath": "D:\\graduated project\\Medscope\\Backend\\MedScope\\MedScope.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "E:\\shared component\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Tasneem\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Yathrip\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -184,11 +184,11 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.Application\\MedScope.Application.csproj": {
-                "projectPath": "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.Application\\MedScope.Application.csproj"
+              "D:\\graduated project\\Medscope\\Backend\\MedScope\\MedScope.Application\\MedScope.Application.csproj": {
+                "projectPath": "D:\\graduated project\\Medscope\\Backend\\MedScope\\MedScope.Application\\MedScope.Application.csproj"
               },
-              "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.Domain\\MedScope.Domain.csproj": {
-                "projectPath": "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.Domain\\MedScope.Domain.csproj"
+              "D:\\graduated project\\Medscope\\Backend\\MedScope\\MedScope.Domain\\MedScope.Domain.csproj": {
+                "projectPath": "D:\\graduated project\\Medscope\\Backend\\MedScope\\MedScope.Domain\\MedScope.Domain.csproj"
               }
             }
           }
@@ -203,12 +203,16 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "10.0.100"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "ClosedXML": {
+              "target": "Package",
+              "version": "[0.105.0, )"
+            },
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
               "version": "[9.0.0, )"
@@ -235,6 +239,10 @@
               "target": "Package",
               "version": "[9.0.0, )"
             },
+            "QuestPDF": {
+              "target": "Package",
+              "version": "[2026.2.4, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.5.0, )"
@@ -256,24 +264,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.103/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.309/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.WebApi\\MedScope.WebApi.csproj": {
+    "D:\\graduated project\\Medscope\\Backend\\MedScope\\MedScope.WebApi\\MedScope.WebApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.WebApi\\MedScope.WebApi.csproj",
+        "projectUniqueName": "D:\\graduated project\\Medscope\\Backend\\MedScope\\MedScope.WebApi\\MedScope.WebApi.csproj",
         "projectName": "MedScope.WebApi",
-        "projectPath": "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.WebApi\\MedScope.WebApi.csproj",
-        "packagesPath": "C:\\Users\\Tasneem\\.nuget\\packages\\",
-        "outputPath": "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.WebApi\\obj\\",
+        "projectPath": "D:\\graduated project\\Medscope\\Backend\\MedScope\\MedScope.WebApi\\MedScope.WebApi.csproj",
+        "packagesPath": "C:\\Users\\Yathrip\\.nuget\\packages\\",
+        "outputPath": "D:\\graduated project\\Medscope\\Backend\\MedScope\\MedScope.WebApi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "E:\\shared component\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Tasneem\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Yathrip\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -288,11 +296,11 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.Application\\MedScope.Application.csproj": {
-                "projectPath": "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.Application\\MedScope.Application.csproj"
+              "D:\\graduated project\\Medscope\\Backend\\MedScope\\MedScope.Application\\MedScope.Application.csproj": {
+                "projectPath": "D:\\graduated project\\Medscope\\Backend\\MedScope\\MedScope.Application\\MedScope.Application.csproj"
               },
-              "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.Infrastructure\\MedScope.Infrastructure.csproj": {
-                "projectPath": "E:\\MedScope\\Medscope\\Backend\\MedScope\\MedScope.Infrastructure\\MedScope.Infrastructure.csproj"
+              "D:\\graduated project\\Medscope\\Backend\\MedScope\\MedScope.Infrastructure\\MedScope.Infrastructure.csproj": {
+                "projectPath": "D:\\graduated project\\Medscope\\Backend\\MedScope\\MedScope.Infrastructure\\MedScope.Infrastructure.csproj"
               }
             }
           }
@@ -307,7 +315,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "10.0.100"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net9.0": {
@@ -365,7 +373,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.103/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.309/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

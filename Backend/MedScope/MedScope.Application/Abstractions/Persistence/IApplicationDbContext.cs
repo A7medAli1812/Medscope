@@ -1,9 +1,11 @@
-﻿using MedScope.Domain.Entities;
+﻿using MedScope.Application.Interfaces;
+using MedScope.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-
+using MedScope.Application.Interfaces;
+using Microsoft.EntityFrameworkCore;
 namespace MedScope.Application.Abstractions.Persistence
 {
     public interface IApplicationDbContext
@@ -17,7 +19,7 @@ namespace MedScope.Application.Abstractions.Persistence
         DbSet<MedicalRecord> MedicalRecords { get; }
         DbSet<MedScope.Domain.Entities.Admin> Admins { get; }
         DbSet<MedScope.Domain.Entities.SuperAdmin> SuperAdmins { get; }
-
+        DbSet<UserSettings> UserSettings { get; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }
