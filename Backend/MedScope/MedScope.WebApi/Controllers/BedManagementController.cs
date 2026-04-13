@@ -22,16 +22,16 @@ namespace MedScope.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            // 🔥 هات الـ userId من التوكن
+            //  هات الـ userId من التوكن
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            // 🔥 ابعته مع الـ Query
+            //  ابعته مع الـ Query
             var result = await _mediator.Send(new GetBedManagementQuery(userId));
 
             return Ok(result);
         }
 
-        // 🔹 إضافة سرير
+        //  إضافة سرير
         [HttpPost]
         public async Task<IActionResult> Create(CreateBedCommand command)
         {
