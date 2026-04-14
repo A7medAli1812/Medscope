@@ -34,6 +34,7 @@ public class ApplicationDbContext
     public DbSet<DoctorWorkingHours> DoctorWorkingHours { get; set; }
     public DbSet<ChatMessage> ChatMessages { get; set; }
     public DbSet<UserSettings> UserSettings { get; set; }
+    public DbSet<PasswordResetOtp> PasswordResetOtps { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder builder)
