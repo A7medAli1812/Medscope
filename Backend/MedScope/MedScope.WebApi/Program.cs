@@ -32,7 +32,7 @@ builder.Services.AddScoped<JwtTokenGenerator>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
-<<<<<<< Updated upstream
+
     {
         policy
             .WithOrigins(
@@ -44,12 +44,7 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod()
             .AllowCredentials();
     });
-=======
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader());
->>>>>>> Stashed changes
-});
+
 
 // =======================
 // Controllers + JSON
@@ -165,12 +160,11 @@ builder.Services.AddApplicationLayer();
 builder.Services.AddInfrastructureLayer(builder.Configuration);
 builder.Services.AddScoped<ChatbotService>();
 builder.Services.AddHttpContextAccessor();
-<<<<<<< Updated upstream
+
 // =======================pdf
 QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 
-=======
->>>>>>> Stashed changes
+
 
 // =======================
 // Build App
@@ -185,10 +179,7 @@ app.UseDeveloperExceptionPage();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-<<<<<<< Updated upstream
-=======
-// تفعيل CORS
->>>>>>> Stashed changes
+
 app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
@@ -227,7 +218,7 @@ using (var scope = app.Services.CreateScope())
     {
         var services = scope.ServiceProvider;
 
-<<<<<<< Updated upstream
+
         var roleManager =
             services.GetRequiredService<RoleManager<IdentityRole>>();
 
@@ -245,15 +236,10 @@ using (var scope = app.Services.CreateScope())
 
         // 🔴 Seed Blood Types
         await BloodBankSeeder.SeedAsync(db);
-=======
-        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
 
-        await SeedRoles.SeedAsync(roleManager);
-        await SeedUsers.SeedAsync(userManager);
->>>>>>> Stashed changes
     }
-    catch (Exception ex)
+    catch (Exception ex)              
+
     {
         Console.WriteLine("Seed Error: " + ex.Message);
     }
