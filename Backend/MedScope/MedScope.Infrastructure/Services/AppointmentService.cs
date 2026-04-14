@@ -272,8 +272,10 @@ namespace MedScope.Infrastructure.Services
             if (appointment == null)
                 throw new Exception("Appointment not found");
 
-            appointment.Date = DateOnly.FromDateTime(dto.Date);
-            appointment.Time = TimeOnly.Parse(dto.Time);
+            // ✅ استخدمي القيم زي ما هي
+            appointment.Date = dto.Date;
+            appointment.Time = dto.Time;
+
             appointment.Status = AppointmentStatus.New;
 
             await _context.SaveChangesAsync();

@@ -11,8 +11,6 @@ namespace MedScope.Application.Features.BedManagement
 {
 
 
-    public class GetBedManagementQuery : IRequest<List<BedManagementDto>>
-    {
-
-    }
+    public record GetBedManagementQuery(string UserId)
+       : IRequest<List<BedManagementDto>>;
 }

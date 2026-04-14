@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MedScope.Application.Features.BedManagement;
+using System.Security.Claims;
 
 namespace MedScope.WebApi.Controllers
 {
@@ -21,11 +22,16 @@ namespace MedScope.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var result = await _mediator.Send(new GetBedManagementQuery());
+            //  هات الـ userId من التوكن
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            //  ابعته مع الـ Query
+            var result = await _mediator.Send(new GetBedManagementQuery(userId));
+
             return Ok(result);
         }
 
-        // 🔹 إضافة سرير
+        //  إضافة سرير
         [HttpPost]
         public async Task<IActionResult> Create(CreateBedCommand command)
         {

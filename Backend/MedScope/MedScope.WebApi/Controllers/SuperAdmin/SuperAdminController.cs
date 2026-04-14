@@ -14,7 +14,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MedScope.WebApi.Controllers.SuperAdmin
 {
-
     [Authorize(Roles = "SuperAdmin")]
     [Route("api/super-admin")]
     [ApiController]
@@ -25,14 +24,14 @@ namespace MedScope.WebApi.Controllers.SuperAdmin
         private readonly IApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly IReportService _reportService;
 
-        public SuperAdminController(
-            ISuperAdminService superAdminService,
-            IMediator mediator,
-            IApplicationDbContext context,
-            UserManager<ApplicationUser> userManager,
-            RoleManager<IdentityRole> roleManager)
+
+    public SuperAdminController(
+        ISuperAdminService superAdminService,
+        IMediator mediator,
+        IApplicationDbContext context,
+        UserManager<ApplicationUser> userManager,
+        RoleManager<IdentityRole> roleManager)
         {
             _superAdminService = superAdminService;
             _context = context;
@@ -49,7 +48,7 @@ namespace MedScope.WebApi.Controllers.SuperAdmin
             return User.FindFirst("uid")?.Value
                 ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         }
-       
+
         // =========================
         // Create Hospital
         // =========================
@@ -68,18 +67,45 @@ namespace MedScope.WebApi.Controllers.SuperAdmin
         }
 
         // =========================
-        // Get Hospital
+        // Get Single Hospital
         // =========================
-        [HttpGet("hospital/{id}")]
+        [HttpGet("hospitals/paginated")]
         public async Task<IActionResult> GetHospital(int id)
         {
             var hospital = await _context.Hospitals
-                .FirstOrDefaultAsync(h => h.Id == id);
+                .Where(h => h.Id == id)
+                .Select(h => new
+                {
+                    h.Id,
+                    Name = h.Name ?? "N/A",
+                    City = h.City ?? "N/A",
+                    IsActive = h.IsActive
+                })
+                .FirstOrDefaultAsync();
 
             if (hospital == null)
                 return NotFound("Hospital not found.");
 
             return Ok(hospital);
+        }
+
+        // =========================
+        // ✅ Get All Hospitals (NEW)
+        // =========================
+        [HttpGet("All-hospitals")]
+        public async Task<IActionResult> GetHospitals()
+        {
+            var hospitals = await _context.Hospitals
+                .Select(h => new
+                {
+                    h.Id,
+                    Name = h.Name ?? "N/A",
+                    City = h.City ?? "N/A",
+                    IsActive = h.IsActive
+                })
+                .ToListAsync();
+
+            return Ok(hospitals);
         }
 
         // =========================
@@ -196,6 +222,9 @@ namespace MedScope.WebApi.Controllers.SuperAdmin
             });
         }
 
+        // =========================
+        // Update Profile
+        // =========================
         [HttpPut("profile")]
         public async Task<IActionResult> UpdateProfile(UpdateProfileDto dto)
         {
@@ -283,7 +312,7 @@ namespace MedScope.WebApi.Controllers.SuperAdmin
 
             return Ok("Settings updated");
         }
-
     }
+
 
 }

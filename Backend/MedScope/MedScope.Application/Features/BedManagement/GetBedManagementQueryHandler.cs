@@ -23,7 +23,19 @@ namespace MedScope.Application.Features.BedManagement
             GetBedManagementQuery request,
             CancellationToken cancellationToken)
         {
+            // ✅ حماية لو الـ UserId فاضي
+            if (string.IsNullOrEmpty(request.UserId))
+                return new List<BedManagementDto>();
+
+            // 🔥 هات المستشفى بتاعة الأدمن (UserId = string GUID)
+            var hospitalId = await _context.Admins
+                .Where(a => a.UserId == request.UserId)
+                .Select(a => a.HospitalId)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            // ❗ فلترة حسب المستشفى
             return await _context.Beds
+                .Where(b => b.HospitalId == hospitalId)
                 .GroupBy(b => b.Ward)
                 .Select(g => new BedManagementDto
                 {
