@@ -4,8 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using MedScope.Application.Interfaces;
-using Microsoft.EntityFrameworkCore;
 namespace MedScope.Application.Abstractions.Persistence
 {
     public interface IApplicationDbContext
@@ -20,6 +18,10 @@ namespace MedScope.Application.Abstractions.Persistence
         DbSet<MedScope.Domain.Entities.Admin> Admins { get; }
         DbSet<MedScope.Domain.Entities.SuperAdmin> SuperAdmins { get; }
         DbSet<UserSettings> UserSettings { get; }
+        DbSet<PasswordResetOtp> PasswordResetOtps { get; }
+        DbSet<ApplicationUser> Users { get; }
+        
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

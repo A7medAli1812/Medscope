@@ -3,8 +3,9 @@ using MedScope.Domain.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using MedScope.Domain.Entities;
+
 namespace MedScope.Infrastructure.Persistence;
+
 public class ApplicationDbContext
     : IdentityDbContext<ApplicationUser>, IApplicationDbContext
 {
@@ -36,6 +37,9 @@ public class ApplicationDbContext
     public DbSet<UserSettings> UserSettings { get; set; }
     public DbSet<PasswordResetOtp> PasswordResetOtps { get; set; }
 
+    // =======================
+    // Fluent API
+    // =======================
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -89,6 +93,10 @@ public class ApplicationDbContext
             .HasQueryFilter(h => !h.IsDeleted);
     }
 
+    // =======================
+    // Audit
+    // =======================
+
     public override Task<int> SaveChangesAsync(
         CancellationToken cancellationToken = default)
     {
@@ -103,4 +111,4 @@ public class ApplicationDbContext
 
         return base.SaveChangesAsync(cancellationToken);
     }
-}   
+}

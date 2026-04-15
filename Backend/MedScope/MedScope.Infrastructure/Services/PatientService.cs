@@ -6,7 +6,7 @@ using MedScope.Infrastructure.Persistence;
 using MedScope.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
+using MedScope.Domain.Entities;
 public class PatientService : IPatientService
 {
     private readonly ApplicationDbContext _context;
