@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MedScope.Domain.Entities;
 
 namespace MedScope.WebApi.Controllers.SuperAdmin
 {

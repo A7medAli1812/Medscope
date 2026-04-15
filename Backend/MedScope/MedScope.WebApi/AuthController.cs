@@ -1,5 +1,5 @@
-﻿using MedScope.Application.Features.Auth;
-using Microsoft.AspNetCore.Identity.Data;
+﻿using MedScope.Application.DTOs.Auth;
+using MedScope.Application.Features.Auth;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedScope.WebApi
@@ -29,8 +29,11 @@ namespace MedScope.WebApi
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest req)
         {
-            var (success, message) = await _resetHandler.Handle(req);
-            return success ? Ok(new { message }) : BadRequest(new { message });
+            (bool success, string message) = await _resetHandler.Handle(req);
+
+            return success
+                ? Ok(new { message })
+                : BadRequest(new { message });
         }
     }
 }

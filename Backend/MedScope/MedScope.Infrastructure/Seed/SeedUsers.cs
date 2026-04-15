@@ -1,6 +1,6 @@
 ﻿using MedScope.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
-
+using MedScope.Domain.Entities;
 namespace MedScope.Infrastructure.Seed
 {
     public static class SeedUsers

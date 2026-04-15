@@ -12,94 +12,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MedScope.Domain.Entities;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
-// =======================
-// Bind AuthSettings
-// =======================
-builder.Services.Configure<AuthSettings>(
-    builder.Configuration.GetSection("AuthSettings"));
-
-// =======================
-// Register JwtTokenGenerator
-// =======================
-builder.Services.AddScoped<JwtTokenGenerator>();
-
-// =======================
-// CORS (Allow All)
-// =======================
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll", policy =>
-
-    {
-        policy
-            .WithOrigins(
-                "http://localhost:5174",
-                "http://localhost:5173",
-                "https://medscope-v3.vercel.app"
-            )
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
-    });
-
-
-// =======================
-// Controllers + JSON
-// =======================
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.Converters
-            .Add(new JsonStringEnumConverter());
-
-        options.JsonSerializerOptions.DefaultIgnoreCondition =
-            JsonIgnoreCondition.WhenWritingNull;
-    });
-
-// =======================
-// Swagger
-// =======================
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "MedScope API",
-        Version = "v1"
-    });
-
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        Scheme = "bearer",
-        BearerFormat = "JWT",
-        In = ParameterLocation.Header,
-        Description = "Enter: Bearer {your token}"
-    });
-
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            Array.Empty<string>()
-        }
-    });
-});
-builder.Services.AddSwaggerGen(c =>
-{
-    c.CustomSchemaIds(type => type.FullName);
-});
 // =======================
 // DbContext
 // =======================
@@ -108,11 +25,17 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // =======================
-// Identity
+// Identity (مرة واحدة بس)
 // =======================
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
+
+// =======================
+// Bind AuthSettings
+// =======================
+builder.Services.Configure<AuthSettings>(
+    builder.Configuration.GetSection("AuthSettings"));
 
 // =======================
 // JWT Authentication
@@ -158,13 +81,90 @@ builder.Services.AddAuthentication(options =>
 // =======================
 builder.Services.AddApplicationLayer();
 builder.Services.AddInfrastructureLayer(builder.Configuration);
+
+// =======================
+// Services
+// =======================
+builder.Services.AddScoped<JwtTokenGenerator>();
 builder.Services.AddScoped<ChatbotService>();
 builder.Services.AddHttpContextAccessor();
 
-// =======================pdf
+// =======================
+// CORS
+// =======================
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy
+            .WithOrigins(
+                "http://localhost:5174",
+                "http://localhost:5173",
+                "https://medscope-v3.vercel.app"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+
+// =======================
+// Controllers
+// =======================
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters
+            .Add(new JsonStringEnumConverter());
+
+        options.JsonSerializerOptions.DefaultIgnoreCondition =
+            JsonIgnoreCondition.WhenWritingNull;
+    });
+
+// =======================
+// Swagger (مرة واحدة بس)
+// =======================
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "MedScope API",
+        Version = "v1"
+    });
+
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Enter: Bearer {your token}"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+
+    c.CustomSchemaIds(type => type.FullName);
+});
+
+// =======================
+// PDF License
+// =======================
 QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
-
-
 
 // =======================
 // Build App
@@ -179,7 +179,6 @@ app.UseDeveloperExceptionPage();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-
 app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
@@ -187,7 +186,9 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Custom Unauthorized / Forbidden Response
+// =======================
+// Custom Status Codes
+// =======================
 app.UseStatusCodePages(async context =>
 {
     var response = context.HttpContext.Response;
@@ -210,14 +211,13 @@ app.UseStatusCodePages(async context =>
 app.MapControllers();
 
 // =======================
-// Seed Roles + Users + BloodBank
+// Seed Data
 // =======================
 using (var scope = app.Services.CreateScope())
 {
     try
     {
         var services = scope.ServiceProvider;
-
 
         var roleManager =
             services.GetRequiredService<RoleManager<IdentityRole>>();
@@ -228,18 +228,11 @@ using (var scope = app.Services.CreateScope())
         var db =
             services.GetRequiredService<ApplicationDbContext>();
 
-        // Seed Roles
         await SeedRoles.SeedAsync(roleManager);
-
-        // Seed Users
         await SeedUsers.SeedAsync(userManager);
-
-        // 🔴 Seed Blood Types
         await BloodBankSeeder.SeedAsync(db);
-
     }
-    catch (Exception ex)              
-
+    catch (Exception ex)
     {
         Console.WriteLine("Seed Error: " + ex.Message);
     }

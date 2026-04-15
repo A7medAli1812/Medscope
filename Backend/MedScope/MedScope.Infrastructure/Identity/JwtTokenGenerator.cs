@@ -3,7 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-
+using MedScope.Domain.Entities;
 namespace MedScope.Infrastructure.Identity
 {
     public class JwtTokenGenerator
