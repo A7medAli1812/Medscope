@@ -1,9 +1,15 @@
+
 ﻿using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Serialization;
 using MedScope.Application;
 using MedScope.Application.Abstractions.Admin;
 using MedScope.Application.Features.Admin;
+
+﻿using MedScope.Application;
+using MedScope.Application.Features.Auth;
+using MedScope.Application.Interfaces;
+
 using MedScope.Domain.Entities;
 using MedScope.Infrastructure;
 using MedScope.Infrastructure.Identity;
@@ -16,8 +22,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
+using System.Security.Claims;
+using System.Text;
+using System.Text.Json.Serialization;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<EmailSettings>(
+    builder.Configuration.GetSection("EmailSettings"));
 
 // =======================
 // DbContext
@@ -91,6 +105,9 @@ builder.Services.AddScoped<JwtTokenGenerator>();
 builder.Services.AddScoped<ChatbotService>();
 builder.Services.AddScoped<IAdminDashboardService, AdminDashboardService>();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<ForgotPasswordHandler>();
+builder.Services.AddScoped<ResetPasswordHandler>();
 
 // =======================
 // CORS
