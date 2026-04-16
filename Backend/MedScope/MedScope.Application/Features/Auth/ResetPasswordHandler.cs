@@ -19,32 +19,41 @@ namespace MedScope.Application.Features.Auth
             _userManager = userManager;
         }
 
+
         public async Task<(bool Success, string Message)> Handle(ResetPasswordRequest request)
         {
+            // ✅ check confirm password
+            if (request.NewPassword != request.ConfirmPassword)
+                return (false, "Passwords do not match");
+
+            // 🔥 نجيب آخر OTP متحقق (مش مستخدم)
             var otpEntry = await _db.PasswordResetOtps
-                .FirstOrDefaultAsync(o =>
-                    o.Email == request.Email &&
-                    o.OtpCode == request.Otp);
+                .Where(o => !o.IsUsed && o.ExpiresAt > DateTime.UtcNow)
+                .OrderByDescending(o => o.ExpiresAt)
+                .FirstOrDefaultAsync();
 
-            if (otpEntry == null || otpEntry.IsUsed || otpEntry.ExpiresAt < DateTime.UtcNow)
-                return (false, "Invalid or expired code.");
+            if (otpEntry == null)
+                return (false, "No verified OTP found");
 
-            var user = await _userManager.FindByEmailAsync(request.Email);
+            // 🔥 نجيب اليوزر
+            var user = await _userManager.FindByEmailAsync(otpEntry.Email);
 
             if (user == null)
-                return (false, "User not found.");
+                return (false, "User not found");
 
+            // 🔥 reset password
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
             var result = await _userManager.ResetPasswordAsync(user, token, request.NewPassword);
 
             if (!result.Succeeded)
-                return (false, "Failed to reset password.");
+                return (false, "Failed to reset password");
 
+            // 🔥 نمنع إعادة الاستخدام
             otpEntry.IsUsed = true;
             await _db.SaveChangesAsync();
 
-            return (true, "Password updated successfully.");
+            return (true, "Password updated successfully");
         }
     }
 }

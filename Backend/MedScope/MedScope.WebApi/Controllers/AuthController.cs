@@ -1,4 +1,5 @@
 ﻿using MedScope.Application.DTOs.Auth;
+using MedScope.Application.Features.Auth;
 using MedScope.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +10,15 @@ namespace MedScope.WebApi.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
+        private readonly VerifyOtpHandler _verifyHandler;
 
-        public AuthController(IAuthService authService)
+        // ✅ تعديل الكونستركتور هنا
+        public AuthController(
+            IAuthService authService,
+            VerifyOtpHandler verifyHandler)
         {
             _authService = authService;
+            _verifyHandler = verifyHandler;
         }
 
         // =========================
@@ -69,6 +75,24 @@ namespace MedScope.WebApi.Controllers
                     stackTrace = ex.StackTrace
                 });
             }
+        }
+
+        // =========================
+        // VERIFY OTP ✅
+        // =========================
+        [HttpPost("verify-otp")]
+        public async Task<IActionResult> VerifyOtp([FromBody] VerifyOtpRequest req)
+        {
+            var (success, token) = await _verifyHandler.Handle(req);
+
+            if (!success)
+                return BadRequest(new { message = token });
+
+            return Ok(new
+            {
+                resetToken = token,   // 🔥 ده المهم
+                message = "OTP verified successfully"
+            });
         }
     }
 }

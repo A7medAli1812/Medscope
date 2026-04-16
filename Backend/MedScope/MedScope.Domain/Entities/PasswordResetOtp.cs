@@ -13,5 +13,6 @@ namespace MedScope.Domain.Entities
         public required string OtpCode { get; set; }
         public DateTime ExpiresAt { get; set; }
         public bool IsUsed { get; set; }
+        public string? ResetToken { get; set; }
     }
 }
