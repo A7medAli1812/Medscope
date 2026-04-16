@@ -15,16 +15,15 @@ namespace MedScope.Application.Features.Admin
 
         public Task<AdminDashboardSummaryDto> GetSummaryAsync(int hospitalNumber)
         {
+            // 🔥 الحل هنا: استخدمي Id بدل HospitalNumber
             var hospital = _context.Hospitals
-                .FirstOrDefault(h => h.HospitalNumber == hospitalNumber);
+                .FirstOrDefault(h => h.Id == hospitalNumber);
 
             if (hospital == null)
                 throw new Exception("Hospital not found");
 
             var doctorsCount = _context.Doctors
-            .Count(d => d.HospitalId == hospital.Id);
-
-
+                .Count(d => d.HospitalId == hospital.Id);
 
             var summary = new AdminDashboardSummaryDto
             {
@@ -38,6 +37,5 @@ namespace MedScope.Application.Features.Admin
 
             return Task.FromResult(summary);
         }
-
     }
 }
