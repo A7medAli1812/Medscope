@@ -68,11 +68,13 @@ const AdminManagement = () => {
   return (
     <div className="admin-page">
       <div className="admin-header">
-        <div>
-          <h2 className="admin-title">Admin Management</h2>
-          <p className="admin-subtitle">Manage your personal information and settings</p>
-        </div>
-        <button className="add-btn" onClick={openAdd}>+ Create New Admin</button>
+        <button 
+        className="add-btn" 
+        onClick={openAdd}
+        style={{ marginLeft: "auto", display: "block", }}
+      >
+        + Create New Admin
+      </button>
       </div>
 
       <div className="admin-table-wrapper">

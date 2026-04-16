@@ -1,6 +1,6 @@
 .hospital-page { padding: 30px; }
 
-.hospital-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+.hospital-header { display: flex; justify-content: flex-end; align-items: center; margin-bottom: 25px; }
 .hospital-title { font-size: 28px; color: #1e4f73; margin-bottom: 5px; }
 .hospital-subtitle { font-size: 14px; color: #7a9bb5; }
 
@@ -84,11 +84,7 @@
   background: #d9e9f2;
 }
 
-.new-form-field {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-}
+.new-form-field { display: flex; flex-direction: column; gap: 7px; }
 
 .new-form-field label {
   font-size: 13px;
@@ -111,36 +107,12 @@
   box-sizing: border-box;
 }
 
-.new-modal-btns {
-  display: flex;
-  gap: 12px;
-  margin-top: 5px;
-}
+.new-modal-btns { display: flex; gap: 12px; margin-top: 5px; }
 
-.new-save-btn {
-  flex: 1;
-  background: #1e4f73;
-  color: white;
-  border: none;
-  padding: 13px;
-  border-radius: 25px;
-  font-size: 15px;
-  cursor: pointer;
-  transition: 0.2s;
-}
+.new-save-btn { flex: 1; background: #1e4f73; color: white; border: none; padding: 13px; border-radius: 25px; font-size: 15px; cursor: pointer; transition: 0.2s; }
 .new-save-btn:hover { background: #004f78; }
 
-.new-close-btn {
-  flex: 1;
-  background: #b0c4d4;
-  color: #1e4f73;
-  border: none;
-  padding: 13px;
-  border-radius: 25px;
-  font-size: 15px;
-  cursor: pointer;
-  transition: 0.2s;
-}
+.new-close-btn { flex: 1; background: #b0c4d4; color: #1e4f73; border: none; padding: 13px; border-radius: 25px; font-size: 15px; cursor: pointer; transition: 0.2s; }
 .new-close-btn:hover { background: #9ab5c8; }
 
 /* ===== SUCCESS MODAL ===== */
@@ -157,28 +129,16 @@
   box-shadow: 0 10px 40px rgba(0,0,0,0.15);
 }
 
-.success-icon {
-  width: 58px;
-  height: 58px;
-  background: #1e4f73;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 22px;
-}
-
+.success-icon { width: 58px; height: 58px; background: #1e4f73; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 22px; }
 .new-success-modal h3 { font-size: 26px; color: #1e4f73; font-weight: 700; margin: 0; }
 .new-success-modal p { font-size: 15px; color: #1e4f73; margin: 0; }
-
 .new-success-modal .new-modal-btns { margin-top: 10px; }
 .new-success-modal .new-save-btn,
 .new-success-modal .new-close-btn { flex: unset; padding: 13px 30px; }
 
 @media (max-width: 600px) {
   .hospital-page { padding: 15px; }
-  .hospital-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+  .hospital-header { flex-direction: column; align-items: flex-end; }
   .table-controls { flex-direction: column; gap: 10px; align-items: flex-start; }
   .search-box { width: 100%; }
   .new-modal { margin: 15px; }
