@@ -2,6 +2,9 @@
 using System.Text;
 using System.Text.Json.Serialization;
 using MedScope.Application;
+using MedScope.Application.Abstractions.Admin;
+using MedScope.Application.Features.Admin;
+using MedScope.Domain.Entities;
 using MedScope.Infrastructure;
 using MedScope.Infrastructure.Identity;
 using MedScope.Infrastructure.Persistence;
@@ -12,7 +15,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using MedScope.Domain.Entities;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -87,6 +89,7 @@ builder.Services.AddInfrastructureLayer(builder.Configuration);
 // =======================
 builder.Services.AddScoped<JwtTokenGenerator>();
 builder.Services.AddScoped<ChatbotService>();
+builder.Services.AddScoped<IAdminDashboardService, AdminDashboardService>();
 builder.Services.AddHttpContextAccessor();
 
 // =======================

@@ -18,7 +18,9 @@ public class AdminDashboardController : ControllerBase
     [HttpGet("summary")]
     public async Task<IActionResult> GetSummary()
     {
-        var hospitalIdClaim = User.FindFirst("hospitalId")?.Value;
+        // ✅ نجيب HospitalId بشكل مرن
+        var hospitalIdClaim = User.Claims
+            .FirstOrDefault(c => c.Type.Contains("HospitalId"))?.Value;
 
         if (string.IsNullOrEmpty(hospitalIdClaim))
             return Unauthorized("HospitalId not found in token");
@@ -30,4 +32,3 @@ public class AdminDashboardController : ControllerBase
         return Ok(result);
     }
 }
-//new test new

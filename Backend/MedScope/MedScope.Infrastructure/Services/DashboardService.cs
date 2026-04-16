@@ -27,7 +27,7 @@ public class DashboardService : IDashboardService
         var userId = _httpContextAccessor.HttpContext.User
             .FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-        if (userId == null)
+        if (string.IsNullOrEmpty(userId))
             throw new Exception("Unauthorized");
 
         var admin = await _context.Admins
@@ -38,6 +38,9 @@ public class DashboardService : IDashboardService
 
         var hospitalId = admin.HospitalId;
 
+        // =========================
+        // 📊 Base Query
+        // =========================
         var baseAppointmentsQuery =
             from a in _context.Appointments
             join d in _context.Doctors on a.DoctorId equals d.Id
@@ -55,45 +58,83 @@ public class DashboardService : IDashboardService
         var appointmentsCount = await baseAppointmentsQuery.CountAsync();
 
         var totalPatients = await baseAppointmentsQuery
+            .Where(a => a.PatientId != null)
             .Select(a => a.PatientId)
             .Distinct()
             .CountAsync();
 
         var newPatients = await baseAppointmentsQuery
+            .Where(a => a.PatientId != null)
             .GroupBy(a => a.PatientId)
             .Where(g => g.Count() == 1)
             .CountAsync();
 
+        // =========================
+        // 👨‍⚕️ Doctors Stats
+        // =========================
         var doctorQuery =
             from a in _context.Appointments
             join d in _context.Doctors on a.DoctorId equals d.Id
-            join u in _context.Users on d.UserId equals u.Id
             where a.HospitalId == hospitalId
                   && d.HospitalId == hospitalId
                   && !d.IsDeleted
                   && a.Date.Month == month
-            select new { a, d, u };
+            select new
+            {
+                a.Date,
+                d.Id,
+                d.UserId
+            };
 
         if (day.HasValue)
         {
             doctorQuery = doctorQuery
-                .Where(x => x.a.Date.Day == day.Value);
+                .Where(x => x.Date.Day == day.Value);
         }
 
-        var doctorData = await doctorQuery
-            .GroupBy(x => new
+        var doctorDataRaw = await doctorQuery.ToListAsync();
+
+        // =========================
+        // 👤 Get Users safely
+        // =========================
+        var userIds = doctorDataRaw
+            .Where(x => !string.IsNullOrEmpty(x.UserId))
+            .Select(x => x.UserId)
+            .Distinct()
+            .ToList();
+
+        var users = await _context.Users
+            .Where(u => userIds.Contains(u.Id))
+            .ToDictionaryAsync(u => u.Id);
+
+        // =========================
+        // 📈 Final Doctor Data
+        // =========================
+        var doctorData = doctorDataRaw
+            .GroupBy(x => x.Id)
+            .Select(g =>
             {
-                x.d.Id,
-                x.u.FirstName,
-                x.u.LastName
+                var userIdKey = g.First().UserId;
+
+                string doctorName = "Unknown";
+
+                if (!string.IsNullOrEmpty(userIdKey) && users.ContainsKey(userIdKey))
+                {
+                    var user = users[userIdKey];
+
+                    doctorName = string.Join(" ",
+                        new[] { user.FirstName ?? "", user.LastName ?? "" }
+                        .Where(s => !string.IsNullOrWhiteSpace(s)));
+                }
+
+                return new
+                {
+                    DoctorId = g.Key,
+                    DoctorName = doctorName,
+                    Count = g.Count()
+                };
             })
-            .Select(g => new
-            {
-                DoctorId = g.Key.Id,
-                DoctorName = g.Key.FirstName + " " + g.Key.LastName,
-                Count = g.Count()
-            })
-            .ToListAsync();
+            .ToList();
 
         var totalAppointmentsForDoctors = doctorData.Sum(x => x.Count);
 
@@ -108,6 +149,9 @@ public class DashboardService : IDashboardService
             .OrderByDescending(x => x.Count)
             .ToList();
 
+        // =========================
+        // 📦 Final Response
+        // =========================
         return new DashboardDto
         {
             TotalBeds = totalBeds,
