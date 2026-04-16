@@ -63,13 +63,13 @@ const HospitalManagement = () => {
 
   return (
     <div className="hospital-page">
-      <div className="hospital-header">
-        <div>
-          <h2 className="hospital-title">Hospital Management</h2>
-          <p className="hospital-subtitle">Manage your personal information and settings</p>
-        </div>
-        <button className="add-btn" onClick={openAdd}>+ Add New Hospital</button>
-      </div>
+      <button 
+        className="add-btn" 
+        onClick={openAdd}
+        style={{ marginLeft: "auto", display: "block", marginBottom: "20px" }}
+      >
+        + Add New Hospital
+      </button>
 
       <div className="hospital-table-wrapper">
         <div className="table-controls">

@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Outlet,
+  useLocation
+} from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import Header from "./components/Header";
@@ -22,15 +28,15 @@ import Doctors from "./pages/Doctors";
 import DashboardPage from "./pages/Dashboard";
 import BedManagement from "./pages/BedManagement";
 import BloodBank from "./pages/BloodBank";
-import MultiHospitalView from "./pages/MultiHospitalView"; 
+import MultiHospitalView from "./pages/MultiHospitalView";
 import NewAppointment from "./pages/new-appointment";
 import NewDoctor from "./pages/new-doctor";
-// Renamed to avoid confusion with the Layout or Route concept widely
+
+import Chatbot from "./Chatbot";
 
 import "./App.css";
-import AdminManagement from "./Super-Admin/Adminmanagement";
 
-// Public Layout Wrapper
+// Public Layout
 function PublicLayout({ isDarkMode, toggleDarkMode }) {
   return (
     <div className="app">
@@ -40,6 +46,67 @@ function PublicLayout({ isDarkMode, toggleDarkMode }) {
       </main>
       <Footer />
     </div>
+  );
+}
+
+// الجزء الداخلي اللي فيه useLocation
+function AppContent({ isDarkMode, toggleDarkMode }) {
+  const location = useLocation();
+
+  // يظهر في كل صفحات الـ admin
+  const showChatbot = location.pathname.startsWith("/super-admin");
+
+  return (
+    <>
+      <Routes>
+        {/* Public */}
+        <Route
+          element={
+            <PublicLayout
+              isDarkMode={isDarkMode}
+              toggleDarkMode={toggleDarkMode}
+            />
+          }
+        >
+          <Route path="/" element={<Login />} />
+          <Route path="/signup" element={<SignUpForm />} />
+        </Route>
+
+        {/* Super Admin */}
+        <Route element={<SuperAdminLayout />}>
+          <Route
+            path="/super-admin/hospitals"
+            element={<Hospitalmanagement />}
+          />
+          <Route
+            path="/super-admin/admins"
+            element={<Adminmanagement />}
+          />
+          <Route path="/super-admin/reports" element={<Reports />} />
+          <Route path="/super-admin/settings" element={<Settings />} />
+        </Route>
+
+        {/* Dashboard */}
+        <Route element={<DashboardLayout />}>
+          <Route path="/home" element={<Home />} />
+          <Route path="/patients" element={<Patients />} />
+          <Route path="/appointments" element={<Appointments />} />
+          <Route path="/doctors" element={<Doctors />} />
+          <Route path="/bed-management" element={<BedManagement />} />
+          <Route path="/blood-bank" element={<BloodBank />} />
+          <Route
+            path="/multi-hospital-view"
+            element={<MultiHospitalView />}
+          />
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/new-appointment" element={<NewAppointment />} />
+          <Route path="/new-doctor" element={<NewDoctor />} />
+        </Route>
+      </Routes>
+
+      {/* شرط ظهور البوت */}
+      {showChatbot && <Chatbot />}
+    </>
   );
 }
 
@@ -55,10 +122,7 @@ function App() {
     document.documentElement.setAttribute("lang", lang);
 
     document.body.dir = dir;
-
-    document.documentElement.style.transition = "all 0.2s ease";
   }, [i18n.language]);
-
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
@@ -77,36 +141,10 @@ function App() {
 
   return (
     <Router>
-     <Routes>
-
-        {/* Public Routes with Header & Footer */}
-        <Route element={<PublicLayout isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />}>
-          <Route path="/" element={<Login />} />
-          <Route path="/signup" element={<SignUpForm />} />
-        </Route>
-
-        <Route element={<SuperAdminLayout />}>
-        <Route path="/super-admin/hospitals" element={<Hospitalmanagement />} />
-        <Route path="/super-admin/admins" element={<Adminmanagement />} />
-        <Route path="/super-admin/reports" element={<Reports />} />
-        <Route path="/super-admin/settings" element={<Settings />} />
-        </Route>
-
-        {/* Dashboard Routes with Sidebar only */}
-        <Route element={<DashboardLayout />}>
-          <Route path="/home" element={<Home />} />
-          <Route path="/patients" element={<Patients />} />
-          <Route path="/appointments" element={<Appointments />} />
-          <Route path="/doctors" element={<Doctors />} />
-          <Route path="/bed-management" element={<BedManagement />} />
-          <Route path="/blood-bank" element={<BloodBank />} />
-          <Route path="/multi-hospital-view" element={<MultiHospitalView />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/new-appointment" element={<NewAppointment />} />
-          <Route path="/new-doctor" element={<NewDoctor />} />
-         
-        </Route>
-      </Routes>
+      <AppContent
+        isDarkMode={isDarkMode}
+        toggleDarkMode={toggleDarkMode}
+      />
     </Router>
   );
 }
