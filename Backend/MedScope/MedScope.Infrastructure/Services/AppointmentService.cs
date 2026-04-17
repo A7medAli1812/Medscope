@@ -367,8 +367,8 @@ namespace MedScope.Infrastructure.Services
                     Specialty = a.Doctor.Specialty,
                     HospitalName = a.Hospital.Name,
                     VisitType = a.VisitType,
-                    Date = a.Date.ToDateTime(a.Time),
-                    Time = a.Time,
+                    Date = a.Date.ToString("yyyy-MM-dd"),
+                    Time = a.Time.ToString("hh:mm tt"),
                     Status = a.Status
                 };
 
@@ -400,8 +400,8 @@ namespace MedScope.Infrastructure.Services
                     Specialty = a.Doctor.Specialty,
                     HospitalName = a.Hospital.Name,
                     VisitType = a.VisitType,
-                    Date = a.Date.ToDateTime(a.Time),
-                    Time = a.Time,
+                    Date = a.Date.ToString("yyyy-MM-dd"),
+                    Time = a.Time.ToString("hh:mm tt"),
                     Status = a.Status
                 };
 
@@ -545,12 +545,12 @@ namespace MedScope.Infrastructure.Services
         {
             return await _context.DoctorWorkingHours
                 .Where(w => w.DoctorId == doctorId)
-                .Select(w => new DoctorScheduleDto
-                {
-                    Day = w.Day,
-                    From = TimeOnly.FromTimeSpan(w.From),
-                    To = TimeOnly.FromTimeSpan(w.To)
-                })
+            .Select(w => new DoctorScheduleDto
+            {
+                Day = w.Day,
+                From = TimeOnly.FromTimeSpan(w.From).ToString("hh:mm tt"),
+                To = TimeOnly.FromTimeSpan(w.To).ToString("hh:mm tt")
+            })
                 .OrderBy(w => w.Day)
                 .ToListAsync();
         }

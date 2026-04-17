@@ -10,8 +10,8 @@ namespace MedScope.Application.DTOs.Patient
     {
         public string Day { get; set; }
 
-        public TimeOnly From { get; set; }
+        public string From { get; set; }
 
-        public TimeOnly To { get; set; }
+        public string To { get; set; }
     }
 }
