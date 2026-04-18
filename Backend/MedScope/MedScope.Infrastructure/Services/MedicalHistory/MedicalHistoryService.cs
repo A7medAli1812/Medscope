@@ -153,7 +153,7 @@ namespace MedScope.Infrastructure.Services
                 .OrderByDescending(x => x.CreatedAt)
                 .Select(x => new PatientVisitDto
                 {
-                    Date = x.CreatedAt,
+                    Date = x.CreatedAt.ToString("yyyy-MM-dd"),
                     Diagnosis = x.Diagnosis,
                     TreatmentPlan = x.TreatmentPlan,
                     FollowUp = x.FollowUp
@@ -195,7 +195,7 @@ namespace MedScope.Infrastructure.Services
                 .OrderByDescending(x => x.CreatedAt)
                 .Select(x => new PatientNoteDto
                 {
-                    Date = x.CreatedAt,
+                    Date = x.CreatedAt.ToString("yyyy-MM-dd"),
                     Diagnosis = x.Diagnosis,
                     TreatmentPlan = x.TreatmentPlan,
                     FollowUp = x.FollowUp

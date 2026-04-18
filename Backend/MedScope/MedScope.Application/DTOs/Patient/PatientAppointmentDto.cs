@@ -21,9 +21,8 @@ namespace MedScope.Application.DTOs.Patient
 
         public string VisitType { get; set; }
 
-        public DateTime Date { get; set; }
-
-        public TimeOnly Time { get; set; }
+        public string Date { get; set; }
+        public string Time { get; set; }
 
         public AppointmentStatus Status { get; set; }
     }

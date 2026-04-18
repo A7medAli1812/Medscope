@@ -193,7 +193,10 @@ public class DashboardService : IDashboardService
             {
                 DoctorName = u.FirstName + " " + u.LastName,
                 Specialty = d.Specialty,
-                Date = a.Date.ToDateTime(TimeOnly.MinValue),
+
+                Date = a.Date.ToString("yyyy-MM-dd"),     // ✅ format date
+                Time = a.Time.ToString("hh:mm tt"),       // ✅ AM/PM
+
                 Status = a.Status
             })
             .Take(3)
@@ -209,7 +212,7 @@ public class DashboardService : IDashboardService
             .Select(r => new PatientReportDto
             {
                 Title = r.Notes,
-                Date = r.RecordDate,
+                Date = r.RecordDate.ToString("yyyy-MM-dd"), // ✅ format date
                 Status = "Ready"
             })
             .ToListAsync();

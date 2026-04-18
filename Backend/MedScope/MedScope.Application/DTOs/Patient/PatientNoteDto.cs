@@ -8,7 +8,7 @@ namespace MedScope.Application.DTOs.Patient
 {
     public class PatientNoteDto
     {
-        public DateTime Date { get; set; }
+        public string Date { get; set; }
 
         public string Diagnosis { get; set; } = null!;
 

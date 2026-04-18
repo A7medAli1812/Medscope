@@ -8,7 +8,7 @@ namespace MedScope.Application.DTOs.MedicalHistory
 {
     public class PatientVisitDto
     {
-        public DateTime Date { get; set; }
+        public string Date { get; set; }
 
         public string Diagnosis { get; set; } = null!;
 
