@@ -70,10 +70,9 @@ namespace MedScope.WebApi.Controllers.Patient
         }
 
         [HttpGet("specialties")]
-        public async Task<IActionResult> GetSpecialties()
+        public async Task<IActionResult> GetSpecialties([FromQuery] int hospitalId)
         {
-            var specialties = await _appointmentService.GetSpecialtiesAsync();
-
+            var specialties = await _appointmentService.GetSpecialtiesByHospitalAsync(hospitalId);
             return Ok(specialties);
         }
 
@@ -93,11 +92,14 @@ namespace MedScope.WebApi.Controllers.Patient
         }
 
         [HttpGet("review")]
-        public async Task<IActionResult> GetReview(int doctorId, DateOnly date, TimeOnly time)
+        public async Task<IActionResult> GetReview()
         {
-            var patientId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var result = await _appointmentService.GetAppointmentReviewAsync(doctorId, date, time, patientId);
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
+
+            var result = await _appointmentService.GetAppointmentReviewFromSessionAsync(userId);
 
             return Ok(result);
         }
@@ -128,6 +130,18 @@ namespace MedScope.WebApi.Controllers.Patient
             var result = await _appointmentService.GetBookingFormAsync(userId);
 
             return Ok(result);
+        }
+        [HttpPost("select")]
+        public async Task<IActionResult> SaveSelection([FromBody] PatientCreateAppointmentDto dto)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId == null)
+                return Unauthorized();
+
+            await _appointmentService.SaveSelectionAsync(userId, dto);
+
+            return Ok(new { message = "Selection saved successfully" });
         }
 
     }

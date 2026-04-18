@@ -1,7 +1,10 @@
-﻿public class Doctor
+﻿using MedScope.Domain.Entities;
+
+public class Doctor
 {
     public int Id { get; set; }
     public string UserId { get; set; }
+    public ApplicationUser User { get; set; }
 
     public string? Specialty { get; set; }
     public string? LicenseNumber { get; set; }
@@ -12,5 +15,6 @@
 
     public ICollection<Appointment> Appointments { get; set; }
     public bool IsDeleted { get; set; } = false;
+    
 
 }
