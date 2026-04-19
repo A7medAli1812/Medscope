@@ -483,6 +483,14 @@ namespace MedScope.Infrastructure.Services
                 .OrderBy(d => d.Name)
                 .ToListAsync();
         }
+        public async Task<List<string>> GetSpecialtiesByHospitalAsync(int hospitalId)
+        {
+            return await _context.Doctors
+                .Where(d => d.HospitalId == hospitalId && !d.IsDeleted)
+                .Select(d => d.Specialty)
+                .Distinct()
+                .ToListAsync();
+        }
         // =========================
         // Get Doctor Available Slots (Booking Step 3)
         // =========================
@@ -554,34 +562,64 @@ namespace MedScope.Infrastructure.Services
                 .OrderBy(w => w.Day)
                 .ToListAsync();
         }
-        public async Task<AppointmentReviewDto> GetAppointmentReviewAsync(int doctorId, DateOnly date, TimeOnly time, int patientId)
+        public async Task<AppointmentReviewDto> GetAppointmentReviewAsync(
+      int doctorId,
+      DateOnly date,
+      TimeOnly time,
+      int patientId)
         {
-            var doctor = await _context.Doctors
-                .Include(d => d.Hospital)
-                .FirstOrDefaultAsync(d => d.Id == doctorId);
+            // =========================
+            // Patient
+            // =========================
+            var patient = await (
+                from p in _context.Patients
+                join u in _context.Users on p.UserId equals u.Id
+                where p.Id == patientId
+                select new
+                {
+                    Name = u.FirstName + " " + u.LastName,
+                    Email = u.Email,
+                    Phone = u.PhoneNumber
+                }
+            ).FirstOrDefaultAsync();
 
-            var patient = await _context.Patients
-                .FirstOrDefaultAsync(p => p.Id == patientId);
+            if (patient == null)
+                throw new Exception("Patient not found");
 
-            if (doctor == null || patient == null)
-                throw new Exception("Invalid data");
+            // =========================
+            // Doctor
+            // =========================
+            var doctor = await (
+                from d in _context.Doctors
+                join u in _context.Users on d.UserId equals u.Id
+                join h in _context.Hospitals on d.HospitalId equals h.Id
+                where d.Id == doctorId
+                select new
+                {
+                    Name = u.FirstName + " " + u.LastName,
+                    Specialty = d.Specialty,
+                    HospitalName = h.Name
+                }
+            ).FirstOrDefaultAsync();
 
-            var doctorUser = await _context.Users
-                .FirstOrDefaultAsync(u => u.Id == doctor.UserId);
+            if (doctor == null)
+                throw new Exception("Doctor not found");
 
-            var patientUser = await _context.Users
-                .FirstOrDefaultAsync(u => u.Id == patient.UserId);
-
-            if (doctorUser == null || patientUser == null)
-                throw new Exception("User not found");
-
+            // =========================
+            // Result
+            // =========================
             return new AppointmentReviewDto
             {
-                DoctorName = doctorUser.FirstName + " " + doctorUser.LastName,
+                PatientName = patient.Name,
+                Email = patient.Email,
+                Phone = patient.Phone,
+
+                DoctorName = doctor.Name,
                 Specialty = doctor.Specialty,
-                HospitalName = doctor.Hospital.Name,
-                Date = date,
-                Time = time
+                HospitalName = doctor.HospitalName,
+
+                Date = date.ToString("yyyy-M-d"),
+                Time = time.ToString("hh:mm tt")
             };
         }
         public async Task<List<DateOnly>> GetDoctorAvailableDatesAsync(int doctorId, int daysAhead = 7)
@@ -699,5 +737,54 @@ namespace MedScope.Infrastructure.Services
                 Email = user.Email
             };
         }
+        public async Task SaveSelectionAsync(string userId, PatientCreateAppointmentDto dto)
+        {
+            var patient = await _context.Patients
+                .FirstOrDefaultAsync(p => p.UserId == userId);
+
+            if (patient == null)
+                throw new Exception("Patient not found");
+
+            var session = new BookingSession
+            {
+                PatientId = patient.Id,
+                DoctorId = dto.DoctorId,
+                Date = dto.Date,
+                Time = TimeOnly.Parse(dto.Time)
+            };
+
+            _context.BookingSessions.Add(session);
+            await _context.SaveChangesAsync();
+        }
+        public async Task<AppointmentReviewDto> GetAppointmentReviewFromSessionAsync(string userId)
+        {
+            var patient = await _context.Patients
+                .FirstOrDefaultAsync(p => p.UserId == userId);
+
+            if (patient == null)
+                throw new Exception("Patient not found");
+
+            var session = await _context.BookingSessions
+                .Where(s => s.PatientId == patient.Id)
+                .OrderByDescending(s => s.Id)
+                .FirstOrDefaultAsync();
+
+            if (session == null)
+                throw new Exception("No booking session found");
+
+            var doctor = await _context.Doctors
+      .Include(d => d.User)
+      .Include(d => d.Hospital)
+      .FirstOrDefaultAsync(d => d.Id == session.DoctorId);
+
+            return new AppointmentReviewDto
+            {
+                DoctorName = doctor.User.FirstName + " " + doctor.User.LastName,
+                Specialty = doctor.Specialty,
+                HospitalName = doctor.Hospital.Name,
+                Date = session.Date.ToString("yyyy-MM-dd"),
+                Time = session.Time.ToString("hh:mm tt")
+            };
+        }
+        }
     }
-}

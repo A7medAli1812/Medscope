@@ -36,6 +36,7 @@ public class ApplicationDbContext
     public DbSet<ChatMessage> ChatMessages { get; set; }
     public DbSet<UserSettings> UserSettings { get; set; }
     public DbSet<PasswordResetOtp> PasswordResetOtps { get; set; }
+    public DbSet<BookingSession> BookingSessions { get; set; }
 
     // =======================
     // Fluent API
@@ -50,10 +51,10 @@ public class ApplicationDbContext
                .HasConversion<string>();
 
         builder.Entity<Doctor>()
-            .HasOne<ApplicationUser>()
-            .WithOne()
-            .HasForeignKey<Doctor>(d => d.UserId)
-            .OnDelete(DeleteBehavior.NoAction);
+      .HasOne(d => d.User)
+      .WithOne()
+      .HasForeignKey<Doctor>(d => d.UserId)
+      .OnDelete(DeleteBehavior.NoAction);
 
         builder.Entity<Admin>()
             .HasOne<ApplicationUser>()
@@ -62,9 +63,9 @@ public class ApplicationDbContext
             .OnDelete(DeleteBehavior.NoAction);
 
         builder.Entity<Patient>()
-            .HasOne<ApplicationUser>()
-            .WithOne()
-            .HasForeignKey<Patient>(p => p.UserId)
+         .HasOne(p => p.User)
+         .WithOne()
+         .HasForeignKey<Patient>(p => p.UserId)
             .OnDelete(DeleteBehavior.NoAction);
 
         builder.Entity<SuperAdmin>()
@@ -111,4 +112,5 @@ public class ApplicationDbContext
 
         return base.SaveChangesAsync(cancellationToken);
     }
+
 }
