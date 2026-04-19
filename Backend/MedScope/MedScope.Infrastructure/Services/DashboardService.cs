@@ -205,17 +205,18 @@ public class DashboardService : IDashboardService
         // =========================
         // Medical Records (Doctor Notes)
         // =========================
-        var records = await _context.MedicalRecords
-            .Where(r => r.PatientId == patientId)
-            .OrderByDescending(r => r.RecordDate)
-            .Take(3)
-            .Select(r => new PatientReportDto
-            {
-                Title = r.Notes,
-                Date = r.RecordDate.ToString("yyyy-MM-dd"), // ✅ format date
-                Status = "Ready"
-            })
-            .ToListAsync();
+        var data = await _context.DoctorNotes
+      .Where(n => n.PatientId == patientId)
+      .OrderByDescending(n => n.CreatedAt)
+      .Take(3)
+      .ToListAsync();
+
+        var records = data.Select(n => new PatientReportDto
+        {
+            Title = n.Diagnosis, // أو Notes لو عايزة
+            Date = n.CreatedAt.ToString("yyyy-MM-dd"),
+            Status = "Ready"
+        }).ToList();
 
         // =========================
         // Updates

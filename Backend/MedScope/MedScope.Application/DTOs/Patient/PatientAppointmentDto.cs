@@ -25,5 +25,6 @@ namespace MedScope.Application.DTOs.Patient
         public string Time { get; set; }
 
         public AppointmentStatus Status { get; set; }
+        public string DisplayStatus { get; set; } = null!;
     }
 }

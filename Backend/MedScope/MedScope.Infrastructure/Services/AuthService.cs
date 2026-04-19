@@ -42,8 +42,21 @@ namespace MedScope.Infrastructure.Services
             }
 
             var existingUser = await _userManager.FindByEmailAsync(dto.Email);
+
             if (existingUser != null)
             {
+                var existingPatient = await _context.Patients
+                    .FirstOrDefaultAsync(p => p.UserId == existingUser.Id);
+
+                if (existingPatient != null && existingPatient.IsDeleted)
+                {
+                    return new AuthResultDto
+                    {
+                        IsSuccess = false,
+                        Message = "This account has been deleted"
+                    };
+                }
+
                 return new AuthResultDto
                 {
                     IsSuccess = false,
@@ -51,6 +64,7 @@ namespace MedScope.Infrastructure.Services
                 };
             }
 
+            // 👇 الجزء اللي كان ناقص عندك
             var user = new ApplicationUser
             {
                 UserName = dto.Email,
@@ -59,10 +73,11 @@ namespace MedScope.Infrastructure.Services
                 LastName = dto.LastName,
                 PhoneNumber = dto.PhoneNumber,
                 Gender = dto.Gender,
-                DateOfBirth = dto.DateOfBirth
+                DateOfBirth = dto.DateOfBirth.ToDateTime(TimeOnly.MinValue)
             };
 
             var result = await _userManager.CreateAsync(user, dto.Password);
+
             if (!result.Succeeded)
             {
                 return new AuthResultDto
@@ -116,8 +131,35 @@ namespace MedScope.Infrastructure.Services
                 };
             }
 
-            var roles = await _userManager.GetRolesAsync(user);
+            // 👇 check على Patient
+            var patient = await _context.Patients
+                .AsNoTracking()
+                .FirstOrDefaultAsync(p => p.UserId == user.Id);
 
+            if (patient != null && patient.IsDeleted)
+            {
+                return new AuthResponseDto
+                {
+                    IsSuccess = false,
+                    Message = "This account has been deleted"
+                };
+            }
+
+            // 👇 غيرنا الاسم هنا
+            var doctorEntity = await _context.Doctors
+                .AsNoTracking()
+                .FirstOrDefaultAsync(d => d.UserId == user.Id);
+
+            if (doctorEntity != null && doctorEntity.IsDeleted)
+            {
+                return new AuthResponseDto
+                {
+                    IsSuccess = false,
+                    Message = "This account has been deleted"
+                };
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
             // =========================
             // 🔑 تحديد HospitalId حسب الدور
             // =========================

@@ -1,8 +1,10 @@
 ﻿using System.Security.Claims;
 using MedScope.Application.Abstractions.Appointments;
 using MedScope.Application.DTOs.Patient;
+using MedScope.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace MedScope.WebApi.Controllers.Patient
@@ -13,10 +15,23 @@ namespace MedScope.WebApi.Controllers.Patient
     public class PatientAppointmentsController : ControllerBase
     {
         private readonly IAppointmentService _appointmentService;
+        private readonly ApplicationDbContext _context;
 
-        public PatientAppointmentsController(IAppointmentService appointmentService)
+        public PatientAppointmentsController(
+    IAppointmentService appointmentService,
+    ApplicationDbContext context)
         {
             _appointmentService = appointmentService;
+            _context = context;
+        }
+        private async Task<int> GetPatientId()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            return await _context.Patients
+                .Where(p => p.UserId == userId)
+                .Select(p => p.Id)
+                .FirstOrDefaultAsync();
         }
 
         // =========================
@@ -25,7 +40,7 @@ namespace MedScope.WebApi.Controllers.Patient
         [HttpGet("upcoming")]
         public async Task<IActionResult> GetUpcomingAppointments()
         {
-            var patientId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var patientId = await GetPatientId();
 
             var data = await _appointmentService
                 .GetUpcomingAppointmentsForPatient(patientId);
@@ -39,7 +54,7 @@ namespace MedScope.WebApi.Controllers.Patient
         [HttpGet("past")]
         public async Task<IActionResult> GetPastAppointments()
         {
-            var patientId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var patientId = await GetPatientId();
 
             var data = await _appointmentService
                 .GetPastAppointmentsForPatient(patientId);
@@ -53,7 +68,7 @@ namespace MedScope.WebApi.Controllers.Patient
         [HttpPut("cancel/{id}")]
         public async Task<IActionResult> CancelAppointment(int id)
         {
-            var patientId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var patientId = await GetPatientId();
 
             await _appointmentService
                 .CancelAppointmentForPatient(id, patientId);
@@ -103,34 +118,22 @@ namespace MedScope.WebApi.Controllers.Patient
 
             return Ok(result);
         }
-        [HttpPost]
-        public async Task<IActionResult> CreateAppointment([FromBody] PatientCreateAppointmentDto dto)
+        [HttpPost("confirm")]
+        public async Task<IActionResult> ConfirmAppointment([FromBody] ConfirmAppointmentDto dto)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             if (userId == null)
                 return Unauthorized();
 
-            var appointmentId = await _appointmentService.CreateAppointmentForPatientAsync(userId, dto);
+            var result = await _appointmentService.ConfirmAppointmentAsync(userId, dto);
 
             return Ok(new
             {
-                message = "Appointment booked successfully",
-                appointmentId = appointmentId
+                message = "Appointment confirmed successfully"
             });
         }
-        [HttpGet("booking-form")]
-        public async Task<IActionResult> GetBookingForm()
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (string.IsNullOrEmpty(userId))
-                return Unauthorized();
-
-            var result = await _appointmentService.GetBookingFormAsync(userId);
-
-            return Ok(result);
-        }
+       
         [HttpPost("select")]
         public async Task<IActionResult> SaveSelection([FromBody] PatientCreateAppointmentDto dto)
         {

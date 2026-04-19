@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace MedScope.Application.DTOs.Patient
 {
-    public class DoctorSlotDto
+    public class ConfirmAppointmentDto
     {
-        public DateOnly Date { get; set; }
-
-        public List<string> AvailableTimes { get; set; } = new(); 
+        public string AppointmentNotes { get; set; }
+        public string VisitType { get; set; }
     }
 }

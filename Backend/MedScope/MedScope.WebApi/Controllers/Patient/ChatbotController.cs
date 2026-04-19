@@ -1,8 +1,11 @@
 ﻿using MedScope.Application.DTOs.Chatbot;
 using MedScope.Infrastructure.Services;
+using MedScope.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 
 namespace MedScope.WebApi.Controllers.Patient
 {
@@ -12,10 +15,25 @@ namespace MedScope.WebApi.Controllers.Patient
     public class ChatbotController : ControllerBase
     {
         private readonly ChatbotService _service;
+        private readonly ApplicationDbContext _context;
 
-        public ChatbotController(ChatbotService service)
+        public ChatbotController(ChatbotService service, ApplicationDbContext context)
         {
             _service = service;
+            _context = context;
+        }
+
+        // =========================
+        // Helper
+        // =========================
+        private async Task<int> GetPatientId()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            return await _context.Patients
+                .Where(p => p.UserId == userId)
+                .Select(p => p.Id)
+                .FirstOrDefaultAsync();
         }
 
         // =========================
@@ -24,12 +42,7 @@ namespace MedScope.WebApi.Controllers.Patient
         [HttpPost("ask")]
         public async Task<IActionResult> Ask([FromBody] ChatRequestDto dto)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (string.IsNullOrEmpty(userId))
-                return Unauthorized();
-
-            var patientId = int.Parse(userId);
+            var patientId = await GetPatientId();
 
             var result = await _service.AskAsync(patientId, dto);
 
@@ -42,12 +55,7 @@ namespace MedScope.WebApi.Controllers.Patient
         [HttpGet("history")]
         public async Task<IActionResult> GetHistory()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (string.IsNullOrEmpty(userId))
-                return Unauthorized();
-
-            var patientId = int.Parse(userId);
+            var patientId = await GetPatientId();
 
             var history = await _service.GetHistoryAsync(patientId);
 
@@ -58,19 +66,15 @@ namespace MedScope.WebApi.Controllers.Patient
         // Upload Attachment
         // =========================
         [HttpPost("upload")]
-        public async Task<IActionResult> UploadAttachment([FromForm] IFormFile file)
+        [Consumes("multipart/form-data")]   // 👈 دي أهم حاجة
+        public async Task<IActionResult> UploadAttachment([FromForm] IFormFile file , [FromForm] string? message)
         {
             if (file == null || file.Length == 0)
                 return BadRequest("File is required");
 
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var patientId = await GetPatientId();
 
-            if (string.IsNullOrEmpty(userId))
-                return Unauthorized();
-
-            var patientId = int.Parse(userId);
-
-            var url = await _service.SaveAttachmentAsync(patientId, file);
+            var url = await _service.SaveAttachmentAsync(patientId, file, message);
 
             return Ok(new { url });
         }

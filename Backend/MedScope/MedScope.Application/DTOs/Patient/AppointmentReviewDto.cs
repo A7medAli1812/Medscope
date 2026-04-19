@@ -21,6 +21,7 @@ namespace MedScope.Application.DTOs.Patient
         public string DoctorName { get; set; } = string.Empty;
         public string Specialty { get; set; } = string.Empty;
         public string HospitalName { get; set; } = string.Empty;
+        public int DoctorId { get; set; }
 
         // =========================
         // Appointment Data

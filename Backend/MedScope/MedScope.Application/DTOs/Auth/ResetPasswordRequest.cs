@@ -10,6 +10,8 @@ namespace MedScope.Application.DTOs.Auth
 {
     public class ResetPasswordRequest
     {
+        [Required]
+        public string ResetToken { get; set; }   
 
         [Required]
         [MinLength(6)]
