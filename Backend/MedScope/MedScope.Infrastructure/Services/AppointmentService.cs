@@ -1,4 +1,5 @@
-﻿using MedScope.Application.Abstractions.Appointments;
+﻿using System.Numerics;
+using MedScope.Application.Abstractions.Appointments;
 using MedScope.Application.DTOs.Admin;
 using MedScope.Application.DTOs.Patient;
 using MedScope.Domain.Entities;
@@ -348,7 +349,11 @@ namespace MedScope.Infrastructure.Services
         // =========================
         public async Task<List<PatientAppointmentDto>> GetUpcomingAppointmentsForPatient(int patientId)
         {
-            var query =
+            var now = DateTime.UtcNow.AddHours(2); // توقيت مصر
+            var today = DateOnly.FromDateTime(now);
+            var currentTime = TimeOnly.FromDateTime(now);
+
+            var data = await (
                 from a in _context.Appointments
                     .Include(a => a.Doctor)
                     .Include(a => a.Hospital)
@@ -357,8 +362,14 @@ namespace MedScope.Infrastructure.Services
                     on a.Doctor.UserId equals doctorUser.Id
 
                 where a.PatientId == patientId
-                 && a.Status != AppointmentStatus.Cancelled
-                 && a.Status != AppointmentStatus.Completed
+                      && a.Status != AppointmentStatus.Cancelled
+                      && a.Status != AppointmentStatus.Completed
+                      && (
+                            a.Date > today ||
+                            (a.Date == today && a.Time > currentTime)
+                         )
+
+                orderby a.Date ascending, a.Time ascending
 
                 select new PatientAppointmentDto
                 {
@@ -367,14 +378,15 @@ namespace MedScope.Infrastructure.Services
                     Specialty = a.Doctor.Specialty,
                     HospitalName = a.Hospital.Name,
                     VisitType = a.VisitType,
+
                     Date = a.Date.ToString("yyyy-MM-dd"),
                     Time = a.Time.ToString("hh:mm tt"),
-                    Status = a.Status
-                };
 
-            return await query
-                .OrderBy(x => x.Date)
-                .ToListAsync();
+                    Status = a.Status
+                }
+            ).ToListAsync();
+
+            return data;
         }
 
         // =========================
@@ -382,7 +394,11 @@ namespace MedScope.Infrastructure.Services
         // =========================
         public async Task<List<PatientAppointmentDto>> GetPastAppointmentsForPatient(int patientId)
         {
-            var query =
+            var now = DateTime.UtcNow.AddHours(2); // توقيت مصر
+            var today = DateOnly.FromDateTime(now);
+            var currentTime = TimeOnly.FromDateTime(now);
+
+            var data = await (
                 from a in _context.Appointments
                     .Include(a => a.Doctor)
                     .Include(a => a.Hospital)
@@ -391,23 +407,47 @@ namespace MedScope.Infrastructure.Services
                     on a.Doctor.UserId equals doctorUser.Id
 
                 where a.PatientId == patientId
-                      && a.Status == AppointmentStatus.Completed
+                      && a.Status != AppointmentStatus.Cancelled
+                      && (
+                            a.Status == AppointmentStatus.Completed
+                            || a.Date < today
+                            || (a.Date == today && a.Time <= currentTime)
+                         )
 
-                select new PatientAppointmentDto
+                orderby a.Date descending, a.Time descending
+
+                select new
                 {
-                    Id = a.Id,
-                    DoctorName = doctorUser.FirstName + " " + doctorUser.LastName,
-                    Specialty = a.Doctor.Specialty,
-                    HospitalName = a.Hospital.Name,
-                    VisitType = a.VisitType,
-                    Date = a.Date.ToString("yyyy-MM-dd"),
-                    Time = a.Time.ToString("hh:mm tt"),
-                    Status = a.Status
-                };
+                    a,
+                    doctorUser
+                }
+            ).ToListAsync();
 
-            return await query
-                .OrderByDescending(x => x.Date)
-                .ToListAsync();
+            // 👇 هنا نحدد Missed ولا Completed
+            var result = data.Select(x =>
+            {
+                var isPast = x.a.Date < today || (x.a.Date == today && x.a.Time <= currentTime);
+
+                return new PatientAppointmentDto
+                {
+                    Id = x.a.Id,
+                    DoctorName = x.doctorUser.FirstName + " " + x.doctorUser.LastName,
+                    Specialty = x.a.Doctor.Specialty,
+                    HospitalName = x.a.Hospital.Name,
+                    VisitType = x.a.VisitType,
+
+                    Date = x.a.Date.ToString("yyyy-MM-dd"),
+                    Time = x.a.Time.ToString("hh:mm tt"),
+
+                    Status = x.a.Status,
+
+                    DisplayStatus = x.a.Status == AppointmentStatus.Completed
+                        ? "Completed"
+                        : isPast ? "Missed" : x.a.Status.ToString()
+                };
+            }).ToList();
+
+            return result;
         }
 
         // =========================
@@ -421,17 +461,23 @@ namespace MedScope.Infrastructure.Services
                     a.PatientId == patientId);
 
             if (appointment == null)
-                throw new Exception("Appointment not found");
+                throw new InvalidOperationException("Appointment not found");
 
             if (appointment.Status == AppointmentStatus.Completed)
-                throw new Exception("Completed appointment cannot be cancelled");
+                throw new InvalidOperationException("Completed appointment cannot be cancelled");
+
+            if (appointment.Status == AppointmentStatus.Cancelled)
+                throw new InvalidOperationException("Appointment already cancelled");
+
+            if (appointment.Date < DateOnly.FromDateTime(DateTime.Now))
+                throw new InvalidOperationException("Cannot cancel past appointment");
 
             appointment.Status = AppointmentStatus.Cancelled;
 
             await _context.SaveChangesAsync();
         }
 
-  
+
 
         public async Task<List<HospitalForBookingDto>> GetHospitalsForBookingAsync()
         {
@@ -547,6 +593,8 @@ namespace MedScope.Infrastructure.Services
             {
                 Date = date,
                 AvailableTimes = availableSlots
+                    .Select(t => t.ToString("h:mm tt")) 
+                    .ToList()
             };
         }
         public async Task<List<DoctorScheduleDto>> GetDoctorScheduleAsync(int doctorId)
@@ -627,7 +675,7 @@ namespace MedScope.Infrastructure.Services
             // 1️⃣ هات أيام شغل الدكتور
             var workingDays = await _context.DoctorWorkingHours
                 .Where(w => w.DoctorId == doctorId)
-                .Select(w => w.Day)
+                .Select(w => w.Day.ToLower()) // ✅ عدّلنا هنا
                 .ToListAsync();
 
             var availableDates = new List<DateOnly>();
@@ -638,7 +686,7 @@ namespace MedScope.Infrastructure.Services
             for (int i = 0; i < daysAhead; i++)
             {
                 var date = DateOnly.FromDateTime(today.AddDays(i));
-                var dayName = date.DayOfWeek.ToString();
+                var dayName = date.DayOfWeek.ToString().ToLower(); // ✅ وعدّلنا هنا
 
                 // 3️⃣ لو اليوم ده من أيام شغل الدكتور
                 if (workingDays.Contains(dayName))
@@ -722,21 +770,7 @@ namespace MedScope.Infrastructure.Services
 
             return appointment.Id;
         }
-        public async Task<BookingFormDto> GetBookingFormAsync(string userId)
-        {
-            var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Id == userId);
-
-            if (user == null)
-                throw new Exception("User not found");
-
-            return new BookingFormDto
-            {
-                PatientName = user.FirstName + " " + user.LastName,
-                Phone = user.PhoneNumber,
-                Email = user.Email
-            };
-        }
+        
         public async Task SaveSelectionAsync(string userId, PatientCreateAppointmentDto dto)
         {
             var patient = await _context.Patients
@@ -758,12 +792,15 @@ namespace MedScope.Infrastructure.Services
         }
         public async Task<AppointmentReviewDto> GetAppointmentReviewFromSessionAsync(string userId)
         {
+            // 1️⃣ هاتي المريض من اليوزر
             var patient = await _context.Patients
+                .Include(p => p.User)
                 .FirstOrDefaultAsync(p => p.UserId == userId);
 
             if (patient == null)
                 throw new Exception("Patient not found");
 
+            // 2️⃣ هاتي آخر session
             var session = await _context.BookingSessions
                 .Where(s => s.PatientId == patient.Id)
                 .OrderByDescending(s => s.Id)
@@ -772,19 +809,68 @@ namespace MedScope.Infrastructure.Services
             if (session == null)
                 throw new Exception("No booking session found");
 
+            // 3️⃣ هاتي الدكتور
             var doctor = await _context.Doctors
-      .Include(d => d.User)
-      .Include(d => d.Hospital)
-      .FirstOrDefaultAsync(d => d.Id == session.DoctorId);
+                .Include(d => d.User)
+                .Include(d => d.Hospital)
+                .FirstOrDefaultAsync(d => d.Id == session.DoctorId);
 
+            if (doctor == null)
+                throw new Exception("Doctor not found");
+
+            // 4️⃣ رجعي الداتا
             return new AppointmentReviewDto
             {
+                DoctorId = doctor.Id, // ✅ ضيفي دي
+                PatientName = patient.User.FirstName + " " + patient.User.LastName,
+                Email = patient.User.Email,
+                Phone = patient.User.PhoneNumber,
+
                 DoctorName = doctor.User.FirstName + " " + doctor.User.LastName,
                 Specialty = doctor.Specialty,
                 HospitalName = doctor.Hospital.Name,
+
                 Date = session.Date.ToString("yyyy-MM-dd"),
                 Time = session.Time.ToString("hh:mm tt")
             };
         }
+        public async Task<string> ConfirmAppointmentAsync(string userId, ConfirmAppointmentDto dto)
+        {
+            var reviewData = await GetAppointmentReviewFromSessionAsync(userId);
+
+            if (reviewData == null)
+                throw new Exception("No review data found");
+
+            var patient = await _context.Patients
+                .FirstOrDefaultAsync(p => p.UserId == userId);
+
+            if (patient == null)
+                throw new Exception("Patient not found");
+
+            // ✅ نجيب الدكتور
+            var doctor = await _context.Doctors
+                .FirstOrDefaultAsync(d => d.Id == reviewData.DoctorId);
+
+            if (doctor == null)
+                throw new Exception("Doctor not found");
+
+            var appointment = new Appointment
+            {
+                DoctorId = reviewData.DoctorId,
+                HospitalId = doctor.HospitalId, // ✅ هنا صح
+                PatientId = patient.Id,
+                Date = DateOnly.Parse(reviewData.Date),
+                Time = TimeOnly.Parse(reviewData.Time),
+                Notes = dto.AppointmentNotes,
+                VisitType = dto.VisitType,
+                Status = AppointmentStatus.New
+            };
+
+            _context.Appointments.Add(appointment);
+            await _context.SaveChangesAsync();
+
+            return "Appointment Confirmed";
         }
+
+    }
     }

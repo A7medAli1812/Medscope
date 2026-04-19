@@ -92,8 +92,9 @@ namespace MedScope.Application.Abstractions.Appointments
         Task<AppointmentReviewDto> GetAppointmentReviewAsync(int doctorId, DateOnly date, TimeOnly time, int patientId);
         Task<List<DateOnly>> GetDoctorAvailableDatesAsync(int doctorId, int daysAhead = 7);
         Task<int> CreateAppointmentForPatientAsync(string userId, PatientCreateAppointmentDto dto);
-        Task<BookingFormDto> GetBookingFormAsync(string userId);
+       
         Task SaveSelectionAsync(string userId, PatientCreateAppointmentDto dto);
         Task<AppointmentReviewDto> GetAppointmentReviewFromSessionAsync(string userId);
+        Task<string> ConfirmAppointmentAsync(string userId, ConfirmAppointmentDto dto);
     }
 }

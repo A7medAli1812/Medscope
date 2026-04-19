@@ -58,7 +58,7 @@ namespace MedScope.Infrastructure.Services
                 .ToListAsync();
         }
 
-        public async Task<string> SaveAttachmentAsync(int patientId, IFormFile file)
+        public async Task<string> SaveAttachmentAsync(int patientId, IFormFile file , string? message)
         {
             var fileName = Guid.NewGuid() + Path.GetExtension(file.FileName);
 
@@ -77,7 +77,12 @@ namespace MedScope.Infrastructure.Services
             var chat = new ChatMessage
             {
                 PatientId = patientId,
-                AttachmentUrl = "/chat-uploads/" + fileName
+                Message = string.IsNullOrWhiteSpace(message)
+               ? file.FileName
+               : message,   // 👈 الرسالة اللي المستخدم كتبها
+                AttachmentUrl = "/chat-uploads/" + fileName,
+                Response = "File uploaded",
+                CreatedAt = DateTime.UtcNow
             };
 
             _context.ChatMessages.Add(chat);

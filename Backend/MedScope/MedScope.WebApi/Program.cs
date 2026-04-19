@@ -25,6 +25,7 @@ using Microsoft.OpenApi.Models;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Serialization;
+using MedScope.WebApi.Swagger;
 
 
 
@@ -179,6 +180,9 @@ builder.Services.AddSwaggerGen(c =>
     });
 
     c.CustomSchemaIds(type => type.FullName);
+
+    // 👇👇👇 ده المهم
+    c.OperationFilter<FileUploadOperationFilter>();
 });
 
 // =======================
