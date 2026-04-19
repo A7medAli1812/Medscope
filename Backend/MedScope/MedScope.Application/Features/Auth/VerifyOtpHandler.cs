@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MedScope.Application.Abstractions.Persistence;
+﻿using MedScope.Application.Abstractions.Persistence;
 using MedScope.Application.DTOs.Auth;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,22 +16,20 @@ namespace MedScope.Application.Features.Auth
         public async Task<(bool Success, string Token)> Handle(VerifyOtpRequest request)
         {
             var otpEntry = await _db.PasswordResetOtps
-                .FirstOrDefaultAsync(o => o.OtpCode == request.Otp);
+                .FirstOrDefaultAsync(o =>
+                    o.Email == request.Email &&      // ✅ مهم جدًا
+                    o.OtpCode == request.Otp &&
+                    !o.IsUsed &&
+                    o.ExpiresAt > DateTime.UtcNow);
 
             if (otpEntry == null)
-                return (false, "Invalid OTP");
+                return (false, "Invalid or expired OTP");
 
-            if (otpEntry.IsUsed)
-                return (false, "OTP already used");
-
-            if (otpEntry.ExpiresAt < DateTime.UtcNow)
-                return (false, "OTP expired");
-
-            // 🔥 هنا بقى الجزء اللي انت بتسأل عليه
+            // 🔥 توليد التوكن
             var resetToken = Guid.NewGuid().ToString();
 
-            otpEntry.IsUsed = true;
             otpEntry.ResetToken = resetToken;
+            otpEntry.IsUsed = true;
 
             await _db.SaveChangesAsync();
 

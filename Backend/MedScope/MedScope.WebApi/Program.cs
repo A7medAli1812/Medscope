@@ -1,31 +1,31 @@
 
 ﻿using System.Security.Claims;
+using System.Security.Claims;
+using System.Text;
 using System.Text;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 using MedScope.Application;
-using MedScope.Application.Abstractions.Admin;
-using MedScope.Application.Features.Admin;
-
 ﻿using MedScope.Application;
+using MedScope.Application.Abstractions.Admin;
+using MedScope.Application.Common;
+using MedScope.Application.Features.Admin;
 using MedScope.Application.Features.Auth;
 using MedScope.Application.Interfaces;
-
 using MedScope.Domain.Entities;
 using MedScope.Infrastructure;
 using MedScope.Infrastructure.Identity;
 using MedScope.Infrastructure.Persistence;
 using MedScope.Infrastructure.Seed;
 using MedScope.Infrastructure.Services;
+using MedScope.WebApi.Swagger;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-
-using System.Security.Claims;
-using System.Text;
 using System.Text.Json.Serialization;
-using MedScope.WebApi.Swagger;
+using MedScope.Application.Common;
 
 
 
@@ -121,6 +121,7 @@ builder.Services.AddCors(options =>
             .WithOrigins(
                 "http://localhost:5174",
                 "http://localhost:5173",
+                "http://localhost:5173/",
                 "https://medscope-v3.vercel.app"
             )
             .AllowAnyHeader()
@@ -137,6 +138,10 @@ builder.Services.AddControllers()
     {
         options.JsonSerializerOptions.Converters
             .Add(new JsonStringEnumConverter());
+
+        // 👇 ده الجديد
+        options.JsonSerializerOptions.Converters
+            .Add(new DateOnlyJsonConverter());
 
         options.JsonSerializerOptions.DefaultIgnoreCondition =
             JsonIgnoreCondition.WhenWritingNull;
