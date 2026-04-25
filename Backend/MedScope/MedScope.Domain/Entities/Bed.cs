@@ -2,9 +2,12 @@
 {
     public class Bed : AuditableEntity
     {
-        public string BedNumber { get; set; } = null!;
-        public string Ward { get; set; } = null!;
-        public bool IsOccupied { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; } = null!;
+
+        public int TotalBeds { get; set; }
+
+        public int AvailableBeds { get; set; }
 
         public int? PatientId { get; set; }
         public Patient? Patient { get; set; }

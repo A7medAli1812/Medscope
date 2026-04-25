@@ -6,31 +6,27 @@ using System.Threading.Tasks;
 
 using MediatR;
 using MedScope.Application.Abstractions.Persistence;
-using Microsoft.EntityFrameworkCore;
 
 namespace MedScope.Application.Features.BedManagement
 {
-    public class ToggleBedStatusCommandHandler
-        : IRequestHandler<ToggleBedStatusCommand, Unit>
+    public class DecreaseBedCommandHandler : IRequestHandler<DecreaseBedCommand, Unit>
     {
         private readonly IApplicationDbContext _context;
 
-        public ToggleBedStatusCommandHandler(IApplicationDbContext context)
+        public DecreaseBedCommandHandler(IApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<Unit> Handle(
-            ToggleBedStatusCommand request,
-            CancellationToken cancellationToken)
+        public async Task<Unit> Handle(DecreaseBedCommand request, CancellationToken cancellationToken)
         {
-            var bed = await _context.Beds
-                .FirstOrDefaultAsync(b => b.Id == request.Id, cancellationToken);
+            var bed = await _context.Beds.FindAsync(request.Id);
 
             if (bed == null)
                 throw new Exception("Bed not found");
 
-            bed.IsOccupied = !bed.IsOccupied;
+            if (bed.AvailableBeds > 0)
+                bed.AvailableBeds--;
 
             await _context.SaveChangesAsync(cancellationToken);
 

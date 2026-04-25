@@ -18,50 +18,47 @@ namespace MedScope.WebApi.Controllers
             _mediator = mediator;
         }
 
-        // 🔹 عرض السراير
+        // ✅ عرض الأقسام (ICU - Emergency ...)
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            //  هات الـ userId من التوكن
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            //  ابعته مع الـ Query
             var result = await _mediator.Send(new GetBedManagementQuery(userId));
 
             return Ok(result);
         }
 
-        //  إضافة سرير
-        [HttpPost]
-        public async Task<IActionResult> Create(CreateBedCommand command)
+        // 🔼 Increase available beds
+        [HttpPut("{id}/increase")]
+        public async Task<IActionResult> Increase(int id)
         {
-            var bedId = await _mediator.Send(command);
+            await _mediator.Send(new IncreaseBedCommand(id));
 
             return Ok(new
             {
-                message = "Bed created successfully ",
-                bedId = bedId
+                message = "Bed increased successfully"
             });
         }
 
-        // 🔹 حذف سرير
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        // 🔽 Decrease available beds
+        [HttpPut("{id}/decrease")]
+        public async Task<IActionResult> Decrease(int id)
         {
-            await _mediator.Send(new DeleteBedCommand(id));
-            return Ok("Bed deleted successfully ");
-        }
-
-        // 🔹 تغيير حالة السرير
-        [HttpPut("{id}/toggle")]
-        public async Task<IActionResult> Toggle(int id)
-        {
-            await _mediator.Send(new ToggleBedStatusCommand(id));
+            await _mediator.Send(new DecreaseBedCommand(id));
 
             return Ok(new
             {
-                message = "Bed status updated successfully "
+                message = "Bed decreased successfully"
             });
         }
+
+        // ✅ (اختياري) عرض كل المستشفيات
+        //[HttpGet("hospitals")]
+        //public async Task<IActionResult> GetHospitalsBeds()
+        //{
+        //    var result = await _mediator.Send(new GetHospitalsBedsQuery());
+        //    return Ok(result);
+        //}
     }
 }
