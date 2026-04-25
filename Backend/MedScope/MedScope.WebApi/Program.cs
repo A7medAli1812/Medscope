@@ -1,12 +1,8 @@
 
 ﻿using System.Security.Claims;
-using System.Security.Claims;
 using System.Text;
-using System.Text;
-using System.Text.Json.Serialization;
 using System.Text.Json.Serialization;
 using MedScope.Application;
-﻿using MedScope.Application;
 using MedScope.Application.Abstractions.Admin;
 using MedScope.Application.Common;
 using MedScope.Application.Features.Admin;
@@ -24,8 +20,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Text.Json.Serialization;
-using MedScope.Application.Common;
+
 
 
 

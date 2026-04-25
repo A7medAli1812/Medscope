@@ -23,27 +23,44 @@ namespace MedScope.Application.Features.BedManagement
             GetBedManagementQuery request,
             CancellationToken cancellationToken)
         {
-            // ✅ حماية لو الـ UserId فاضي
             if (string.IsNullOrEmpty(request.UserId))
                 return new List<BedManagementDto>();
 
-            // 🔥 هات المستشفى بتاعة الأدمن (UserId = string GUID)
             var hospitalId = await _context.Admins
                 .Where(a => a.UserId == request.UserId)
                 .Select(a => a.HospitalId)
                 .FirstOrDefaultAsync(cancellationToken);
 
-            // ❗ فلترة حسب المستشفى
-            return await _context.Beds
+            // ✅ هات البيانات من DB
+            var beds = await _context.Beds
                 .Where(b => b.HospitalId == hospitalId)
-                .GroupBy(b => b.Ward)
-                .Select(g => new BedManagementDto
+                .Select(b => new BedManagementDto
                 {
-                    Ward = g.Key,
-                    TotalBeds = g.Count(),
-                    UsedBeds = g.Count(b => b.IsOccupied)
+                    Name = b.Name,
+                    TotalBeds = b.TotalBeds,
+                    AvailableBeds = b.AvailableBeds
                 })
                 .ToListAsync(cancellationToken);
+
+            // 🔥 الأقسام الأساسية
+            var defaultBeds = new List<BedManagementDto>
+            {
+                new() { Name = "ICU", TotalBeds = 50, AvailableBeds = 50 },
+                new() { Name = "Emergency", TotalBeds = 22, AvailableBeds = 22 },
+                new() { Name = "Pediatric", TotalBeds = 30, AvailableBeds = 30 },
+                new() { Name = "Operating Room (OR) Beds", TotalBeds = 19, AvailableBeds = 19 }
+            };
+
+            // ✅ لو ناقص حاجة يضيفها
+            foreach (var def in defaultBeds)
+            {
+                if (!beds.Any(b => b.Name == def.Name))
+                {
+                    beds.Add(def);
+                }
+            }
+
+            return beds;
         }
     }
 }

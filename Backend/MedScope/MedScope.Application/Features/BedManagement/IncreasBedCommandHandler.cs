@@ -1,28 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-
 using MediatR;
 using MedScope.Application.Abstractions.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace MedScope.Application.Features.BedManagement
 {
-    public class DeleteBedCommandHandler
-        : IRequestHandler<DeleteBedCommand, Unit>
+    public class IncreaseBedCommandHandler : IRequestHandler<IncreaseBedCommand, Unit>
     {
         private readonly IApplicationDbContext _context;
 
-        public DeleteBedCommandHandler(IApplicationDbContext context)
+        public IncreaseBedCommandHandler(IApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<Unit> Handle(
-            DeleteBedCommand request,
-            CancellationToken cancellationToken)
+        public async Task<Unit> Handle(IncreaseBedCommand request, CancellationToken cancellationToken)
         {
             var bed = await _context.Beds
                 .FirstOrDefaultAsync(b => b.Id == request.Id, cancellationToken);
@@ -30,7 +24,8 @@ namespace MedScope.Application.Features.BedManagement
             if (bed == null)
                 throw new Exception("Bed not found");
 
-            _context.Beds.Remove(bed);
+            if (bed.AvailableBeds < bed.TotalBeds)
+                bed.AvailableBeds++;
 
             await _context.SaveChangesAsync(cancellationToken);
 

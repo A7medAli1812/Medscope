@@ -8,5 +8,5 @@ using MediatR;
 
 namespace MedScope.Application.Features.BedManagement
 {
-    public record DeleteBedCommand(int Id) : IRequest<Unit>;
+    public record IncreaseBedCommand(int Id) : IRequest<Unit>;
 }
