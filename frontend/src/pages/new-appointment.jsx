@@ -1,183 +1,271 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./new-appointment.css";
+import { useNavigate } from "react-router-dom";
+
+import {
+  getPatients,
+  getDoctors,
+  getAvailableDates,
+  getAvailableSlots,
+  createAppointment
+} from "../api/admin/appointmentsService";
 
 const NewAppointment = () => {
 
-const [form,setForm] = useState({
-patient:"Elizabeth Polson",
-doctor:"Dr. John",
-date:"2025-12-05",
-time:"09:30",
-age:"32",
-visit:"Consultation",
-notes:""
-});
+  const navigate = useNavigate();
 
-const handleChange = (e)=>{
-setForm({
-...form,
-[e.target.name]:e.target.value
-});
-};
+  const [patients,setPatients] = useState([]);
+  const [filteredPatients,setFilteredPatients] = useState([]);
 
-const handleSubmit = (e)=>{
-e.preventDefault();
-console.log(form);
-};
+  const [doctors,setDoctors] = useState([]);
+  const [dates,setDates] = useState([]);
+  const [times,setTimes] = useState([]);
 
-return (
+  const [form,setForm] = useState({
+    patientId:"",
+    doctorId:"",
+    date:"",
+    time:"",
+    patientAge:"",
+    visitType:"Consultation",
+    notes:""
+  });
 
-<div className="appointment-page">
+  const [search,setSearch] = useState("");
+  const [loading,setLoading] = useState(false);
 
-<div className="appointment-card">
+  // load data
+  useEffect(()=>{
+    fetchInitial();
+  },[]);
 
-<div className="appointment-header">
+  const fetchInitial = async () => {
+    const patientsRes = await getPatients();
+    const doctorsRes = await getDoctors();
 
-<span className="breadcrumb">
+    setPatients(patientsRes.data || []);
+    setFilteredPatients(patientsRes.data || []);
 
-← Appointment Management
+    setDoctors(doctorsRes.data || []);
+  };
 
-</span>
+  // patient search
+  const handleSearch = (e)=>{
+    const value = e.target.value;
+    setSearch(value);
 
-<h2>Rescheduled Appointment</h2>
+    const filtered = patients.filter(p =>
+      p.fullName.toLowerCase().includes(value.toLowerCase())
+    );
 
-</div>
+    setFilteredPatients(filtered);
+  };
 
-<form onSubmit={handleSubmit}>
+  // doctor change
+  const handleDoctorChange = async (e)=>{
+    const doctorId = e.target.value;
 
-<div className="form-grid">
+    setForm({...form,doctorId,date:"",time:""});
+    setDates([]);
+    setTimes([]);
 
-{/* Patient */}
+    if(doctorId){
+      const res = await getAvailableDates(doctorId);
+      setDates(res);
+    }
+  };
 
-<div className="form-group">
+  // date change
+  const handleDateChange = async (e)=>{
+    const date = e.target.value;
 
-<label>Patient *</label>
+    setForm({...form,date,time:""});
+    setTimes([]);
 
-<input
-name="patient"
-value={form.patient}
-onChange={handleChange}
-/>
+    if(date && form.doctorId){
+      const res = await getAvailableSlots(form.doctorId,date);
+      setTimes(res.availableTimes || []);
+    }
+  };
 
-</div>
+  const handleSubmit = async (e)=>{
+    e.preventDefault();
 
-{/* Doctor */}
+    try{
+      setLoading(true);
 
-<div className="form-group">
+      await createAppointment({
+        ...form,
+        patientId:Number(form.patientId),
+        doctorId:Number(form.doctorId),
+        patientAge:Number(form.patientAge)
+      });
 
-<label>Doctor *</label>
+      navigate("/appointments");
 
-<select
-name="doctor"
-value={form.doctor}
-onChange={handleChange}
->
+    }catch(err){
+      alert("Error creating appointment");
+    }finally{
+      setLoading(false);
+    }
+  };
 
-<option>Dr. John</option>
-<option>Dr. Joel</option>
-<option>Dr. Nova</option>
+  return (
 
-</select>
+    <div className="appointment-page">
 
-</div>
+      <div className="appointment-card">
 
-{/* Date */}
+        <div className="appointment-header">
+          <span className="breadcrumb" onClick={()=>navigate("/appointments")}>
+            ← Appointment Management
+          </span>
+          <h2>New Appointment</h2>
+        </div>
 
-<div className="form-group">
+        <form onSubmit={handleSubmit}>
 
-<label>Date & Time *</label>
+          <div className="form-grid">
 
-<input
-type="datetime-local"
-name="date"
-value={form.date}
-onChange={handleChange}
-/>
+            {/* Patient Search */}
+            <div className="form-group">
+              <label>Patient *</label>
 
-</div>
+              <input
+                placeholder="Search patient..."
+                value={search}
+                onChange={handleSearch}
+              />
 
-{/* Age */}
+              <select
+                value={form.patientId}
+                onChange={(e)=>setForm({...form,patientId:e.target.value})}
+                required
+              >
+                <option value="">Select Patient</option>
+                {filteredPatients.map(p=>(
+                  <option key={p.id} value={p.id}>
+                    {p.fullName}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-<div className="form-group">
+            {/* Doctor */}
+            <div className="form-group">
+              <label>Doctor *</label>
 
-<label>Patient Age *</label>
+              <select
+                value={form.doctorId}
+                onChange={handleDoctorChange}
+                required
+              >
+                <option value="">Select Doctor</option>
+                {doctors.map(d=>(
+                  <option key={d.doctorId} value={d.doctorId}>
+                    {d.name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-<input
-name="age"
-value={form.age}
-onChange={handleChange}
-/>
+            {/* Date */}
+            <div className="form-group">
+              <label>Date *</label>
 
-</div>
+              <select
+                value={form.date}
+                onChange={handleDateChange}
+                required
+              >
+                <option value="">Select Date</option>
+                {dates.map((d,i)=>(
+                  <option key={i} value={d}>{d}</option>
+                ))}
+              </select>
+            </div>
 
-{/* Visit Type */}
+            {/* Time */}
+            <div className="form-group">
+              <label>Time *</label>
 
-<div className="form-group">
+              <select
+                value={form.time}
+                onChange={(e)=>setForm({...form,time:e.target.value})}
+                required
+              >
+                <option value="">Select Time</option>
+                {times.map((t,i)=>(
+                  <option key={i} value={t}>{t}</option>
+                ))}
+              </select>
+            </div>
 
-<label>Visit Type *</label>
+            {/* Age */}
+            <div className="form-group">
+              <label>Patient Age *</label>
 
-<select
-name="visit"
-value={form.visit}
-onChange={handleChange}
->
+              <input
+                value={form.patientAge}
+                onChange={(e)=>setForm({...form,patientAge:e.target.value})}
+                required
+              />
+            </div>
 
-<option>Consultation</option>
-<option>Follow-up</option>
-<option>Emergency</option>
-<option>Surgery</option>
+            {/* Visit */}
+            <div className="form-group">
+              <label>Visit Type *</label>
 
-</select>
+              <select
+                value={form.visitType}
+                onChange={(e)=>setForm({...form,visitType:e.target.value})}
+              >
+                <option>Consultation</option>
+                <option>Follow-up</option>
+                <option>Emergency</option>
+                <option>Surgery</option>
+              </select>
+            </div>
 
-</div>
+            {/* Notes */}
+            <div className="form-group full-width">
+              <label>Notes</label>
 
-{/* Notes */}
+              <textarea
+                value={form.notes}
+                onChange={(e)=>setForm({...form,notes:e.target.value})}
+              />
+            </div>
 
-<div className="form-group">
+          </div>
 
-<label>Notes (Optional)</label>
+          <div className="form-actions">
 
-<textarea
-name="notes"
-placeholder="Add any relevant notes for the appointment..."
-value={form.notes}
-onChange={handleChange}
-/>
+            <button
+              type="button"
+              className="cancel-btn"
+              onClick={()=>navigate("/appointments")}
+            >
+              Cancel
+            </button>
 
-</div>
+            <button
+              type="submit"
+              className="confirm-btn"
+              disabled={loading}
+            >
+              {loading ? "Adding..." : "Add Appointment"}
+            </button>
 
-</div>
+          </div>
 
-<div className="form-actions">
+        </form>
 
-<button
-type="button"
-className="cancel-btn"
->
+      </div>
 
-Cancel
+    </div>
 
-</button>
-
-<button
-type="submit"
-className="confirm-btn"
->
-
-Confirm Reschedule
-
-</button>
-
-</div>
-
-</form>
-
-</div>
-
-</div>
-
-);
-
+  );
 };
 
 export default NewAppointment;

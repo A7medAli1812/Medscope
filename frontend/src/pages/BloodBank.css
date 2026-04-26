@@ -1,111 +1,136 @@
-.blood-container{
-padding:40px;
+.blood-container {
+  padding: 20px;
 }
 
-.blood-title{
-font-size:26px;
-font-weight:600;
-color:#1b3f5a;
-margin-bottom:30px;
-display:flex;
-align-items:center;
-gap:10px;
+.blood-title {
+  font-size: 24px;
+  margin-bottom: 20px;
 }
 
-.blood-icon{
-font-size:22px;
+/* 🔥 grid 4 per row */
+.blood-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
 }
 
-/* GRID */
-
-.blood-grid{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:30px;
+/* responsive */
+@media (max-width: 1024px) {
+  .blood-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
-/* CARD */
-
-.blood-card{
-background:#e8f0f6;
-border-radius:20px;
-padding:25px;
-box-shadow:0 6px 10px rgba(0,0,0,0.08);
-text-align:center;
-transition:0.2s;
+@media (max-width: 600px) {
+  .blood-grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
 
-.blood-card:hover{
-transform:translateY(-3px);
+/* 🔥 card */
+.blood-card {
+  background: #f5f7fa;
+  border-radius: 18px;
+  padding: 25px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: 0.3s;
 }
 
-/* TYPE CIRCLE */
-
-.blood-type{
-width:50px;
-height:50px;
-background:#2C5777;
-color:white;
-border-radius:50%;
-display:flex;
-align-items:center;
-justify-content:center;
-font-weight:600;
-margin:auto;
-margin-bottom:20px;
+.blood-card:hover {
+  transform: translateY(-5px);
 }
 
-/* LABEL */
-
-.blood-label{
-font-size:14px;
-color:#3d5a73;
-margin-bottom:10px;
+/* 🔥 animation */
+.pulse {
+  animation: pulseAnim 0.3s ease;
 }
 
-/* INPUT */
-
-.blood-input{
-width:100%;
-padding:10px;
-border-radius:20px;
-border:none;
-background:#dfe8ef;
-text-align:center;
-font-size:16px;
+@keyframes pulseAnim {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.07); }
+  100% { transform: scale(1); }
 }
 
-/* STATUS */
-
-.blood-status{
-margin-top:10px;
-font-size:13px;
-color:#2C5777;
+/* type */
+.blood-type {
+  background: #2f4b66;
+  color: white;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  line-height: 55px;
+  margin: auto;
+  font-weight: bold;
 }
 
-.blood-status.low{
-color:#d9534f;
-font-weight:600;
+/* label */
+.blood-label {
+  margin: 10px 0;
+  font-size: 14px;
 }
 
-/* RESPONSIVE */
-
-@media(max-width:1200px){
-
-.blood-grid{
-grid-template-columns:repeat(2,1fr);
+/* 🔥 controls */
+.quantity-control {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 10px;
 }
 
+.quantity-number {
+  font-size: 22px;
+  font-weight: bold;
 }
 
-@media(max-width:600px){
-
-.blood-grid{
-grid-template-columns:1fr;
+/* buttons */
+.btn-increase,
+.btn-decrease {
+  width: 35px;
+  height: 35px;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  cursor: pointer;
 }
 
-.blood-container{
-padding:20px;
+.btn-increase {
+  background: #4caf50;
+  color: white;
 }
 
+.btn-decrease {
+  background: #f44336;
+  color: white;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 🔥 progress bar */
+.progress-bar {
+  height: 6px;
+  background: #ddd;
+  border-radius: 10px;
+  margin: 10px 0;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background: #2f4b66;
+  transition: width 0.3s;
+}
+
+/* status */
+.blood-status {
+  font-size: 13px;
+  color: green;
+}
+
+.blood-status.low {
+  color: red;
 }

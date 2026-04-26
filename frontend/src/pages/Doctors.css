@@ -1,273 +1,207 @@
-.doctors-page{
-padding:30px;
-background:#eef3f7;
-min-height:100vh;
+/* BACKGROUND */
+.doctors-page {
+  padding: 25px;
+  background: linear-gradient(180deg, #e9f1f7 0%, #d9e6f2 100%);
+  min-height: 100vh;
 }
 
-.page-title{
-font-size:22px;
-font-weight:600;
-color:#1f4e6d;
-margin-bottom:20px;
+/* TITLE */
+.page-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #2c5d7c;
+  margin-bottom: 15px;
 }
 
 /* CARD */
-
-.doctors-card{
-
-background:#e7eef4;
-padding:28px;
-border-radius:16px;
-box-shadow:0 8px 20px rgba(0,0,0,0.05);
-
+.table-container {
+  background: linear-gradient(180deg, #dbe7f2 0%, #c9d9e8 100%);
+  border-radius: 18px;
+  padding: 20px;
 }
 
 /* HEADER */
-
-.card-header{
-
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:20px;
-
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
 }
 
-.new-doctor-btn{
-
-background:#1f4e6d;
-color:white;
-border:none;
-padding:10px 20px;
-border-radius:25px;
-font-size:14px;
-cursor:pointer;
-transition:0.2s;
-
+.table-header h3 {
+  font-size: 14px;
+  color: #2c5d7c;
+  font-weight: 600;
 }
 
-.new-doctor-btn:hover{
-
-background:#163c54;
-
+/* BUTTON */
+.new-btn {
+  background: #2c5d7c;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  cursor: pointer;
 }
 
-/* SEARCH + FILTER */
-
-.filters{
-
-display:flex;
-align-items:center;
-gap:18px;
-margin-bottom:20px;
-
+/* FILTERS */
+.filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
 }
 
-/* SEARCH */
-
-.search-box{
-
-position:relative;
-
+.search-input {
+  background: #f1f6fb;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 12px;
+  font-size: 13px;
+  outline: none;
+  width: 160px;
 }
 
-.search-box input{
-
-padding:10px 38px;
-border-radius:25px;
-border:none;
-background:#f2f6f9;
-font-size:13px;
-outline:none;
-width:200px;
-
-}
-
-.search-box i{
-
-position:absolute;
-left:14px;
-top:11px;
-font-size:13px;
-color:#004f78;
-
-}
-
-/* FILTER */
-
-.filter-select{
-
-padding:9px 18px;
-border-radius:22px;
-border:1px solid #004f78;
-background:white;
-font-size:13px;
-color:#004f78;
-cursor:pointer;
-
+.filter-btn {
+  background: #ffffff;
+  border: 1px solid #bcd2e3;
+  border-radius: 20px;
+  padding: 7px 12px;
+  font-size: 13px;
+  cursor: pointer;
 }
 
 /* TABLE */
-
-.doctors-table{
-
-width:100%;
-border-collapse:collapse;
-
+.doctors-table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.doctors-table th{
-
-text-align:left;
-padding:14px;
-font-size:13px;
-color:#1f4e6d;
-border-bottom:2px solid #6f9bb6;
-
+.doctors-table th {
+  font-size: 12px;
+  font-weight: 600;
+  color: #2f5f7f;
+  text-align: left;
+  padding: 10px 8px;
+  border-bottom: 1px solid #aac2d6;
 }
 
-.doctors-table td{
-
-padding:14px;
-font-size:13px;
-border-bottom:1px solid #b8cfe0;
-
+.table-row td {
+  padding: 14px 8px;
+  font-size: 13px;
+  color: #2c5875;
+  border-bottom: 1px solid #b6ccdd;
 }
 
-/* NAME */
-
-.doctor-name{
-
-display:flex;
-align-items:center;
-gap:10px;
-
+/* COLORS */
+.doc-id {
+  color: #5c8fb3;
+  font-weight: 500;
 }
 
-.doctor-name img{
-
-width:34px;
-height:34px;
-border-radius:50%;
-
+.doc-name {
+  color: #2f6f9f;
+  font-weight: 500;
 }
 
-/* EDIT BUTTON */
-
-.edit-btn{
-
-border:1px solid #004f78;
-background:white;
-border-radius:6px;
-padding:4px 9px;
-cursor:pointer;
-
-}
-
-.edit-btn:hover{
-
-background:#004f78;
-color:white;
-
+.doc-specialty,
+.doc-phone,
+.doc-email {
+  color: #3e6f90;
 }
 
 /* STATUS */
-
-.status-active{
-
-background:#2ecc71;
-color:white;
-padding:4px 14px;
-border-radius:20px;
-font-size:12px;
-
+.status {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
 }
 
-.status-inactive{
-
-background:#e74c3c;
-color:white;
-padding:4px 14px;
-border-radius:20px;
-font-size:12px;
-
+.status.active {
+  background: #2ecc71;
+  color: #fff;
 }
 
-/* PAGINATION */
-
-.pagination{
-
-display:flex;
-justify-content:flex-end;
-align-items:center;
-margin-top:25px;
-gap:15px;
-
+.status.inactive {
+  background: #e74c3c;
+  color: #fff;
 }
 
-.pagination button{
-
-background:none;
-border:none;
-font-size:13px;
-color:#1f4e6d;
-cursor:pointer;
-
+/* PAGINATION (كبرنا الخط هنا بس 👇) */
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  margin-top: 15px;
 }
 
-.pages{
-
-display:flex;
-gap:8px;
-
+.page-btn {
+  background: #e2e8f0;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 14px; /* كان 12 */
+  cursor: pointer;
 }
 
-.pages span{
-
-width:28px;
-height:28px;
-display:flex;
-align-items:center;
-justify-content:center;
-border-radius:50%;
-font-size:13px;
-cursor:pointer;
-background:#c9d8e5;
-color:#1f4e6d;
-
+.page-btn.active {
+  background: #2c5d7c;
+  color: #fff;
 }
 
-.pages .active{
-
-background:#1f4e6d;
-color:white;
-
-}
-@media (max-width:1100px){
-
-.doctor-controls{
-flex-direction:column;
-align-items:flex-start;
-gap:12px;
+.page-text {
+  font-size: 14px; /* كان 12 */
+  color: #555;
+  margin: 0 6px;
 }
 
-.doctor-table{
-overflow-x:auto;
+/* LOADING */
+.loading {
+  text-align: center;
+  padding: 20px;
+}
+/* add only this */
+
+.page-text.clickable {
+  cursor: pointer;
 }
 
+.page-text.clickable:hover {
+  color: #2c5d7c;
+  font-weight: 500;
+}
+/* SKELETON */
+.skeleton {
+  height: 12px;
+  background: linear-gradient(90deg, #dbe7f2 25%, #c9d9e8 50%, #dbe7f2 75%);
+  border-radius: 6px;
+  animation: shimmer 1.5s infinite;
 }
 
-@media (max-width:768px){
-
-.doctor-table th,
-.doctor-table td{
-font-size:13px;
-padding:8px;
+.skeleton.small {
+  width: 60px;
+  height: 18px;
+  border-radius: 20px;
 }
 
-.status-badge{
-font-size:12px;
-padding:4px 8px;
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: 200px 0;
+  }
 }
 
+/* clickable pagination */
+.page-text.clickable {
+  cursor: pointer;
+}
+
+.page-text.clickable:hover {
+  color: #2c5d7c;
+  font-weight: 500;
 }

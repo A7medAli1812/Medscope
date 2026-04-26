@@ -1,177 +1,81 @@
-import React, { useState } from "react";
-import axiosInstance from "../api/axios";
+import React, { useEffect, useState } from "react";
 import "./Home.css";
+import { getDashboardSummary } from "../api/admin/dashboard";
+import toast from "react-hot-toast";
 
 const Home = () => {
 
-    const [hospital] = useState({
-        name: "Al Haya",
-        hospitalName: "Metropolitan General Hospital",
-        doctors: 125,
-        departments: 18,
-        phone: "(555)123-4567",
-        email: "info@metrogeneralhospital.com",
-        website: "www.metrogeneralhospital.com"
-    });
+  const [data, setData] = useState(null);
 
-    const [notifications] = useState(3);
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-    const specialties = [
-        "Cardiology",
-        "Neurology",
-        "Orthopedics",
-        "Pediatrics",
-        "Emergency Medicine",
-        "Internal Medicine",
-        "Dermatology",
-        "Radiology"
-    ];
+  const fetchData = async () => {
+    try {
+      const res = await getDashboardSummary();
+      setData(res.data);
+    } catch (err) {
+      toast.error("Failed to load dashboard");
+    }
+  };
 
-    return (
-        <div className="home-container">
+  if (!data) return <div className="loading">Loading...</div>;
 
-            {/* Header */}
-            <div className="home-header">
+  return (
+    <div className="home-page">
 
-                <h1 className="page-title">Home</h1>
+      <h2 className="page-title">Home</h2>
 
-                <div className="user-profile">
+      {/* 🔥 الكارد الكبير */}
+      <div className="home-card">
 
-                    <div className="notification-icon">
-                        <span className="dot"></span>
-                        <i className="fas fa-bell"></i>
-                    </div>
+        {/* LEFT */}
+        <div className="home-left">
 
-                    <div className="user-info">
+          <h3 className="hospital-name">
+            🏥 {data.hospitalName}
+          </h3>
 
-                        <img
-                            src="https://ui-avatars.com/api/?name=Jonitha+Admin&background=0D8ABC&color=fff"
-                            alt="User"
-                            className="user-avatar"
-                        />
+          <p className="hospital-type">
+            {data.hospitalType}
+          </p>
 
-                        <div className="user-text">
-                            <span className="user-name">Jonitha</span>
-                            <span className="user-role">Admin</span>
-                        </div>
+          <div className="info-list">
 
-                    </div>
+            <p>👨‍⚕️ {data.doctorsCount} Doctors</p>
+            <p>🏢 {data.departmentsCount} Departments</p>
+            <p>📞 {data.phone}</p>
+            <p>📧 {data.email}</p>
+            <p>🌐 {data.website}</p>
 
-                </div>
-
-            </div>
-
-
-            {/* Hospital Card */}
-
-            <div className="hospital-card">
-
-                <div className="card-header">
-
-                    <i className="fas fa-hospital-alt card-icon"></i>
-                    <h2>{hospital.name}</h2>
-
-                </div>
-
-
-                <div className="card-content">
-
-                    <div className="hospital-details">
-
-                        <h3>{hospital.hospitalName}</h3>
-
-                        <div className="detail-row">
-                            <i className="fas fa-user-md"></i>
-                            <span>{hospital.doctors} Doctors</span>
-                        </div>
-
-                        <div className="detail-row">
-                            <i className="fas fa-building"></i>
-                            <span>{hospital.departments} Medical Departments</span>
-                        </div>
-
-                        <div className="detail-row">
-                            <i className="fas fa-phone-alt"></i>
-                            <span>{hospital.phone}</span>
-                        </div>
-
-                        <div className="detail-row">
-                            <i className="fas fa-envelope"></i>
-                            <span>{hospital.email}</span>
-                        </div>
-
-                        <div className="detail-row">
-                            <i className="fas fa-globe"></i>
-                            <span>{hospital.website}</span>
-                        </div>
-
-                    </div>
-
-
-
-                    {/* Specialties */}
-
-                    <div className="specialties-section">
-
-                        <h3>Available Specialties</h3>
-
-                        <div className="specialties-grid">
-
-                            {specialties.map((item, index) => (
-
-                                <div className="specialty-item" key={index}>
-
-                                    <span className="bullet"></span>
-
-                                    {item}
-
-                                </div>
-
-                            ))}
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-
-            {/* Bottom Cards */}
-
-            <div className="bottom-cards">
-
-                <div className="status-card">
-
-                    <div className="icon-circle">
-                        <i className="fas fa-hospital-user"></i>
-                    </div>
-
-                    <p>{hospital.hospitalName}</p>
-
-                    <h4>Your Hospital</h4>
-
-                </div>
-
-
-                <div className="status-card">
-
-                    <div className="icon-circle">
-                        <i className="fas fa-bell"></i>
-                    </div>
-
-                    <p className="big-number">{notifications}</p>
-
-                    <p>New Notifications</p>
-
-                </div>
-
-            </div>
+          </div>
 
         </div>
-    );
+
+        {/* RIGHT */}
+        <div className="home-right">
+
+          <h4>Available Specialties</h4>
+
+          <div className="specialties">
+
+            <span>Cardiology</span>
+            <span>Neurology</span>
+            <span>Orthopedics</span>
+            <span>Pediatrics</span>
+            <span>Emergency</span>
+            <span>Dermatology</span>
+            <span>Radiology</span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  );
 };
 
 export default Home;

@@ -1,240 +1,241 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Dashboard.css";
-
+import { getDashboardStats, getPatientsChart } from "../api/admin/dashboardd";
 import {
   PieChart,
   Pie,
   Cell,
   Tooltip,
-  ResponsiveContainer,
   BarChart,
   Bar,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Legend
+  Legend,
+  ResponsiveContainer,
+  CartesianGrid
 } from "recharts";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBed,
-  faUserInjured,
-  faUserDoctor,
-  faCalendarCheck
-} from "@fortawesome/free-solid-svg-icons";
+const COLORS = ["#2C5777", "#6C8EA4", "#D96C6C", "#A7BBC7", "#4F6D7A"];
 
 const Dashboard = () => {
+  const today = new Date();
 
-  const [selectedMonth,setSelectedMonth] = useState("May");
+  const [month, setMonth] = useState(today.getMonth() + 1);
+  const [compareMonth, setCompareMonth] = useState(null);
 
-  /* Doctors statistics */
-  const doctorsData = [
-    { name:"Dr. John", value:55 },
-    { name:"Dr. Ahmed", value:25 },
-    { name:"Dr. Hassan", value:8 },
-    { name:"Dr. Ali", value:12 },
-    { name:"Dr. Sara", value:18 },
-    { name:"Dr. Adam", value:14 }
-  ];
+  const [stats, setStats] = useState({
+    totalBeds: 0,
+    newPatients: 0,
+    totalDoctors: 0,
+    appointmentsCount: 0,
+    doctorStats: []
+  });
 
-  /* Patients statistics */
-  const patientsData = [
-    { date:"25 May", new:20, old:10 },
-    { date:"26 May", new:30, old:15 },
-    { date:"27 May", new:40, old:20 },
-    { date:"28 May", new:50, old:25 },
-    { date:"29 May", new:45, old:18 },
-    { date:"30 May", new:42, old:28 },
-    { date:"31 May", new:35, old:22 }
-  ];
+  const [chartData, setChartData] = useState([]);
 
-  const COLORS = [
-    "#2C5777",
-    "#8FA9BE",
-    "#C9D8E6",
-    "#E16B6B",
-    "#6C8EA4",
-    "#9BB3C7"
-  ];
+  // 🔥 Fetch Dashboard
+  const fetchDashboard = async () => {
+    const res = await getDashboardStats(month, today.getDate());
+    setStats(res.data);
+  };
+
+  // 🔥 Fetch ALL pages
+  const fetchAllPatients = async (selectedMonth) => {
+    let all = [];
+    let page = 1;
+    let hasMore = true;
+
+    while (hasMore) {
+      const res = await getPatientsChart(selectedMonth, page);
+      const data = res.data.patientStats;
+
+      if (!data || data.length === 0) {
+        hasMore = false;
+      } else {
+        all = [...all, ...data];
+        page++;
+      }
+    }
+
+    return all;
+  };
+
+  // 🔥 Main Chart Logic
+  const fetchChart = async () => {
+    const current = await fetchAllPatients(month);
+
+    let compare = [];
+    if (compareMonth) {
+      compare = await fetchAllPatients(compareMonth);
+    }
+
+    const merged = current.map((item, index) => ({
+      date: new Date(item.date).toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "short"
+      }),
+      new: item.newPatients,
+      old: item.oldPatients,
+      compareNew: compare[index]?.newPatients || 0
+    }));
+
+    setChartData(merged);
+  };
+
+  useEffect(() => {
+    fetchDashboard();
+    fetchChart();
+  }, [month, compareMonth]);
+
+  // 🔥 Custom Tooltip
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div style={{
+          background: "#fff",
+          padding: "10px",
+          borderRadius: "10px",
+          boxShadow: "0 5px 15px rgba(0,0,0,0.1)"
+        }}>
+          <p><strong>{label}</strong></p>
+          {payload.map((p, i) => (
+            <p key={i} style={{ color: p.color }}>
+              {p.name}: {p.value}
+            </p>
+          ))}
+        </div>
+      );
+    }
+    return null;
+  };
+
+  const doctorStats =
+    stats?.doctorStats?.map((d) => ({
+      name: d.doctorName,
+      value: d.count
+    })) || [];
 
   return (
     <div className="dashboard-container">
+      <h2 className="dashboard-title">Activity Overview</h2>
 
-      <h1 className="dashboard-title">Activity Overview</h1>
-
-      {/* STAT CARDS */}
-
+      {/* Stats */}
       <div className="stats-cards">
-
         <div className="stat-card">
-          <div className="stat-text">
-            <h4>Total Beds</h4>
-            <h2>120</h2>
-          </div>
-          <FontAwesomeIcon icon={faBed} className="stat-icon"/>
+          <h4>Total Beds</h4>
+          <h2>{stats.totalBeds}</h2>
         </div>
 
         <div className="stat-card">
-          <div className="stat-text">
-            <h4>New Patients</h4>
-            <h2>50</h2>
-          </div>
-          <FontAwesomeIcon icon={faUserInjured} className="stat-icon"/>
+          <h4>New Patients</h4>
+          <h2>{stats.newPatients}</h2>
         </div>
 
         <div className="stat-card">
-          <div className="stat-text">
-            <h4>Total Doctors</h4>
-            <h2>31</h2>
-          </div>
-          <FontAwesomeIcon icon={faUserDoctor} className="stat-icon"/>
+          <h4>Total Doctors</h4>
+          <h2>{stats.totalDoctors}</h2>
         </div>
 
         <div className="stat-card">
-          <div className="stat-text">
-            <h4>Appointments</h4>
-            <h2>100</h2>
-          </div>
-          <FontAwesomeIcon icon={faCalendarCheck} className="stat-icon"/>
+          <h4>Appointments</h4>
+          <h2>{stats.appointmentsCount}</h2>
         </div>
-
       </div>
-
-      {/* CHARTS */}
 
       <div className="charts-container">
 
-        {/* Doctors Pie */}
-
+        {/* Pie */}
         <div className="chart-card">
+          <h4>Appointments Distribution by Doctor</h4>
 
-          <div className="chart-header">
-            <h3>Appointments Distribution by Doctor</h3>
-          </div>
-
-          <div className="pie-container">
-
-            <ResponsiveContainer width="100%" height={260}>
-
-              <PieChart>
-
-                <Pie
-                  data={doctorsData}
-                  dataKey="value"
-                  nameKey="name"
-                  innerRadius={60}
-                  outerRadius={90}
-                  paddingAngle={2}
-                >
-
-                  {doctorsData.map((entry,index)=>(
-                    <Cell key={index} fill={COLORS[index % COLORS.length]} />
-                  ))}
-
-                </Pie>
-
-                <Tooltip/>
-
-              </PieChart>
-
-            </ResponsiveContainer>
-
-          </div>
-
-          {/* doctors list */}
-
-          <div className="doctor-list">
-
-            {doctorsData.map((doc,index)=>(
-              <div key={index} className="doctor-item">
-                <span className="color-dot"
-                style={{background:COLORS[index % COLORS.length]}}
-                ></span>
-
-                {doc.name}
-
-                <span className="doctor-count">
-                  {doc.value}
-                </span>
-              </div>
-            ))}
-
-          </div>
-
-        </div>
-
-
-        {/* Patients statistics */}
-
-        <div className="chart-card">
-
-          <div className="chart-header">
-
-            <h3>Patients Statistics</h3>
-
-            <select
-            className="month-select"
-            value={selectedMonth}
-            onChange={(e)=>setSelectedMonth(e.target.value)}
-            >
-              <option>January</option>
-              <option>February</option>
-              <option>March</option>
-              <option>April</option>
-              <option>May</option>
-              <option>June</option>
-              <option>July</option>
-            </select>
-
-          </div>
-
-          <div className="total-patients">
-            Total No of Patients : 480
-          </div>
-
-          <ResponsiveContainer width="100%" height={260}>
-
-            <BarChart data={patientsData}>
-
-              <CartesianGrid strokeDasharray="3 3"/>
-
-              <XAxis dataKey="date"/>
-
-              <YAxis/>
-
-              <Tooltip/>
-
-              <Legend/>
-
-              <Bar dataKey="new" fill="#2C5777" name="New Patients"/>
-
-              <Bar dataKey="old" fill="#9BB3C7" name="Old Patients"/>
-
-            </BarChart>
-
+          <ResponsiveContainer width="100%" height={250}>
+            <PieChart>
+              <Pie
+                data={doctorStats}
+                dataKey="value"
+                innerRadius={70}
+                outerRadius={100}
+                paddingAngle={3}
+                animationDuration={800}
+              >
+                {doctorStats.map((_, i) => (
+                  <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip content={<CustomTooltip />} />
+            </PieChart>
           </ResponsiveContainer>
-
-          {/* pagination */}
-
-          <div className="pagination">
-
-            <button>Previous</button>
-
-            <div className="pages">
-              <span className="active">1</span>
-              <span>2</span>
-              <span>3</span>
-              <span>4</span>
-            </div>
-
-            <button>Next</button>
-
-          </div>
-
         </div>
 
-      </div>
+        {/* Bar Chart */}
+        <div className="chart-card">
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <h4>Patients Statistics</h4>
 
+            <div style={{ display: "flex", gap: "10px" }}>
+              {/* Month */}
+              <select
+                value={month}
+                onChange={(e) => setMonth(Number(e.target.value))}
+              >
+                {[...Array(12)].map((_, i) => (
+                  <option key={i} value={i + 1}>
+                    Month {i + 1}
+                  </option>
+                ))}
+              </select>
+
+              {/* Compare */}
+              <select
+                value={compareMonth || ""}
+                onChange={(e) =>
+                  setCompareMonth(e.target.value ? Number(e.target.value) : null)
+                }
+              >
+                <option value="">Compare</option>
+                {[...Array(12)].map((_, i) => (
+                  <option key={i} value={i + 1}>
+                    Month {i + 1}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <ResponsiveContainer width="100%" height={280}>
+            <BarChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="date" />
+              <YAxis />
+              <Tooltip content={<CustomTooltip />} />
+              <Legend />
+
+              <Bar
+                dataKey="new"
+                fill="#2C5777"
+                radius={[6, 6, 0, 0]}
+                animationDuration={800}
+              />
+
+              <Bar
+                dataKey="old"
+                fill="#A7BBC7"
+                radius={[6, 6, 0, 0]}
+                animationDuration={800}
+              />
+
+              {compareMonth && (
+                <Bar
+                  dataKey="compareNew"
+                  fill="#D96C6C"
+                  radius={[6, 6, 0, 0]}
+                  animationDuration={800}
+                />
+              )}
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
     </div>
   );
 };

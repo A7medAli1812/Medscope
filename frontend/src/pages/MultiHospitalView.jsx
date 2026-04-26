@@ -1,98 +1,150 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./MultiHospitalView.css";
+import { getMultiHospitalBeds } from "../api/admin/hospitalService";
 
 const MultiHospitalView = () => {
 
-const hospitals = [
+  const [hospitals,setHospitals] = useState([]);
+  const [loading,setLoading] = useState(true);
+  const [error,setError] = useState("");
 
-{
-name:"Al Ameen Hospital",
-beds:[
-{title:"Total Beds",used:55,total:100},
-{title:"ICU Beds",used:30,total:40},
-{title:"Emergency Beds",used:2,total:30},
-{title:"Pediatric Beds",used:23,total:30}
-]
-},
+  // fetch
+  const fetchHospitals = async () => {
+    try {
+      setError("");
 
-{
-name:"Maka Hospital",
-beds:[
-{title:"Total Beds",used:55,total:150},
-{title:"ICU Beds",used:30,total:50},
-{title:"Emergency Beds",used:25,total:45},
-{title:"Pediatric Beds",used:12,total:55}
-]
-}
+      const res = await getMultiHospitalBeds();
+      setHospitals(res || []);
 
-];
+    } catch (err) {
 
-return (
+      if (err.response?.status === 500) {
+        setError("Server error, try again later");
+      } else if (err.response?.status === 401) {
+        setError("Unauthorized (login again)");
+      } else {
+        setError("Failed to load hospitals");
+      }
 
-<div className="multi-page">
+    } finally {
+      setLoading(false);
+    }
+  };
 
-<h2 className="page-title">Multi-Hospital View</h2>
+  // first load
+  useEffect(()=>{
+    fetchHospitals();
+  },[]);
 
-{hospitals.map((hospital,index)=>(
+  // 🔥 auto refresh كل دقيقة
+  useEffect(()=>{
+    const interval = setInterval(()=>{
+      console.log("🔄 refreshing hospitals...");
+      fetchHospitals();
+    },60000);
 
-<div className="hospital-card" key={index}>
+    return () => clearInterval(interval);
+  },[]);
 
-<div className="hospital-header">
+  // helpers
+  const getPercent = (used,total)=>{
+    if(!total) return 0;
+    return Math.round((used / total) * 100);
+  };
 
-<div className="hospital-icon">
-<i className="fas fa-hospital"></i>
-</div>
+  const getColor = (percent)=>{
+    if(percent < 50) return "#4CAF50";
+    if(percent < 80) return "#FFC107";
+    return "#E53935";
+  };
 
-<h3>{hospital.name}</h3>
+  // UI states
+  if(loading) return <div className="multi-page">Loading hospitals...</div>;
+  if(error) return <div className="multi-page">{error}</div>;
 
-</div>
+  return (
 
-<div className="beds-container">
+    <div className="multi-page">
 
-{hospital.beds.map((bed,i)=>{
+      <h2 className="page-title">Multi-Hospital View</h2>
 
-const percent=(bed.used/bed.total)*100;
+      {hospitals.length === 0 && <p>No hospitals found</p>}
 
-return(
+      {hospitals.map((hospital,index)=>{
 
-<div className="bed-row" key={i}>
+        const usedBeds = hospital.usedBeds;
+        const totalBeds = hospital.totalBeds;
+        const availableBeds = hospital.availableBeds;
 
-<div className="bed-label">
+        return(
 
-<span>{bed.title}</span>
+          <div className="hospital-card" key={index}>
 
-<span className="bed-count">
+            <div className="hospital-header">
 
-{bed.used}/{bed.total} beds
+              <div className="hospital-icon">
+                <i className="fas fa-hospital"></i>
+              </div>
 
-</span>
+              <div>
+                <h3>{hospital.hospital}</h3>
 
-</div>
+                <p className="summary">
+                  Total: {totalBeds} | Used: {usedBeds} | Available: {availableBeds}
+                </p>
+              </div>
 
-<div className="progress-bar">
+            </div>
 
-<div
-className="progress"
-style={{width:`${percent}%`}}
-></div>
+            <div className="beds-container">
 
-</div>
+              {hospital.beds?.map((bed,i)=>{
 
-</div>
+                const used = bed.totalBeds - bed.availableBeds;
+                const total = bed.totalBeds;
+                const percent = getPercent(used,total);
 
-);
+                return(
 
-})}
+                  <div className="bed-row" key={i}>
 
-</div>
+                    <div className="bed-label">
+                      <span>{bed.name}</span>
 
-</div>
+                      <span className="bed-count">
+                        {used}/{total}
+                      </span>
+                    </div>
 
-))}
+                    <div className="progress-bar">
 
-</div>
+                      <div
+                        className="progress"
+                        style={{
+                          width:`${percent}%`,
+                          background:getColor(percent)
+                        }}
+                      ></div>
 
-);
+                    </div>
+
+                  </div>
+
+                );
+
+              })}
+
+            </div>
+
+          </div>
+
+        );
+
+      })}
+
+    </div>
+
+  );
 
 };
 
