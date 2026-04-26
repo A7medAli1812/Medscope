@@ -20,24 +20,78 @@ namespace MedScope.Application.Features.BedManagement
             _context = context;
         }
 
-        public async Task<List<HospitalBedsDto>> Handle(
-            GetHospitalsBedsQuery request,
-            CancellationToken cancellationToken)
+        public async Task<List<HospitalBedsDto>> Handle(GetHospitalsBedsQuery request, CancellationToken cancellationToken)
         {
             var hospitals = await _context.Hospitals
                 .Include(h => h.Beds)
                 .ToListAsync(cancellationToken);
 
-            return hospitals.Select(h => new HospitalBedsDto
+            return hospitals.Select(h =>
             {
-                HospitalName = h.Name ?? "",
+                var beds = h.Beds ?? new List<Domain.Entities.Bed>();
 
-                Beds = h.Beds.Select(b => new BedManagementDto
+                // 🔥 Normalize names (lowercase)
+                var normalizedBeds = beds
+                    .GroupBy(b => b.Name.ToLower())
+                    .ToDictionary(
+                        g => g.Key,
+                        g => new
+                        {
+                            Total = g.Sum(x => x.TotalBeds),
+                            Available = g.Sum(x => x.AvailableBeds)
+                        });
+
+                int GetTotal(string name) =>
+                    normalizedBeds.ContainsKey(name.ToLower()) ? normalizedBeds[name.ToLower()].Total : 0;
+
+                int GetAvailable(string name) =>
+                    normalizedBeds.ContainsKey(name.ToLower()) ? normalizedBeds[name.ToLower()].Available : 0;
+
+                var totalBeds = beds.Sum(b => b.TotalBeds);
+                var totalAvailable = beds.Sum(b => b.AvailableBeds);
+
+                return new HospitalBedsDto
                 {
-                    Name = b.Name,
-                    TotalBeds = b.TotalBeds,
-                    AvailableBeds = b.AvailableBeds
-                }).ToList()
+                    HospitalName = h.Name ?? "",
+
+                    Beds = new List<BedManagementDto>
+            {
+                new BedManagementDto
+                {
+                    Name = "Total Beds",
+                    TotalBeds = totalBeds,
+                    AvailableBeds = totalAvailable
+                },
+
+                new BedManagementDto
+                {
+                    Name = "ICU Beds",
+                    TotalBeds = GetTotal("ICU"),
+                    AvailableBeds = GetAvailable("ICU")
+                },
+
+                new BedManagementDto
+                {
+                    Name = "Emergency Beds",
+                    TotalBeds = GetTotal("Emergency"),
+                    AvailableBeds = GetAvailable("Emergency")
+                },
+
+                new BedManagementDto
+                {
+                    Name = "Pediatric Beds",
+                    TotalBeds = GetTotal("Pediatric"),
+                    AvailableBeds = GetAvailable("Pediatric")
+                },
+
+                new BedManagementDto
+                {
+                    Name = "Operating Room (OR) Beds",
+                    TotalBeds = GetTotal("Operating Room (OR) Beds"),
+                    AvailableBeds = GetAvailable("Operating Room (OR) Beds")
+                }
+            }
+                };
             }).ToList();
         }
     }

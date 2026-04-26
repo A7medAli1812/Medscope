@@ -1,22 +1,25 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+
 using MediatR;
 using MedScope.Application.Abstractions.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace MedScope.Application.Features.BedManagement
 {
-    public class IncreaseBedCommandHandler : IRequestHandler<IncreaseBedCommand, Unit>
+    public class SetTotalBedsCommandHandler : IRequestHandler<SetTotalBedsCommand, Unit>
     {
         private readonly IApplicationDbContext _context;
 
-        public IncreaseBedCommandHandler(IApplicationDbContext context)
+        public SetTotalBedsCommandHandler(IApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<Unit> Handle(IncreaseBedCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(SetTotalBedsCommand request, CancellationToken cancellationToken)
         {
             var bed = await _context.Beds
                 .FirstOrDefaultAsync(b => b.Id == request.Id, cancellationToken);
@@ -24,9 +27,10 @@ namespace MedScope.Application.Features.BedManagement
             if (bed == null)
                 throw new Exception("Bed not found");
 
-            bed.AvailableBeds += 1;
+            bed.TotalBeds = request.Total;
 
-            _context.Beds.Update(bed); 
+            if (bed.AvailableBeds > bed.TotalBeds)
+                bed.AvailableBeds = bed.TotalBeds;
 
             await _context.SaveChangesAsync(cancellationToken);
 

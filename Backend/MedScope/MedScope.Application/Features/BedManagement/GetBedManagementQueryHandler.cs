@@ -2,10 +2,6 @@
 using MedScope.Application.Abstractions.Persistence;
 using MedScope.Application.DTOs.BedManagementDto;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace MedScope.Application.Features.BedManagement
 {
@@ -31,36 +27,50 @@ namespace MedScope.Application.Features.BedManagement
                 .Select(a => a.HospitalId)
                 .FirstOrDefaultAsync(cancellationToken);
 
-            // ✅ هات البيانات من DB
             var beds = await _context.Beds
                 .Where(b => b.HospitalId == hospitalId)
-                .Select(b => new BedManagementDto
-                {
-                    Name = b.Name,
-                    TotalBeds = b.TotalBeds,
-                    AvailableBeds = b.AvailableBeds
-                })
                 .ToListAsync(cancellationToken);
 
-            // 🔥 الأقسام الأساسية
-            var defaultBeds = new List<BedManagementDto>
+            // 🔥 الأقسام المطلوبة في UI
+            var requiredSections = new List<string>
             {
-                new() { Name = "ICU", TotalBeds = 50, AvailableBeds = 50 },
-                new() { Name = "Emergency", TotalBeds = 22, AvailableBeds = 22 },
-                new() { Name = "Pediatric", TotalBeds = 30, AvailableBeds = 30 },
-                new() { Name = "Operating Room (OR) Beds", TotalBeds = 19, AvailableBeds = 19 }
+                "ICU",
+                "Emergency",
+                "Pediatric",
+                "Operating Room (OR) Beds"
             };
 
-            // ✅ لو ناقص حاجة يضيفها
-            foreach (var def in defaultBeds)
+            // 🔥 نعمل lookup سريع
+            var result = new List<BedManagementDto>();
+
+            foreach (var section in requiredSections)
             {
-                if (!beds.Any(b => b.Name == def.Name))
+                var bed = beds.FirstOrDefault(b => b.Name == section);
+
+                if (bed != null)
                 {
-                    beds.Add(def);
+                    result.Add(new BedManagementDto
+                    {
+                        Id = bed.Id,
+                        Name = bed.Name,
+                        TotalBeds = bed.TotalBeds,
+                        AvailableBeds = bed.AvailableBeds
+                    });
+                }
+                else
+                {
+                    // ❗️ fallback بس (مش بنخزن في DB)
+                    result.Add(new BedManagementDto
+                    {
+                        Id = 0,
+                        Name = section,
+                        TotalBeds = 0,
+                        AvailableBeds = 0
+                    });
                 }
             }
 
-            return beds;
+            return result;
         }
     }
 }

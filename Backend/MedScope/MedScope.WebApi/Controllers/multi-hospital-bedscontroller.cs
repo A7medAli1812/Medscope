@@ -27,7 +27,7 @@ namespace MedScope.WebApi.Controllers
 
                     TotalBeds = h.Beds.Sum(b => b.TotalBeds),
                     AvailableBeds = h.Beds.Sum(b => b.AvailableBeds),
-                    UsedBeds = h.Beds.Sum(b => b.TotalBeds - b.AvailableBeds),
+                    //UsedBeds = h.Beds.Sum(b => b.TotalBeds - b.AvailableBeds),
 
                     Beds = h.Beds.Select(b => new
                     {
