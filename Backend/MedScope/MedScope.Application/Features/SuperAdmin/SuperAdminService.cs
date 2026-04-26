@@ -18,17 +18,13 @@ namespace MedScope.Application.Features.SuperAdmin
         public async Task CreateHospitalAsync(CreateHospitalDto dto)
         {
             // =========================
-            // Basic Validation
+            // Validation
             // =========================
             if (string.IsNullOrWhiteSpace(dto.Name))
                 throw new Exception("Hospital name is required.");
 
             if (string.IsNullOrWhiteSpace(dto.Email))
                 throw new Exception("Hospital email is required.");
-
-            // =========================
-            // Business Rules Validation
-            // =========================
 
             var numberExists = await _context.Hospitals
                 .AnyAsync(h => h.HospitalNumber == dto.HospitalNumber);
@@ -45,7 +41,6 @@ namespace MedScope.Application.Features.SuperAdmin
             // =========================
             // Create Hospital
             // =========================
-
             var hospital = new Hospital
             {
                 Name = dto.Name,
@@ -53,12 +48,35 @@ namespace MedScope.Application.Features.SuperAdmin
                 HospitalNumber = dto.HospitalNumber,
                 Phone = dto.Phone,
                 Email = dto.Email,
-                Website = dto.Website ,
+                Website = dto.Website,
                 City = dto.City,
                 Address = dto.Address
             };
 
             await _context.Hospitals.AddAsync(hospital);
+
+            //  الأقسام الافتراضية
+            var sections = new List<string>
+            {
+                "ICU",
+                "Emergency",
+                "Pediatric",
+                "Operating Room (OR) Beds"
+            };
+
+            //  إضافة الأقسام (بدون تكرار)
+            foreach (var section in sections)
+            {
+                _context.Beds.Add(new Bed
+                {
+                    Name = section,
+                    Hospital = hospital, // 👈 مهم بدل HospitalId
+                    TotalBeds = 0,
+                    AvailableBeds = 0
+                });
+            }
+
+            // ✅ حفظ مرة واحدة بس
             await _context.SaveChangesAsync();
         }
     }

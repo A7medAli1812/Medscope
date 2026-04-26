@@ -53,12 +53,15 @@ namespace MedScope.WebApi.Controllers
             });
         }
 
-        // ✅ (اختياري) عرض كل المستشفيات
-        //[HttpGet("hospitals")]
-        //public async Task<IActionResult> GetHospitalsBeds()
-        //{
-        //    var result = await _mediator.Send(new GetHospitalsBedsQuery());
-        //    return Ok(result);
-        //}
+        [HttpPut("{id}/set-total")]
+        public async Task<IActionResult> SetTotal(int id, int total)
+        {
+            await _mediator.Send(new SetTotalBedsCommand(id, total));
+
+            return Ok(new
+            {
+                message = "Total beds updated successfully"
+            });
+        }
     }
 }
