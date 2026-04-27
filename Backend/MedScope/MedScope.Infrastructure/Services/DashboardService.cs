@@ -53,7 +53,8 @@ public class DashboardService : IDashboardService
             .CountAsync(d => d.HospitalId == hospitalId && !d.IsDeleted);
 
         var totalBeds = await _context.Beds
-            .CountAsync(b => b.HospitalId == hospitalId);
+           .Where(b => b.HospitalId == hospitalId)
+            .SumAsync(b => b.TotalBeds);
 
         var appointmentsCount = await baseAppointmentsQuery.CountAsync();
 
@@ -192,10 +193,10 @@ public class DashboardService : IDashboardService
             select new PatientAppointmentDto
             {
                 DoctorName = u.FirstName + " " + u.LastName,
-                Specialty = d.Specialty,
+                Specialty = d.Specialty.Name,
 
-                Date = a.Date.ToString("yyyy-MM-dd"),     // ✅ format date
-                Time = a.Time.ToString("hh:mm tt"),       // ✅ AM/PM
+                Date = a.Date.ToString("yyyy-MM-dd"),     
+                Time = a.Time.ToString("hh:mm tt"),       
 
                 Status = a.Status
             })

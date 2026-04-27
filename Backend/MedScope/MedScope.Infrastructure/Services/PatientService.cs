@@ -67,7 +67,7 @@ public class PatientService : IPatientService
                 Email = x.Email,
                 PhoneNumber = x.PhoneNumber,
                 Gender = x.Gender.ToString(),
-                DateOfBirth = x.DateOfBirth,
+                DateOfBirth = x.DateOfBirth.ToString("yyyy-MM-dd"),
                 BloodGroup = x.BloodGroup
             })
             .ToListAsync();

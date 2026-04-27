@@ -6,7 +6,9 @@ public class Doctor
     public string UserId { get; set; }
     public ApplicationUser User { get; set; }
 
-    public string? Specialty { get; set; }
+    //public string? Specialty { get; set; }
+    public int SpecialtyId { get; set; }
+    public Specialty Specialty { get; set; }
     public string? LicenseNumber { get; set; }
 
     // 🔗 Foreign Key

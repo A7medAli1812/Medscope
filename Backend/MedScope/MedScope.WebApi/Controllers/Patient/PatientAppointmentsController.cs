@@ -85,10 +85,15 @@ namespace MedScope.WebApi.Controllers.Patient
         }
 
         [HttpGet("specialties")]
-        public async Task<IActionResult> GetSpecialties([FromQuery] int hospitalId)
+        public async Task<List<string>> GetSpecialtiesByHospital(int hospitalId)
         {
-            var specialties = await _appointmentService.GetSpecialtiesByHospitalAsync(hospitalId);
-            return Ok(specialties);
+            return await _context.Doctors
+                .Include(d => d.Specialty)
+                .Where(d => d.HospitalId == hospitalId && !d.IsDeleted)
+                .Select(d => d.Specialty.Name)
+                .Distinct()
+                .OrderBy(s => s)
+                .ToListAsync();
         }
 
         [HttpGet("doctors")]

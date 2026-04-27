@@ -75,7 +75,7 @@ namespace MedScope.WebApi.Controllers
             _context.Doctors.Add(new DoctorEntity
             {
                 UserId = user.Id,
-                Specialty = dto.Specialty,
+                SpecialtyId = dto.SpecialtyId,   //  الجديد
                 HospitalId = hospitalId
             });
 
@@ -117,7 +117,7 @@ namespace MedScope.WebApi.Controllers
 
             if (!string.IsNullOrEmpty(specialty))
             {
-                query = query.Where(x => x.d.Specialty == specialty);
+                query = query.Where(x => x.d.Specialty.Name == specialty);
             }
 
             var totalCount = await query.CountAsync();
@@ -131,7 +131,7 @@ namespace MedScope.WebApi.Controllers
                     Name = x.u.FirstName + " " + x.u.LastName,
                     Email = x.u.Email,
                     PhoneNumber = x.u.PhoneNumber,
-                    Specialty = x.d.Specialty,
+                    Specialty = x.d.Specialty.Name,
                     Status = x.u.LockoutEnd == null ? "Active" : "Inactive"
                 })
                 .ToListAsync();
@@ -161,7 +161,7 @@ namespace MedScope.WebApi.Controllers
                     FullName = u.FirstName + " " + u.LastName,
                     Email = u.Email,
                     PhoneNumber = u.PhoneNumber,
-                    Specialty = d.Specialty,
+                    Specialty = d.Specialty.Name,
                     Gender = u.Gender,
                     Status = u.LockoutEnd == null ? "Active" : "Inactive"
                 }
@@ -200,7 +200,7 @@ namespace MedScope.WebApi.Controllers
 
             user.Gender = Enum.Parse<Gender>(dto.Gender);
 
-            doctor.Specialty = dto.Specialty;
+            doctor.SpecialtyId = dto.SpecialtyId;   
 
             if (dto.Status == "Inactive")
                 user.LockoutEnd = DateTimeOffset.MaxValue;

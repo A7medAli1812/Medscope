@@ -112,7 +112,7 @@ namespace MedScope.Infrastructure.Services
                     PatientName = patientUser.FirstName + " " + patientUser.LastName,
                     PatientAge = a.PatientAge,
                     DoctorName = doctorUser.FirstName + " " + doctorUser.LastName,
-                    Specialty = a.Doctor.Specialty
+                    Specialty = a.Doctor.Specialty.Name
                 };
 
             if (!string.IsNullOrEmpty(search))
@@ -375,7 +375,7 @@ namespace MedScope.Infrastructure.Services
                 {
                     Id = a.Id,
                     DoctorName = doctorUser.FirstName + " " + doctorUser.LastName,
-                    Specialty = a.Doctor.Specialty,
+                    Specialty = a.Doctor.Specialty.Name,
                     HospitalName = a.Hospital.Name,
                     VisitType = a.VisitType,
 
@@ -432,7 +432,7 @@ namespace MedScope.Infrastructure.Services
                 {
                     Id = x.a.Id,
                     DoctorName = x.doctorUser.FirstName + " " + x.doctorUser.LastName,
-                    Specialty = x.a.Doctor.Specialty,
+                    Specialty = x.a.Doctor.Specialty.Name,
                     HospitalName = x.a.Hospital.Name,
                     VisitType = x.a.VisitType,
 
@@ -497,10 +497,8 @@ namespace MedScope.Infrastructure.Services
         // =========================
         public async Task<List<string>> GetSpecialtiesAsync()
         {
-            return await _context.Doctors
-                .Where(d => !string.IsNullOrEmpty(d.Specialty))
-                .Select(d => d.Specialty)
-                .Distinct()
+            return await _context.Specialties
+                .Select(s => s.Name)
                 .OrderBy(s => s)
                 .ToListAsync();
         }
@@ -514,14 +512,14 @@ namespace MedScope.Infrastructure.Services
                 join doctorUser in _context.Users
                     on d.UserId equals doctorUser.Id
 
-                where d.Specialty == specialty
+                where d.Specialty.Name == specialty
                       && d.HospitalId == hospitalId
 
                 select new DoctorForBookingDto
                 {
                     Id = d.Id,
                     Name = doctorUser.FirstName + " " + doctorUser.LastName,
-                    Specialty = d.Specialty,
+                    Specialty = d.Specialty.Name,
                     HospitalName = d.Hospital.Name
                 };
 
@@ -533,7 +531,7 @@ namespace MedScope.Infrastructure.Services
         {
             return await _context.Doctors
                 .Where(d => d.HospitalId == hospitalId && !d.IsDeleted)
-                .Select(d => d.Specialty)
+                .Select(d => d.Specialty.Name)
                 .Distinct()
                 .ToListAsync();
         }
@@ -645,7 +643,7 @@ namespace MedScope.Infrastructure.Services
                 select new
                 {
                     Name = u.FirstName + " " + u.LastName,
-                    Specialty = d.Specialty,
+                    Specialty = d.Specialty.Name,
                     HospitalName = h.Name
                 }
             ).FirstOrDefaultAsync();
@@ -827,7 +825,7 @@ namespace MedScope.Infrastructure.Services
                 Phone = patient.User.PhoneNumber,
 
                 DoctorName = doctor.User.FirstName + " " + doctor.User.LastName,
-                Specialty = doctor.Specialty,
+                Specialty = doctor.Specialty.Name,
                 HospitalName = doctor.Hospital.Name,
 
                 Date = session.Date.ToString("yyyy-MM-dd"),
