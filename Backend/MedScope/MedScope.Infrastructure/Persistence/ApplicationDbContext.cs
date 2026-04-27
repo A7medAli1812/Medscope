@@ -37,6 +37,7 @@ public class ApplicationDbContext
     public DbSet<UserSettings> UserSettings { get; set; }
     public DbSet<PasswordResetOtp> PasswordResetOtps { get; set; }
     public DbSet<BookingSession> BookingSessions { get; set; }
+    public DbSet<Specialty> Specialties { get; set; }
 
     // =======================
     // Fluent API

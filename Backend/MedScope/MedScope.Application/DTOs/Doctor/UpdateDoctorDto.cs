@@ -14,7 +14,7 @@ namespace MedScope.Application.DTOs.Doctor
 
         public string PhoneNumber { get; set; }
 
-        public string Specialty { get; set; }
+        public int SpecialtyId { get; set; }
 
         public string Gender { get; set; }
 

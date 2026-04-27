@@ -1,6 +1,7 @@
 ﻿using MedScope.Application.Abstractions.Admin;
 using MedScope.Application.Abstractions.Persistence;
 using MedScope.Application.DTOs.Admin;
+using Microsoft.EntityFrameworkCore;
 
 namespace MedScope.Application.Features.Admin
 {
@@ -23,7 +24,16 @@ namespace MedScope.Application.Features.Admin
                 throw new Exception("Hospital not found");
 
             var doctorsCount = _context.Doctors
-                .Count(d => d.HospitalId == hospital.Id);
+     .Count(d => d.HospitalId == hospital.Id && !d.IsDeleted);
+
+            var specialties = _context.Doctors
+           .Include(d => d.Specialty)
+           .Where(d => d.HospitalId == hospital.Id && !d.IsDeleted)
+           .Select(d => d.Specialty.Name)
+           .Distinct()
+           .ToList();
+
+            var departmentsCount = specialties.Count;
 
             var summary = new AdminDashboardSummaryDto
             {
@@ -32,7 +42,9 @@ namespace MedScope.Application.Features.Admin
                 DoctorsCount = doctorsCount,
                 Phone = hospital.Phone,
                 Email = hospital.Email,
-                Website = hospital.Website
+                Website = hospital.Website,
+                Specialties = specialties,
+                DepartmentsCount = departmentsCount
             };
 
             return Task.FromResult(summary);
