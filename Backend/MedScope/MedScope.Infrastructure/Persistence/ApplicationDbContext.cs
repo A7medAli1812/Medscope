@@ -38,6 +38,7 @@ public class ApplicationDbContext
     public DbSet<PasswordResetOtp> PasswordResetOtps { get; set; }
     public DbSet<BookingSession> BookingSessions { get; set; }
     public DbSet<Specialty> Specialties { get; set; }
+    public DbSet<HospitalSpecialty> HospitalSpecialties { get; set; }
 
     // =======================
     // Fluent API
@@ -52,10 +53,10 @@ public class ApplicationDbContext
                .HasConversion<string>();
 
         builder.Entity<Doctor>()
-      .HasOne(d => d.User)
-      .WithOne()
-      .HasForeignKey<Doctor>(d => d.UserId)
-      .OnDelete(DeleteBehavior.NoAction);
+            .HasOne(d => d.User)
+            .WithOne()
+            .HasForeignKey<Doctor>(d => d.UserId)
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.Entity<Admin>()
             .HasOne<ApplicationUser>()
@@ -64,9 +65,9 @@ public class ApplicationDbContext
             .OnDelete(DeleteBehavior.NoAction);
 
         builder.Entity<Patient>()
-         .HasOne(p => p.User)
-         .WithOne()
-         .HasForeignKey<Patient>(p => p.UserId)
+            .HasOne(p => p.User)
+            .WithOne()
+            .HasForeignKey<Patient>(p => p.UserId)
             .OnDelete(DeleteBehavior.NoAction);
 
         builder.Entity<SuperAdmin>()
@@ -93,6 +94,22 @@ public class ApplicationDbContext
 
         builder.Entity<Hospital>()
             .HasQueryFilter(h => !h.IsDeleted);
+
+        // 🔥 الجديد (مهم جدًا)
+        builder.Entity<HospitalSpecialty>()
+            .HasKey(hs => new { hs.HospitalId, hs.SpecialtyId });
+
+        builder.Entity<HospitalSpecialty>()
+            .HasOne(hs => hs.Hospital)
+            .WithMany()
+            .HasForeignKey(hs => hs.HospitalId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<HospitalSpecialty>()
+            .HasOne(hs => hs.Specialty)
+            .WithMany()
+            .HasForeignKey(hs => hs.SpecialtyId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 
     // =======================

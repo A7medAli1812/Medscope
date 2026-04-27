@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace MedScope.WebApi.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/admin/specialties")]
     [Authorize(Roles = "Admin,Patient")]
     public class SpecialtiesController : ControllerBase
     {
@@ -16,22 +16,22 @@ namespace MedScope.WebApi.Controllers
         {
             _context = context;
         }
-        [HttpGet]
-        public async Task<IActionResult> GetSpecialties(int hospitalId)
+
+        // 🔥 تخصصات المستشفى (للأدمن)
+        [HttpGet("by-hospital")]
+        public async Task<IActionResult> GetHospitalSpecialties(int hospitalId)
         {
-            // 🔥 هنا الـ handling
             if (hospitalId == 0)
                 return BadRequest("hospitalId is required");
 
-            var specialties = await _context.Doctors
-                .Include(d => d.Specialty)
-                .Where(d => d.HospitalId == hospitalId && !d.IsDeleted)
-                .Select(d => new
+            var specialties = await _context.HospitalSpecialties
+                .Include(hs => hs.Specialty)
+                .Where(hs => hs.HospitalId == hospitalId)
+                .Select(hs => new
                 {
-                    Id = d.Specialty.Id,
-                    Name = d.Specialty.Name
+                    hs.Specialty.Id,
+                    hs.Specialty.Name
                 })
-                .Distinct()
                 .OrderBy(s => s.Name)
                 .ToListAsync();
 

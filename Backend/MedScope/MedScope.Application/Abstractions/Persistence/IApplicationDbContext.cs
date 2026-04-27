@@ -20,8 +20,9 @@ namespace MedScope.Application.Abstractions.Persistence
         DbSet<UserSettings> UserSettings { get; }
         DbSet<PasswordResetOtp> PasswordResetOtps { get; }
         DbSet<ApplicationUser> Users { get; }
-        
 
+        DbSet<Specialty> Specialties { get; }
+        DbSet<HospitalSpecialty> HospitalSpecialties { get; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }
