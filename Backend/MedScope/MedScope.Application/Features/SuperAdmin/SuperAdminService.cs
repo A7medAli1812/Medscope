@@ -55,28 +55,40 @@ namespace MedScope.Application.Features.SuperAdmin
 
             await _context.Hospitals.AddAsync(hospital);
 
-            //  الأقسام الافتراضية
+            // الأقسام الافتراضية
             var sections = new List<string>
-            {
-                "ICU",
-                "Emergency",
-                "Pediatric",
-                "Operating Room (OR) Beds"
-            };
+{
+    "ICU",
+    "Emergency",
+    "Pediatric",
+    "Operating Room (OR) Beds"
+};
 
-            //  إضافة الأقسام (بدون تكرار)
+            // إضافة الأقسام
             foreach (var section in sections)
             {
                 _context.Beds.Add(new Bed
                 {
                     Name = section,
-                    Hospital = hospital, // 👈 مهم بدل HospitalId
+                    Hospital = hospital,
                     TotalBeds = 0,
                     AvailableBeds = 0
                 });
             }
 
-            // ✅ حفظ مرة واحدة بس
+            // 🔥 نجيب التخصصات
+            var specialties = await _context.Specialties.ToListAsync();
+
+            // 🔥 نربط التخصصات بالمستشفى
+            var hospitalSpecialties = specialties.Select(s => new HospitalSpecialty
+            {
+                Hospital = hospital, // 👈 دي أحسن من HospitalId
+                SpecialtyId = s.Id
+            }).ToList();
+
+            _context.HospitalSpecialties.AddRange(hospitalSpecialties);
+
+            //  حفظ مرة واحدة بس لكل حاجة
             await _context.SaveChangesAsync();
         }
     }
