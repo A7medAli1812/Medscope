@@ -84,7 +84,10 @@ builder.Services.AddAuthentication(options =>
                 ),
 
             RoleClaimType = ClaimTypes.Role,
-            NameClaimType = ClaimTypes.NameIdentifier
+            NameClaimType = ClaimTypes.NameIdentifier,
+
+            // 🔥 الحل المهم
+            ClockSkew = TimeSpan.Zero
         };
 });
 
