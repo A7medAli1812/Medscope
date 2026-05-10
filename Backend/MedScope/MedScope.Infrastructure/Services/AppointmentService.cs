@@ -670,23 +670,23 @@ namespace MedScope.Infrastructure.Services
         }
         public async Task<List<DateOnly>> GetDoctorAvailableDatesAsync(int doctorId, int daysAhead = 7)
         {
-            // 1️⃣ هات أيام شغل الدكتور
+            // 1️ هات أيام شغل الدكتور
             var workingDays = await _context.DoctorWorkingHours
                 .Where(w => w.DoctorId == doctorId)
-                .Select(w => w.Day.ToLower()) // ✅ عدّلنا هنا
+                .Select(w => w.Day.ToLower()) //  عدّلنا هنا
                 .ToListAsync();
 
             var availableDates = new List<DateOnly>();
 
             var today = DateTime.Today;
 
-            // 2️⃣ لف على الأيام الجاية
+            // 2️ لف على الأيام الجاية
             for (int i = 0; i < daysAhead; i++)
             {
                 var date = DateOnly.FromDateTime(today.AddDays(i));
                 var dayName = date.DayOfWeek.ToString().ToLower(); // ✅ وعدّلنا هنا
 
-                // 3️⃣ لو اليوم ده من أيام شغل الدكتور
+                // 3️ لو اليوم ده من أيام شغل الدكتور
                 if (workingDays.Contains(dayName))
                 {
                     availableDates.Add(date);
@@ -811,6 +811,7 @@ namespace MedScope.Infrastructure.Services
             var doctor = await _context.Doctors
                 .Include(d => d.User)
                 .Include(d => d.Hospital)
+                .Include(d => d.Specialty)
                 .FirstOrDefaultAsync(d => d.Id == session.DoctorId);
 
             if (doctor == null)
@@ -819,7 +820,7 @@ namespace MedScope.Infrastructure.Services
             // 4️⃣ رجعي الداتا
             return new AppointmentReviewDto
             {
-                DoctorId = doctor.Id, // ✅ ضيفي دي
+                DoctorId = doctor.Id, 
                 PatientName = patient.User.FirstName + " " + patient.User.LastName,
                 Email = patient.User.Email,
                 Phone = patient.User.PhoneNumber,
