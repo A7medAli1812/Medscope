@@ -1,69 +1,135 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./AdminManagement.css";
+import {
+  getAdmins,
+  createAdmin,
+  getAllHospitals,
+} from "../api/superAdminApi";
 
 const AdminManagement = () => {
-  const [admins, setAdmins] = useState([
-    { id: "EMP1001", name: "Ahmed Al-Zahrani", email: "ahmed.zahrani@kfmc.med.sa", hospital: "King Fahad", status: "Active", lastLogin: "1/30/2026, 8:30:00 AM" },
-    { id: "EMP1002", name: "Fatima Al-Harbi", email: "ahmed.zahrani@kfmc.med.sa", hospital: "King Abdulaziz", status: "Active", lastLogin: "1/30/2026, 8:30:00 AM" },
-    { id: "EMP1003", name: "Mohammed Ali", email: "ahmed.zahrani@kfmc.med.sa", hospital: "Prince Sultan", status: "Active", lastLogin: "1/30/2026, 8:30:00 AM" },
-    { id: "EMP1004", name: "Sara Al-Mutairi", email: "ahmed.zahrani@kfmc.med.sa", hospital: "Al Noor", status: "Suspended", lastLogin: "1/30/2026, 8:30:00 AM" },
-    { id: "EMP1005", name: "Ahmed Adel", email: "ahmed.zahrani@kfmc.med.sa", hospital: "Dallah Hospital", status: "Active", lastLogin: "1/30/2026, 8:30:00 AM" },
-    { id: "EMP1006", name: "Khalid Al-Shehri", email: "ahmed.zahrani@kfmc.med.sa", hospital: "Elhayat", status: "Active", lastLogin: "1/30/2026, 8:30:00 AM" },
-    { id: "EMP1007", name: "Yara Mostafa", email: "ahmed.zahrani@kfmc.med.sa", hospital: "Makkah", status: "Active", lastLogin: "1/30/2026, 8:30:00 AM" },
-  ]);
-
-  const hospitals = ["King Fahad", "King Abdulaziz", "Prince Sultan", "Al Noor", "Dallah Hospital", "Elhayat", "Makkah"];
+  const [admins, setAdmins] = useState([]);
+  const [hospitals, setHospitals] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const [search, setSearch] = useState("");
   const [filterHospital, setFilterHospital] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
   const [modalStep, setModalStep] = useState(null); // null | "form" | "success"
   const [editIndex, setEditIndex] = useState(null);
   const [tempPassword, setTempPassword] = useState("");
-  const [formData, setFormData] = useState({ name: "", email: "", hospital: "", password: "", status: "Active" });
+  const [formData, setFormData] = useState({ firstName: "", lastName: "", email: "", hospitalId: "", password: "" });
+  const [saving, setSaving] = useState(false);
 
-  const itemsPerPage = 7;
-  const hospitalOptions = ["All", ...new Set(admins.map((a) => a.hospital))];
+  const pageSize = 7;
 
-  const filtered = admins.filter((a) => {
-    const matchSearch = a.name.toLowerCase().includes(search.toLowerCase()) || a.email.toLowerCase().includes(search.toLowerCase()) || a.id.toLowerCase().includes(search.toLowerCase());
-    const matchHospital = filterHospital === "All" || a.hospital === filterHospital;
-    return matchSearch && matchHospital;
-  });
+  // ========== Fetch Hospitals for dropdown ==========
+  useEffect(() => {
+    const fetchHospitals = async () => {
+      try {
+        const response = await getAllHospitals();
+        setHospitals(response.data || []);
+      } catch (err) {
+        console.error("Error fetching hospitals:", err);
+      }
+    };
+    fetchHospitals();
+  }, []);
 
-  const totalPages = Math.ceil(filtered.length / itemsPerPage);
-  const paginated = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  // ========== Fetch Admins ==========
+  const fetchAdmins = async () => {
+    try {
+      setLoading(true);
+      setError("");
 
+      const params = {
+        Page: currentPage,
+        PageSize: pageSize,
+      };
+
+      if (search) params.Search = search;
+      if (filterHospital !== "All") {
+        const hospital = hospitals.find((h) => h.name === filterHospital);
+        if (hospital) params.HospitalId = hospital.id;
+      }
+
+      const response = await getAdmins(params);
+      const result = response.data;
+
+      setAdmins(result.data || []);
+      setTotalPages(result.totalPages || 1);
+    } catch (err) {
+      console.error("Error fetching admins:", err);
+      setError("Failed to load admins");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAdmins();
+  }, [currentPage, search, filterHospital]);
+
+  // ========== Hospital options for filter ==========
+  const hospitalOptions = ["All", ...hospitals.map((h) => h.name)];
+
+  // ========== Modal Handlers ==========
   const openAdd = () => {
     setEditIndex(null);
-    setFormData({ name: "", email: "", hospital: "", password: "", status: "Active" });
+    setFormData({ firstName: "", lastName: "", email: "", hospitalId: "", password: "" });
     setModalStep("form");
   };
 
   const openEdit = (index) => {
     setEditIndex(index);
-    setFormData({ ...paginated[index], password: "" });
+    const admin = admins[index];
+    const nameParts = (admin.name || "").split(" ");
+    setFormData({
+      firstName: nameParts[0] || "",
+      lastName: nameParts.slice(1).join(" ") || "",
+      email: admin.email || "",
+      hospitalId: "",
+      password: "",
+    });
     setModalStep("form");
   };
 
-  const handleSave = () => {
-    if (editIndex !== null) {
-      const globalIndex = admins.findIndex((a) => a.id === paginated[editIndex].id);
-      const updated = [...admins];
-      updated[globalIndex] = { ...formData, lastLogin: admins[globalIndex].lastLogin };
-      setAdmins(updated);
-      setModalStep(null);
-    } else {
-      const newId = `EMP${1000 + admins.length + 1}`;
-      const now = new Date().toLocaleString();
-      const pass = Math.random().toString(36).slice(-8);
-      setAdmins((prev) => [...prev, { ...formData, id: newId, lastLogin: now }]);
-      setTempPassword(pass);
-      setModalStep("success");
+  const handleSave = async () => {
+    try {
+      setSaving(true);
+
+      if (editIndex !== null) {
+        // Edit not supported in backend - close modal
+        alert("Edit admin is not supported yet from the API");
+        setModalStep(null);
+      } else {
+        // Create new admin
+        await createAdmin({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          password: formData.password,
+          hospitalId: parseInt(formData.hospitalId),
+        });
+
+        setTempPassword(formData.password);
+        setModalStep("success");
+        await fetchAdmins();
+      }
+    } catch (err) {
+      console.error("Error saving admin:", err);
+      const errorMsg = err.response?.data?.message || err.response?.data || "Failed to save admin";
+      alert(typeof errorMsg === "string" ? errorMsg : JSON.stringify(errorMsg));
+    } finally {
+      setSaving(false);
     }
   };
 
-  const handleDelete = (id) => setAdmins((prev) => prev.filter((a) => a.id !== id));
+  if (loading && admins.length === 0) {
+    return <div className="admin-page"><h2>Loading...</h2></div>;
+  }
 
   return (
     <div className="admin-page">
@@ -76,6 +142,8 @@ const AdminManagement = () => {
         + Create New Admin
       </button>
       </div>
+
+      {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
 
       <div className="admin-table-wrapper">
         <div className="table-controls">
@@ -95,19 +163,19 @@ const AdminManagement = () => {
             </tr>
           </thead>
           <tbody>
-            {paginated.map((admin, index) => (
-              <tr key={admin.id}>
-                <td className="emp-id">{admin.id}</td>
+            {admins.map((admin, index) => (
+              <tr key={admin.id || index}>
+                <td className="emp-id">{admin.employeeId}</td>
                 <td>{admin.name}</td>
                 <td>{admin.email}</td>
-                <td>{admin.hospital}</td>
+                <td>{admin.hospitalName}</td>
                 <td><span className={`status-badge ${admin.status === "Active" ? "active" : "suspended"}`}>{admin.status}</span></td>
-                <td>{admin.lastLogin}</td>
+                <td>{admin.lastLogin ? new Date(admin.lastLogin).toLocaleString() : "N/A"}</td>
                 <td className="actions-cell">
-                  <button className="action-btn ban-btn" onClick={() => setAdmins(prev => prev.map(a => a.id === admin.id ? { ...a, status: a.status === "Active" ? "Suspended" : "Active" } : a))}>
+                  <button className="action-btn ban-btn" onClick={() => alert("Toggle status not supported yet from the API")}>
                     <i className="fas fa-ban"></i>
                   </button>
-                  <button className="action-btn reset-btn" onClick={() => alert(`Password reset sent for ${admin.id}`)}>
+                  <button className="action-btn reset-btn" onClick={() => alert(`Password reset sent for ${admin.employeeId}`)}>
                     <i className="fas fa-sync-alt"></i>
                   </button>
                   <button className="action-btn edit-btn" onClick={() => openEdit(index)}>
@@ -140,8 +208,12 @@ const AdminManagement = () => {
               </div>
               <div className="new-modal-body">
                 <div className="new-form-field">
-                  <label><i className="fas fa-user"></i> Name *</label>
-                  <input type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
+                  <label><i className="fas fa-user"></i> First Name *</label>
+                  <input type="text" value={formData.firstName} onChange={(e) => setFormData({ ...formData, firstName: e.target.value })} />
+                </div>
+                <div className="new-form-field">
+                  <label><i className="fas fa-user"></i> Last Name *</label>
+                  <input type="text" value={formData.lastName} onChange={(e) => setFormData({ ...formData, lastName: e.target.value })} />
                 </div>
                 <div className="new-form-field">
                   <label><i className="fas fa-envelope" style={{ color: "#c0392b" }}></i> Email *</label>
@@ -149,9 +221,9 @@ const AdminManagement = () => {
                 </div>
                 <div className="new-form-field">
                   <label><i className="fas fa-home"></i> Hospital *</label>
-                  <select value={formData.hospital} onChange={(e) => setFormData({ ...formData, hospital: e.target.value })}>
+                  <select value={formData.hospitalId} onChange={(e) => setFormData({ ...formData, hospitalId: e.target.value })}>
                     <option value="">Select hospital</option>
-                    {hospitals.map((h) => <option key={h} value={h}>{h}</option>)}
+                    {hospitals.map((h) => <option key={h.id} value={h.id}>{h.name}</option>)}
                   </select>
                 </div>
                 <div className="new-form-field">
@@ -159,7 +231,9 @@ const AdminManagement = () => {
                   <input type="password" value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
                 </div>
                 <div className="new-modal-btns">
-                  <button className="new-save-btn" onClick={handleSave}>Save</button>
+                  <button className="new-save-btn" onClick={handleSave} disabled={saving}>
+                    {saving ? "Saving..." : "Save"}
+                  </button>
                   <button className="new-close-btn" onClick={() => setModalStep(null)}>Close</button>
                 </div>
               </div>

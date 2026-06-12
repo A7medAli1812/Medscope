@@ -1,12 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Settings.css";
+import {
+  getProfile,
+  updateProfile,
+  changePassword,
+  updateNotifications,
+} from "../api/superAdminApi";
 
 const Settings = () => {
   const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState(true);
+
   const [info, setInfo] = useState({
-    fullName: "John Doe",
-    email: "john.doe@email.com",
-    phone: "+1 (555) 123-4567",
+    fullName: "",
+    email: "",
+    phone: "",
   });
   const [tempInfo, setTempInfo] = useState({ ...info });
 
@@ -16,6 +24,7 @@ const Settings = () => {
     confirm: "",
   });
   const [passMsg, setPassMsg] = useState("");
+  const [savingPass, setSavingPass] = useState(false);
 
   const [notifications, setNotifications] = useState({
     systemErrors: true,
@@ -23,27 +32,105 @@ const Settings = () => {
     appointmentReminders: true,
   });
 
+  // ========== Fetch Profile ==========
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const response = await getProfile();
+        const data = response.data;
+        setInfo({
+          fullName: data.fullName || "",
+          email: data.email || "",
+          phone: data.phoneNumber || "",
+        });
+        setTempInfo({
+          fullName: data.fullName || "",
+          email: data.email || "",
+          phone: data.phoneNumber || "",
+        });
+      } catch (err) {
+        console.error("Error fetching profile:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProfile();
+  }, []);
+
+  // ========== Edit Profile ==========
   const handleEdit = () => {
     setTempInfo({ ...info });
     setIsEditing(true);
   };
 
-  const handleSaveInfo = () => {
-    setInfo({ ...tempInfo });
-    setIsEditing(false);
+  const handleSaveInfo = async () => {
+    try {
+      const nameParts = tempInfo.fullName.split(" ");
+      await updateProfile({
+        firstName: nameParts[0] || "",
+        lastName: nameParts.slice(1).join(" ") || "",
+        phoneNumber: tempInfo.phone,
+      });
+      setInfo({ ...tempInfo });
+      setIsEditing(false);
+    } catch (err) {
+      console.error("Error updating profile:", err);
+      alert(err.response?.data || "Failed to update profile");
+    }
   };
 
-  const handleChangePassword = () => {
+  // ========== Change Password ==========
+  const handleChangePassword = async () => {
     if (!passwords.current) return setPassMsg("Please enter current password.");
     if (passwords.newPass.length < 6) return setPassMsg("New password must be at least 6 characters.");
     if (passwords.newPass !== passwords.confirm) return setPassMsg("Passwords don't match.");
-    setPassMsg("Password changed successfully!");
-    setPasswords({ current: "", newPass: "", confirm: "" });
+
+    try {
+      setSavingPass(true);
+      setPassMsg("");
+      await changePassword({
+        currentPassword: passwords.current,
+        newPassword: passwords.newPass,
+        confirmPassword: passwords.confirm,
+      });
+      setPassMsg("Password changed successfully!");
+      setPasswords({ current: "", newPass: "", confirm: "" });
+    } catch (err) {
+      console.error("Error changing password:", err);
+      const errorMsg = err.response?.data;
+      if (typeof errorMsg === "string") {
+        setPassMsg(errorMsg);
+      } else if (Array.isArray(errorMsg)) {
+        setPassMsg(errorMsg.map((e) => e.description || e).join(", "));
+      } else {
+        setPassMsg("Failed to change password");
+      }
+    } finally {
+      setSavingPass(false);
+    }
   };
 
-  const toggleNotif = (key) => {
-    setNotifications((prev) => ({ ...prev, [key]: !prev[key] }));
+  // ========== Notifications ==========
+  const toggleNotif = async (key) => {
+    const updated = { ...notifications, [key]: !notifications[key] };
+    setNotifications(updated);
+
+    try {
+      await updateNotifications({
+        systemAlerts: updated.systemErrors,
+        securityAlerts: updated.securityIncidents,
+        appointmentReminders: updated.appointmentReminders,
+      });
+    } catch (err) {
+      console.error("Error updating notifications:", err);
+      // Revert on error
+      setNotifications(notifications);
+    }
   };
+
+  if (loading) {
+    return <div className="settings-page"><h2>Loading...</h2></div>;
+  }
 
   return (
     <div className="settings-page">
@@ -95,7 +182,7 @@ const Settings = () => {
                 onChange={(e) => setTempInfo({ ...tempInfo, phone: e.target.value })}
               />
             ) : (
-              <p>{info.phone}</p>
+              <p>{info.phone || "Not set"}</p>
             )}
           </div>
         </div>
@@ -105,8 +192,8 @@ const Settings = () => {
       <div className="settings-card">
         <div className="card-top">
           <h3 className="card-title">Security Settings</h3>
-          <button className="edit-btn" onClick={handleChangePassword}>
-            Change Password
+          <button className="edit-btn" onClick={handleChangePassword} disabled={savingPass}>
+            {savingPass ? "Changing..." : "Change Password"}
           </button>
         </div>
 

@@ -1,65 +1,150 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./HospitalManagement.css";
+import {
+  getHospitals,
+  createHospital,
+  updateHospital,
+  deleteHospital,
+  changeHospitalStatus,
+} from "../api/superAdminApi";
 
 const HospitalManagement = () => {
-  const [hospitals, setHospitals] = useState([
-    { id: "H001", name: "King Fahad Medical City", city: "Jeddah", admins: 8, status: "Active" },
-    { id: "H002", name: "King Abdulaziz Medical City", city: "Riyadh", admins: 6, status: "Active" },
-    { id: "H003", name: "Al Noor Specialist Hospital", city: "Riyadh", admins: 5, status: "Active" },
-    { id: "H004", name: "Dallah Hospital", city: "Makkah", admins: 4, status: "Suspended" },
-    { id: "H005", name: "Elhayat Hospital", city: "Jeddah", admins: 7, status: "Active" },
-    { id: "H006", name: "Maka Hospital", city: "Makkah", admins: 2, status: "Active" },
-    { id: "H007", name: "Dallah Hospital", city: "Makkah", admins: 3, status: "Active" },
-  ]);
+  const [hospitals, setHospitals] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
   const [modalStep, setModalStep] = useState(null); // null | "form" | "success"
   const [editIndex, setEditIndex] = useState(null);
   const [createdId, setCreatedId] = useState("");
-  const [formData, setFormData] = useState({ name: "", city: "", email: "", phone: "", address: "", admins: 0, status: "Active" });
+  const [formData, setFormData] = useState({ name: "", city: "", email: "", phone: "", address: "" });
+  const [saving, setSaving] = useState(false);
 
-  const itemsPerPage = 7;
+  const pageSize = 7;
 
-  const filtered = hospitals.filter((h) => {
-    const matchSearch = h.name.toLowerCase().includes(search.toLowerCase()) || h.city.toLowerCase().includes(search.toLowerCase()) || h.id.toLowerCase().includes(search.toLowerCase());
-    const matchStatus = filterStatus === "All" || h.status === filterStatus;
-    return matchSearch && matchStatus;
-  });
+  // ========== Fetch Hospitals ==========
+  const fetchHospitals = async () => {
+    try {
+      setLoading(true);
+      setError("");
 
-  const totalPages = Math.ceil(filtered.length / itemsPerPage);
-  const paginated = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+      const params = {
+        Page: currentPage,
+        PageSize: pageSize,
+      };
 
+      if (search) params.Search = search;
+      if (filterStatus === "Active") params.IsActive = true;
+      else if (filterStatus === "Suspended") params.IsActive = false;
+
+      const response = await getHospitals(params);
+      const result = response.data;
+
+      setHospitals(result.data || []);
+      setTotalPages(result.totalPages || 1);
+    } catch (err) {
+      console.error("Error fetching hospitals:", err);
+      setError("Failed to load hospitals");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchHospitals();
+  }, [currentPage, search, filterStatus]);
+
+  // ========== Modal Handlers ==========
   const openAdd = () => {
     setEditIndex(null);
-    setFormData({ name: "", city: "", email: "", phone: "", address: "", admins: 0, status: "Active" });
+    setFormData({ name: "", city: "", email: "", phone: "", address: "" });
     setModalStep("form");
   };
 
   const openEdit = (index) => {
     setEditIndex(index);
-    setFormData({ ...paginated[index], email: "", phone: "", address: "" });
+    const h = hospitals[index];
+    setFormData({
+      name: h.name || "",
+      city: h.city || "",
+      email: "",
+      phone: "",
+      address: "",
+    });
     setModalStep("form");
   };
 
-  const handleSave = () => {
-    if (editIndex !== null) {
-      const globalIndex = hospitals.findIndex((h) => h.id === paginated[editIndex].id);
-      const updated = [...hospitals];
-      updated[globalIndex] = { ...formData };
-      setHospitals(updated);
-      setModalStep(null);
-    } else {
-      const newId = `H${String(hospitals.length + 1).padStart(3, "0")}`;
-      setHospitals((prev) => [...prev, { ...formData, id: newId }]);
-      setCreatedId(newId);
-      setModalStep("success");
+  const handleSave = async () => {
+    try {
+      setSaving(true);
+
+      if (editIndex !== null) {
+        // Edit existing hospital
+        const hospital = hospitals[editIndex];
+        await updateHospital(hospital.id, {
+          name: formData.name,
+          city: formData.city,
+          email: formData.email,
+          phone: formData.phone,
+          address: formData.address,
+        });
+        setModalStep(null);
+      } else {
+        // Create new hospital
+        await createHospital({
+          name: formData.name,
+          city: formData.city,
+          email: formData.email,
+          phone: formData.phone,
+          address: formData.address,
+          type: "General",
+          hospitalNumber: 0,
+          website: "",
+        });
+        setCreatedId(formData.name);
+        setModalStep("success");
+      }
+
+      // Refresh data
+      await fetchHospitals();
+    } catch (err) {
+      console.error("Error saving hospital:", err);
+      alert(err.response?.data || "Failed to save hospital");
+    } finally {
+      setSaving(false);
     }
   };
 
-  const handleDelete = (id) => setHospitals((prev) => prev.filter((h) => h.id !== id));
-  const handleStatusChange = (id, newStatus) => setHospitals((prev) => prev.map((h) => (h.id === id ? { ...h, status: newStatus } : h)));
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this hospital?")) return;
+
+    try {
+      await deleteHospital(id);
+      await fetchHospitals();
+    } catch (err) {
+      console.error("Error deleting hospital:", err);
+      alert(err.response?.data || "Failed to delete hospital");
+    }
+  };
+
+  const handleStatusChange = async (id, newStatus) => {
+    try {
+      const isActive = newStatus === "Active";
+      await changeHospitalStatus(id, isActive);
+      await fetchHospitals();
+    } catch (err) {
+      console.error("Error changing status:", err);
+      alert(err.response?.data || "Failed to change status");
+    }
+  };
+
+  if (loading && hospitals.length === 0) {
+    return <div className="hospital-page"><h2>Loading...</h2></div>;
+  }
 
   return (
     <div className="hospital-page">
@@ -70,6 +155,8 @@ const HospitalManagement = () => {
       >
         + Add New Hospital
       </button>
+
+      {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
 
       <div className="hospital-table-wrapper">
         <div className="table-controls">
@@ -91,12 +178,12 @@ const HospitalManagement = () => {
             </tr>
           </thead>
           <tbody>
-            {paginated.map((hospital, index) => (
+            {hospitals.map((hospital, index) => (
               <tr key={hospital.id}>
                 <td>{hospital.id}</td>
                 <td>{hospital.name}</td>
                 <td>{hospital.city}</td>
-                <td>{hospital.admins}</td>
+                <td>{hospital.adminsCount}</td>
                 <td><span className={`status-badge ${hospital.status === "Active" ? "active" : "suspended"}`}>{hospital.status}</span></td>
                 <td className="actions-cell">
                   <select className="action-select" value={hospital.status} onChange={(e) => handleStatusChange(hospital.id, e.target.value)}>
@@ -144,7 +231,9 @@ const HospitalManagement = () => {
                   </div>
                 ))}
                 <div className="new-modal-btns">
-                  <button className="new-save-btn" onClick={handleSave}>Save</button>
+                  <button className="new-save-btn" onClick={handleSave} disabled={saving}>
+                    {saving ? "Saving..." : "Save"}
+                  </button>
                   <button className="new-close-btn" onClick={() => setModalStep(null)}>Close</button>
                 </div>
               </div>
@@ -155,7 +244,7 @@ const HospitalManagement = () => {
             <div className="new-success-modal">
               <div className="success-icon"><i className="fas fa-check"></i></div>
               <h3>Hospital created successfully</h3>
-              <p>Hospital ID is: {createdId}</p>
+              <p>Hospital: {createdId}</p>
               <div className="new-modal-btns">
                 <button className="new-save-btn" onClick={openAdd}>Add Another</button>
                 <button className="new-close-btn" onClick={() => setModalStep(null)}>Back to hospitals</button>
