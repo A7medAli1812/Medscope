@@ -256,6 +256,52 @@ namespace MedScope.WebApi.Controllers.SuperAdmin
         }
 
         // =========================
+        // Toggle Admin Status (Active / Inactive)
+        // =========================
+        [HttpPatch("admins/{id:int}/toggle-status")]
+        public async Task<IActionResult> ToggleAdminStatus(int id)
+        {
+            // 1️⃣ جيب الأدمن من جدول Admins
+            var admin = await _context.Admins
+                .FirstOrDefaultAsync(a => a.Id == id);
+
+            if (admin == null)
+                return NotFound(new { message = "Admin not found." });
+
+            // 2️⃣ جيب الـ ApplicationUser المرتبط
+            var user = await _userManager.FindByIdAsync(admin.UserId);
+
+            if (user == null)
+                return NotFound(new { message = "User account not found." });
+
+            // 3️⃣ اعكس الـ IsActive
+            admin.IsActive = !admin.IsActive;
+
+            // 4️⃣ لو الأدمن اتعطّل → قفّل الحساب في Identity
+            //    لو اتفعّل تاني → فكّ القفل
+            if (!admin.IsActive)
+            {
+                // Lockout لمدة 100 سنة = محظور فعلياً
+                await _userManager.SetLockoutEnabledAsync(user, true);
+                await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.UtcNow.AddYears(100));
+            }
+            else
+            {
+                await _userManager.SetLockoutEndDateAsync(user, null);
+            }
+
+            await _context.SaveChangesAsync();
+
+            var status = admin.IsActive ? "activated" : "deactivated";
+            return Ok(new
+            {
+                message = $"Admin {status} successfully.",
+                adminId = admin.Id,
+                isActive = admin.IsActive
+            });
+        }
+
+        // =========================
         // Profile
         // =========================
         [HttpGet("profile")]
