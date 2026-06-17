@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using MediatR;
 using MedScope.Application.Abstractions.Persistence;
 using MedScope.Application.Abstractions.SuperAdmin;
@@ -197,6 +197,108 @@ namespace MedScope.WebApi.Controllers.SuperAdmin
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "Admin created successfully" });
+        }
+
+        // =========================
+        // Update Admin
+        // =========================
+        [HttpPut("admins/{id:int}")]
+        public async Task<IActionResult> UpdateAdmin(int id, [FromBody] UpdateAdminDto dto)
+        {
+            // 1️⃣ جيب الأدمن من جدول Admins
+            var admin = await _context.Admins
+                .FirstOrDefaultAsync(a => a.Id == id);
+
+            if (admin == null)
+                return NotFound(new { message = "Admin not found." });
+
+            // 2️⃣ جيب الـ ApplicationUser المرتبط بيه
+            var user = await _userManager.FindByIdAsync(admin.UserId);
+
+            if (user == null)
+                return NotFound(new { message = "User account not found." });
+
+            // 3️⃣ تأكد إن المستشفى الجديدة موجودة
+            var hospitalExists = await _context.Hospitals
+                .AnyAsync(h => h.Id == dto.HospitalId);
+
+            if (!hospitalExists)
+                return BadRequest(new { message = "Invalid HospitalId." });
+
+            // 4️⃣ لو الإيميل اتغير، تأكد مش موجود عند حد تاني
+            if (!string.Equals(user.Email, dto.Email, StringComparison.OrdinalIgnoreCase))
+            {
+                var emailTaken = await _userManager.FindByEmailAsync(dto.Email);
+                if (emailTaken != null)
+                    return BadRequest(new { message = "Email is already in use by another account." });
+
+                user.Email = dto.Email;
+                user.UserName = dto.Email;
+            }
+
+            // 5️⃣ حدّث بيانات الـ ApplicationUser
+            user.FirstName = dto.FirstName;
+            user.LastName = dto.LastName;
+            user.PhoneNumber = dto.PhoneNumber;
+
+            var updateResult = await _userManager.UpdateAsync(user);
+            if (!updateResult.Succeeded)
+                return BadRequest(updateResult.Errors);
+
+            // 6️⃣ حدّث بيانات جدول Admins
+            admin.Department = dto.Department;
+            admin.HospitalId = dto.HospitalId;
+            admin.IsActive = dto.IsActive;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Admin updated successfully." });
+        }
+
+        // =========================
+        // Toggle Admin Status (Active / Inactive)
+        // =========================
+        [HttpPatch("admins/{id:int}/toggle-status")]
+        public async Task<IActionResult> ToggleAdminStatus(int id)
+        {
+            // 1️⃣ جيب الأدمن من جدول Admins
+            var admin = await _context.Admins
+                .FirstOrDefaultAsync(a => a.Id == id);
+
+            if (admin == null)
+                return NotFound(new { message = "Admin not found." });
+
+            // 2️⃣ جيب الـ ApplicationUser المرتبط
+            var user = await _userManager.FindByIdAsync(admin.UserId);
+
+            if (user == null)
+                return NotFound(new { message = "User account not found." });
+
+            // 3️⃣ اعكس الـ IsActive
+            admin.IsActive = !admin.IsActive;
+
+            // 4️⃣ لو الأدمن اتعطّل → قفّل الحساب في Identity
+            //    لو اتفعّل تاني → فكّ القفل
+            if (!admin.IsActive)
+            {
+                // Lockout لمدة 100 سنة = محظور فعلياً
+                await _userManager.SetLockoutEnabledAsync(user, true);
+                await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.UtcNow.AddYears(100));
+            }
+            else
+            {
+                await _userManager.SetLockoutEndDateAsync(user, null);
+            }
+
+            await _context.SaveChangesAsync();
+
+            var status = admin.IsActive ? "activated" : "deactivated";
+            return Ok(new
+            {
+                message = $"Admin {status} successfully.",
+                adminId = admin.Id,
+                isActive = admin.IsActive
+            });
         }
 
         // =========================
