@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MedScope.Application.Features.BedManagement;
@@ -20,6 +20,7 @@ namespace MedScope.WebApi.Controllers
 
         // ✅ عرض الأقسام (ICU - Emergency ...)
         [HttpGet]
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         public async Task<IActionResult> Get()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -33,11 +34,12 @@ namespace MedScope.WebApi.Controllers
         [HttpPut("{id}/increase")]
         public async Task<IActionResult> Increase(int id)
         {
-            await _mediator.Send(new IncreaseBedCommand(id));
+            var rowsAffected = await _mediator.Send(new IncreaseBedCommand(id));
 
             return Ok(new
             {
-                message = "Bed increased successfully"
+                message = "Bed increased successfully",
+                rowsAffected = rowsAffected
             });
         }
 
@@ -45,11 +47,12 @@ namespace MedScope.WebApi.Controllers
         [HttpPut("{id}/decrease")]
         public async Task<IActionResult> Decrease(int id)
         {
-            await _mediator.Send(new DecreaseBedCommand(id));
+            var rowsAffected = await _mediator.Send(new DecreaseBedCommand(id));
 
             return Ok(new
             {
-                message = "Bed decreased successfully"
+                message = "Bed decreased successfully",
+                rowsAffected = rowsAffected
             });
         }
 
