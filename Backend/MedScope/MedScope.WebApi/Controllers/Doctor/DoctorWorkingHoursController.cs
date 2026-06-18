@@ -1,4 +1,4 @@
-﻿using MedScope.Application.DTOs.Doctor.WorkingHours;
+using MedScope.Application.DTOs.Doctor.WorkingHours;
 using MedScope.Application.Interfaces.Doctor;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +18,18 @@ namespace MedScope.WebApi.Controllers.Doctor
             _service = service;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetWorkingHours()
+        {
+            var doctorUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (doctorUserId == null)
+                return Unauthorized();
+
+            var result = await _service.GetWorkingHours(doctorUserId);
+            return Ok(result);
+        }
+
         [HttpPost]
         public async Task<IActionResult> SaveWorkingHours([FromBody] SaveWorkingHoursDto dto)
         {
@@ -31,4 +43,4 @@ namespace MedScope.WebApi.Controllers.Doctor
             return Ok(new { message = "Working hours saved successfully" });
         }
     }
-}
+}

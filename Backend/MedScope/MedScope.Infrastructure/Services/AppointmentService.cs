@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using MedScope.Application.Abstractions.Appointments;
 using MedScope.Application.DTOs.Admin;
 using MedScope.Application.DTOs.Patient;
@@ -540,10 +540,10 @@ namespace MedScope.Infrastructure.Services
         // =========================
         public async Task<DoctorSlotDto> GetDoctorAvailableSlotsAsync(int doctorId, DateOnly date)
         {
-            var day = date.DayOfWeek.ToString();
+            var day = date.DayOfWeek.ToString().ToLower();
 
             var workingHours = await _context.DoctorWorkingHours
-                .FirstOrDefaultAsync(w => w.DoctorId == doctorId && w.Day == day);
+                .FirstOrDefaultAsync(w => w.DoctorId == doctorId && w.Day.ToLower() == day);
 
             if (workingHours == null)
                 throw new Exception("Doctor does not work on this day");
@@ -551,7 +551,7 @@ namespace MedScope.Infrastructure.Services
             var from = TimeOnly.FromTimeSpan(workingHours.From);
             var to = TimeOnly.FromTimeSpan(workingHours.To);
 
-            var duration = workingHours.AppointmentDuration;
+            var duration = workingHours.AppointmentDuration > 0 ? workingHours.AppointmentDuration : 30;
 
             var allSlots = new List<TimeOnly>();
 
