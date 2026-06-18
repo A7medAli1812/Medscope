@@ -1,4 +1,4 @@
-﻿using MedScope.Application.DTOs;
+using MedScope.Application.DTOs;
 using MedScope.Application.DTOs.Patient;
 using MedScope.Application.Interfaces;
 using MedScope.Infrastructure.Persistence;
@@ -224,21 +224,53 @@ public class DashboardService : IDashboardService
         // =========================
         var updates = new List<PatientUpdateDto>();
 
-        if (appointments.Any())
+        foreach (var appt in appointments)
         {
-            updates.Add(new PatientUpdateDto
+            if (DateTime.TryParse(appt.Date, out DateTime apptDate))
             {
-                Message = "Appointment reminder for tomorrow",
-                Time = "2 hours ago"
-            });
+                var daysUntil = (apptDate.Date - DateTime.Now.Date).Days;
+                string timeString = string.Empty;
+
+                if (daysUntil == 0) timeString = "Today";
+                else if (daysUntil == 1) timeString = "Tomorrow";
+                else if (daysUntil > 1 && daysUntil <= 7) timeString = $"In {daysUntil} days";
+                else if (daysUntil > 7) timeString = apptDate.ToString("MMM dd, yyyy");
+
+                if (!string.IsNullOrEmpty(timeString))
+                {
+                    updates.Add(new PatientUpdateDto
+                    {
+                        Message = $"Appointment reminder with Dr. {appt.DoctorName}",
+                        Time = timeString
+                    });
+                }
+            }
         }
 
-        if (records.Any())
+        foreach (var note in data)
         {
+            var timeSpan = DateTime.UtcNow - note.CreatedAt;
+            string timeString;
+
+            if (timeSpan.TotalMinutes < 1)
+                timeString = "Just now";
+            else if (timeSpan.TotalMinutes < 60)
+                timeString = $"{(int)timeSpan.TotalMinutes} mins ago";
+            else if (timeSpan.TotalHours < 2)
+                timeString = "1 hour ago";
+            else if (timeSpan.TotalHours < 24)
+                timeString = $"{(int)timeSpan.TotalHours} hours ago";
+            else if (timeSpan.TotalDays < 2)
+                timeString = "1 day ago";
+            else
+                timeString = $"{(int)timeSpan.TotalDays} days ago";
+
+            var title = !string.IsNullOrEmpty(note.Diagnosis) ? note.Diagnosis : "Medical record";
+
             updates.Add(new PatientUpdateDto
             {
-                Message = "New doctor note added",
-                Time = "1 day ago"
+                Message = $"New doctor note added: {title}",
+                Time = timeString
             });
         }
 
