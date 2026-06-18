@@ -1,79 +1,36 @@
-import React, { useEffect, useState } from "react";
-import "./Home.css";
-import { getDashboardSummary } from "../api/admin/dashboard";
-import toast from "react-hot-toast";
+import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import Hero from '../components/Home/Hero';
+import Features from '../components/Home/Features';
+import Partners from '../components/Home/Partners';
+import BodyDiagram from '../components/Home/BodyDiagram';
+import ManagementTools from '../components/Home/ManagementTools';
+import '../styles/Home/Home.css';
 
 const Home = () => {
-
-  const [data, setData] = useState(null);
+  const location = useLocation();
 
   useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    try {
-      const res = await getDashboardSummary();
-      setData(res.data);
-    } catch (err) {
-      toast.error("Failed to load dashboard");
+    if (location.hash) {
+      const id = location.hash.substring(1);
+      const element = document.getElementById(id);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 150);
+      }
+    } else {
+      window.scrollTo(0, 0);
     }
-  };
-
-  if (!data) return <div className="loading">Loading...</div>;
+  }, [location]);
 
   return (
     <div className="home-page">
-
-      <h2 className="page-title">Home</h2>
-
-      {/* 🔥 الكارد الكبير */}
-      <div className="home-card">
-
-        {/* LEFT */}
-        <div className="home-left">
-
-          <h3 className="hospital-name">
-            🏥 {data.hospitalName}
-          </h3>
-
-          <p className="hospital-type">
-            {data.hospitalType}
-          </p>
-
-          <div className="info-list">
-
-            <p>👨‍⚕️ {data.doctorsCount} Doctors</p>
-            <p>🏢 {data.departmentsCount} Departments</p>
-            <p>📞 {data.phone}</p>
-            <p>📧 {data.email}</p>
-            <p>🌐 {data.website}</p>
-
-          </div>
-
-        </div>
-
-        {/* RIGHT */}
-        <div className="home-right">
-
-          <h4>Available Specialties</h4>
-
-          <div className="specialties">
-
-            <span>Cardiology</span>
-            <span>Neurology</span>
-            <span>Orthopedics</span>
-            <span>Pediatrics</span>
-            <span>Emergency</span>
-            <span>Dermatology</span>
-            <span>Radiology</span>
-
-          </div>
-
-        </div>
-
-      </div>
-
+      <Hero />
+      <Features />
+      <Partners />
+      <BodyDiagram />
+      <ManagementTools />
     </div>
   );
 };

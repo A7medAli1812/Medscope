@@ -1,0 +1,267 @@
+/* ============================================================
+   Patient Record (Medical History)
+   Reference Design Styles
+   ============================================================ */
+
+.mh-record-container {
+    padding: 0;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* ---- Patient Info Card ---- */
+.mh-patient-card {
+    background: #eaf3f8;
+    border-radius: 12px;
+    padding: 24px 32px;
+    border: 1px solid #dce8ef;
+}
+
+.mh-patient-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+}
+
+.mh-patient-name-container h2 {
+    color: #4A708B; /* Darker blue-grey to match reference */
+    font-size: 1.4rem;
+    font-weight: 500;
+    margin: 0 0 4px 0;
+}
+
+.mh-patient-id {
+    color: #5C707A;
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+.mh-patient-id strong {
+    font-weight: 500;
+    color: #5C707A;
+}
+
+.mh-blood-badge {
+    background: #004f78;
+    color: #ffffff;
+    font-weight: 600;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 0.95rem;
+}
+
+.mh-patient-details {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.mh-detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.mh-detail-label {
+    color: #007a94;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.mh-detail-value {
+    color: #1e3a4f;
+    font-size: 0.9rem;
+}
+
+/* ---- Summary Grid ---- */
+.mh-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.mh-summary-card {
+    background: #eaf3f8;
+    border-radius: 12px;
+    padding: 20px 24px;
+    border: 1px solid #dce8ef;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 90px;
+}
+
+.mh-summary-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #007a94;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.mh-summary-header svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Unique Icon Colors */
+.mh-icon-red { color: #e74c3c; }
+
+.mh-summary-count {
+    color: #004f78;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 0;
+    margin-top: 12px;
+}
+
+/* ---- Tabs ---- */
+.mh-tabs-container {
+    display: flex;
+    background: #e2edf5;
+    border-radius: 30px;
+    padding: 0;
+    margin-top: 4px;
+    overflow: hidden;
+}
+
+.mh-tab {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 0;
+    border: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #4a7389;
+    background: transparent;
+}
+
+.mh-tab.active {
+    background: #abc9d8;
+    color: #004f78;
+    border-radius: 26px;
+}
+
+.mh-tab svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* ---- Details Sections ---- */
+.mh-details-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.mh-section-card {
+    background: #eaf3f8;
+    border-radius: 16px;
+    padding: 20px 32px;
+    border: 1px solid #dce8ef;
+}
+
+.mh-section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #004f78;
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin: 0 0 16px 0;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #d7e4ed;
+}
+
+.mh-section-title svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Detailed Lists */
+.mh-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 12px 0;
+}
+
+.mh-list-item:not(:last-child) {
+    border-bottom: 1px solid #dce8ef;
+}
+
+.mh-item-content {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.mh-item-name {
+    color: #007a94;
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+.mh-item-detail {
+    color: #5a7d91;
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+/* Medication Pill */
+.mh-med-pill {
+    background: #004f78;
+    color: white;
+    font-size: 0.75rem;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+/* ============================================================
+   RESPONSIVE BREAKPOINTS
+   ============================================================ */
+@media (max-width: 1024px) {
+    .mh-patient-details {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+    }
+    
+    .mh-summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 767px) {
+    .mh-action-bar {
+        flex-direction: column;
+        height: auto;
+        padding: 0;
+    }
+    
+    .mh-action-bar-left {
+        width: 100%;
+        height: 48px;
+    }
+    
+    .mh-print-btn {
+        width: 100%;
+        justify-content: center;
+        border-radius: 0 0 8px 8px;
+    }
+
+    .mh-patient-card, .mh-section-card {
+        padding: 20px;
+    }
+}

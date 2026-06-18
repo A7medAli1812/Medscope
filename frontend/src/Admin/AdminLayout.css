@@ -1,0 +1,24 @@
+.admin-layout{
+    display: flex;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.admin-layout .sidebar{
+    width: 270px;
+    flex-shrink: 0;
+}
+
+.admin-content{
+    flex: 1;
+    height: 100vh;
+    overflow-y: auto;
+
+}
+
+.sidebar{
+    width: 260px;
+    height: 100vh;
+    flex-shrink: 0;
+    overflow-y: auto;
+}

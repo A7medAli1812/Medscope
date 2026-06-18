@@ -1,14 +1,8 @@
 .header {
-  background-color: #090D19;
+  background-color: #004F78;
   padding: 0.2rem 0;
   position: relative;
   z-index: 100;
-  box-shadow: var(--shadow-sm);
-}
-[data-theme="dark"] .header {
-  background: #111;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.285);
 }
 
 .header-container {
@@ -41,17 +35,6 @@
   align-items: center;
   justify-content: center;
 }
-[data-theme="dark"] .logo-icon {
-  
-  background:linear-gradient(-145deg,#fff,#0a4059);
-}
-
-.logo-m {
-  color: white;
-  font-size: 1.25rem;
-  font-weight: bold;
-  font-family: 'Arial', sans-serif;
-}
 
 .logo-text {
   display: flex;
@@ -68,11 +51,10 @@
   font-size: 1.1rem;
   margin: 0;
   line-height: 1.2;
-
 }
 
 .logo-subtitle {
-  color: var(--text-secondary);
+  color: #a0c4d8;
   font-size: 0.6rem;
   margin: 0;
   line-height: 1;
@@ -97,25 +79,15 @@
   text-decoration: none;
   font-weight: 500;
   font-size: 0.9rem;
-  transition: var(--transition);
+  transition: color 0.2s ease;
   position: relative;
-}
-[data-theme="dark"] .nav-link {
-  color:#fcfdff70;
 }
 
 .nav-link:hover {
-  /* color: var(--accent-primary); */
-    background: linear-gradient(0deg, #0a8cd8, #3ae8b6);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text; /* للـ Firefox */
-}
-[data-theme="dark"] .nav-link:hover {
   background: linear-gradient(0deg, #0a8cd8, #3ae8b6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-clip: text; /* للـ Firefox */
+  background-clip: text;
 }
 
 .nav-link::after {
@@ -125,7 +97,7 @@
   left: 0;
   width: 0;
   height: 2px;
-  background: var(--accent-primary);
+  background: #3ae8b6;
   transition: width 0.3s ease;
 }
 
@@ -141,69 +113,11 @@
   gap: 1rem;
 }
 
-.lang-switch-btn {
-  background: none;
-  border: none;
-  color: #a6adaf;
-  font-size: 1.3rem;
-  cursor: pointer;
-  transition: transform 0.2s ease, color 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-
-.lang-switch-btn:hover {
-  color: #cdebf9;
-  transform: scale(1.1);
-}
-
-[data-theme="dark"] .lang-switch-btn {
-  color: #00aeff;
-}
-
-
-.dark-mode-toggle {
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-  border: 1px solid var(--border-color);
-  padding: 0.3rem;
-  border-radius: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: var(--transition);
-  box-shadow: var(--shadow-sm);
-}
-
-.dark-mode-toggle:hover {
-  background: var(--bg-tertiary);
-  border-color: var(--border-hover);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
-}
-
-.dark-mode-icon {
-  font-size: 15px;
-  color: #084668;
-  transition: var(--transition);
-}
-[data-theme="dark"] .dark-mode-icon {
-  color: #00aeff;
-}
-
-
-.dark-mode-toggle:hover .dark-mode-icon {
-  color: #0a5c7f;
-}
-
 .signin-btn {
-  background:#0a4059;
+  background: #0a4059;
   color: white;
   border: none;
-  padding: 9px;
+  padding: 9px 16px;
   border-radius: 8px;
   font-weight: 500;
   font-size: 0.85rem;
@@ -211,21 +125,45 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  transition: var(--transition);
-  box-shadow: var(--shadow-md);
+  transition: all 0.2s ease;
 }
 
 .signin-btn:hover {
+  background: #0c5576;
   transform: translateY(-1px);
 }
 
 .signin-icon {
   font-size: 13px;
   color: white;
-  transition: var(--transition);
 }
 
+.signup-btn {
+  background: #27ae60;
+  color: white;
+  border: none;
+  padding: 9px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
 
+.signup-btn:hover {
+  background: #219a52;
+  transform: translateY(-1px);
+}
+
+.signup-icon {
+  font-size: 13px;
+  color: white;
+}
+
+/* Mobile */
 .mobile-menu-btn {
   display: none;
   flex-direction: column;
@@ -238,31 +176,30 @@
 
 .mobile-menu-icon {
   font-size: 20px;
-  color: #084668;
-  transition: var(--transition);
+  color: #ffffff;
+  transition: transform 0.3s ease;
 }
-[data-theme="dark"] .mobile-menu-icon {
-  color: #00aeff;
-}
-
 
 .mobile-menu-btn:hover .mobile-menu-icon {
-  color: #0a5c7f;
+  color: #3ae8b6;
 }
 
-/* Mobile Menu Styles */
+.mobile-menu-btn.active .mobile-menu-icon {
+  transform: rotate(180deg);
+}
+
 .mobile-menu {
   position: absolute;
   top: 100%;
   left: 0;
   right: 0;
-  background: var(--bg-primary);
-  border-top: 1px solid var(--border-color);
-  box-shadow: var(--shadow-lg);
+  background: #004F78;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   transform: translateY(-100%);
   opacity: 0;
   visibility: hidden;
-  transition: var(--transition);
+  transition: all 0.3s ease;
   z-index: 1000;
 }
 
@@ -286,29 +223,29 @@
 }
 
 .mobile-nav-link {
-  color: var(--text-primary);
+  color: #ffffff;
   text-decoration: none;
   font-weight: 500;
   font-size: 0.9rem;
   padding: 0.75rem 1rem;
   border-radius: 6px;
-  transition: var(--transition);
+  transition: background 0.2s ease;
   display: block;
 }
 
 .mobile-nav-link:hover {
-  background: var(--bg-secondary);
-  color: var(--accent-primary);
+  background: rgba(255, 255, 255, 0.1);
+  color: #3ae8b6;
 }
 
 .mobile-menu-actions {
   margin-top: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .mobile-signin-btn {
-  background: var(--accent-primary);
+  background: #0a4059;
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -319,62 +256,60 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  transition: var(--transition);
-  box-shadow: var(--shadow-md);
+  transition: all 0.2s ease;
   width: 100%;
   justify-content: center;
 }
-.mobile-signin-btn:hover {
-  background: #0c5576;
-}
-[data-theme="dark"] .mobile-signin-btn:hover {
-  background: #0c5576;
-}
-
-
-[data-theme="dark"] .mobile-signin-btn {
-  background: #0a4059;
-}
-
-[data-theme="dark"] .mobile-signin-btn:hover {
-  background: #0c5576;
-}
-
 
 .mobile-signin-btn:hover {
+  background: #0c5576;
   transform: translateY(-1px);
-  box-shadow: var(--shadow-lg);
 }
 
 .mobile-signin-icon {
   font-size: 16px;
   color: white;
-  transition: var(--transition);
 }
 
-
-/* Mobile Menu Icon Animation */
-.mobile-menu-icon {
-  transition: transform 0.3s ease;
+.mobile-signup-btn {
+  background: #27ae60;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  width: 100%;
+  justify-content: center;
 }
 
-.mobile-menu-btn.active .mobile-menu-icon {
-  transform: rotate(180deg);
+.mobile-signup-btn:hover {
+  background: #219a52;
+  transform: translateY(-1px);
 }
 
-/* Responsive Design */
+.mobile-signup-icon {
+  font-size: 16px;
+  color: white;
+}
+
+/* Responsive */
 @media (max-width: 1024px) {
   .nav-list {
     gap: 1rem;
   }
-  
+
   .nav-link {
     font-size: 0.85rem;
   }
 }
 
 @media (max-width: 795px) {
-
   .navigation {
     display: none;
   }
@@ -395,21 +330,8 @@
     gap: 0.75rem;
   }
 
-  .signin-btn {
-    padding: 0.5rem 1rem;
-    font-size: 0.8rem;
-  }
-
-  .dark-mode-toggle {
-    padding: 0.4rem;
-  }
-
-  .dark-mode-icon {
-    font-size: 16px;
-  }
-
-  /* Hide desktop signin button on mobile */
-  .signin-btn {
+  .signin-btn,
+  .signup-btn {
     display: none;
   }
 }
@@ -425,36 +347,11 @@
     height: 35px;
   }
 
-  .logo-m {
-    font-size: 1.1rem;
-  }
-
   .logo-title {
     font-size: 1rem;
   }
 
   .logo-subtitle {
     font-size: 0.6rem;
-  }
-
-  .header-right {
-    gap: 0.5rem;
-  }
-
-  .signin-btn {
-    padding: 0.4rem 0.75rem;
-    font-size: 0.75rem;
-  }
-
-  .signin-icon {
-    font-size: 14px;
-  }
-
-  .dark-mode-toggle {
-    padding: 0.35rem;
-  }
-
-  .dark-mode-icon {
-    font-size: 14px;
   }
 }

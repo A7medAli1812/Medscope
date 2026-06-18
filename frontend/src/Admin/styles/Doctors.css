@@ -1,0 +1,429 @@
+/* ==========================================================================
+   DOCTORS MANAGEMENT PAGE — Matches mockup design
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* ── Page wrapper ── */
+.doc-page {
+  padding: 30px 40px;
+  background-color: #f4f8fb;
+  min-height: 100vh;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ── Top header bar ── */
+.doc-header-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.doc-page-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #004F78;
+  margin: 0;
+}
+
+.doc-profile-area {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.doc-profile-details {
+  text-align: right;
+}
+
+.doc-profile-details .profile-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #004F78;
+  display: block;
+}
+
+.doc-profile-details .profile-role {
+  font-size: 11px;
+  font-weight: 500;
+  color: #8fa3b3;
+  display: block;
+}
+
+/* ── Card wrapper ── */
+.doc-card-wrapper {
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 0;
+  box-shadow: 0 4px 18px rgba(0, 79, 120, 0.02);
+  border: 1px solid rgba(0, 79, 120, 0.05);
+  overflow: hidden;
+}
+
+.doc-card {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Card header (tab + new doctor btn) ── */
+.doc-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 28px 0;
+  border-bottom: 1px solid #eef3f7;
+}
+
+.doc-tab-active {
+  font-size: 14px;
+  font-weight: 600;
+  color: #004F78;
+  padding-bottom: 14px;
+  border-bottom: 3px solid #004F78;
+  display: inline-block;
+}
+
+.doc-new-btn {
+  background-color: #004F78;
+  color: #ffffff;
+  border: none;
+  border-radius: 20px;
+  padding: 9px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: background 0.15s;
+  white-space: nowrap;
+  margin-bottom: 10px;
+}
+
+.doc-new-btn:hover {
+  background-color: #003a58;
+}
+
+/* ── Filters ── */
+.doc-filters {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 28px;
+}
+
+.doc-search-wrapper {
+  position: relative;
+  width: 200px;
+}
+
+.doc-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: #8fa3b3;
+  pointer-events: none;
+}
+
+.doc-search-input {
+  width: 100%;
+  padding: 8px 14px 8px 34px;
+  border: 1px solid rgba(0, 79, 120, 0.2);
+  border-radius: 20px;
+  font-size: 13px;
+  color: #004F78;
+  background: #ffffff;
+  outline: none;
+  font-family: 'Inter', sans-serif;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+}
+
+.doc-search-input::placeholder {
+  color: #aabcca;
+}
+
+.doc-search-input:focus {
+  border-color: #004F78;
+}
+
+.doc-filter-select {
+  padding: 8px 36px 8px 14px;
+  border: 1px solid #004F78;
+  border-radius: 20px;
+  font-size: 13px;
+  color: #004F78;
+  background-color: #ffffff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23004F78' viewBox='0 0 16 16'%3E%3Cpath d='M1.5 3a.5.5 0 0 1 .5-.5h12a.5.5 0 0 1 0 1H2a.5.5 0 0 1-.5-.5zM3 6.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM5 10a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5A.5.5 0 0 1 5 10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+  cursor: pointer;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  transition: border-color 0.15s;
+}
+
+.doc-filter-select:focus {
+  border-color: #003a5c;
+}
+
+/* ── Table ── */
+.doc-table-wrapper {
+  overflow-x: auto;
+}
+
+.doc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.doc-table thead tr {
+  border-bottom: 1.5px solid #eef3f7;
+}
+
+.doc-table thead th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 700;
+  color: #004F78;
+  font-size: 11.5px;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+.doc-table thead th:first-child {
+  padding-left: 28px;
+}
+
+.doc-table thead th:last-child {
+  padding-right: 28px;
+}
+
+.doc-table tbody tr {
+  border-bottom: 1px solid #f0f4f8;
+  transition: background-color 0.15s;
+}
+
+.doc-table tbody tr:hover {
+  background-color: #f5faff;
+}
+
+.doc-table tbody td {
+  padding: 13px 16px;
+  color: #2c5f78;
+  font-size: 13px;
+  vertical-align: middle;
+}
+
+.doc-table tbody td:first-child {
+  padding-left: 28px;
+}
+
+.doc-table tbody td:last-child {
+  padding-right: 28px;
+}
+
+.doc-id-cell {
+  font-weight: 600;
+  color: #004F78 !important;
+}
+
+.doc-name-cell {
+  font-weight: 700;
+  color: #1a3d50 !important;
+}
+
+.doc-email-cell {
+  color: #5b7990 !important;
+  font-size: 12.5px !important;
+}
+
+.doc-loading-cell,
+.doc-empty-cell {
+  text-align: center;
+  padding: 40px !important;
+  color: #8fa3b3;
+  font-weight: 600;
+}
+
+/* ── Toggle Switch (ACTION column) ── */
+.doc-toggle-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  outline: none;
+  display: inline-flex;
+  align-items: center;
+  transition: opacity 0.15s;
+}
+
+.doc-toggle-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.doc-toggle-track {
+  display: flex;
+  align-items: center;
+  width: 38px;
+  height: 20px;
+  border-radius: 12px;
+  position: relative;
+  transition: background-color 0.25s;
+}
+
+.doc-toggle-active .doc-toggle-track {
+  background-color: #22c55e;
+}
+
+.doc-toggle-inactive .doc-toggle-track {
+  background-color: #d96c6c;
+}
+
+.doc-toggle-thumb {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  transition: left 0.25s;
+}
+
+.doc-toggle-active .doc-toggle-thumb {
+  left: 20px;
+}
+
+.doc-toggle-inactive .doc-toggle-thumb {
+  left: 2px;
+}
+
+/* ── Status Badge ── */
+.doc-status-badge {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+}
+
+.doc-badge-active {
+  background-color: #e6f7ee;
+  color: #1a7f4b;
+  border: 1px solid #a8e0c0;
+}
+
+.doc-badge-inactive {
+  background-color: #fff0f0;
+  color: #d32f2f;
+  border: 1px solid #ffcdd2;
+}
+
+/* ── Pagination ── */
+.doc-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px 18px;
+  border-top: 1px solid #eef3f7;
+}
+
+.doc-pagination-info {
+  font-size: 12.5px;
+  color: #8fa3b3;
+  font-weight: 500;
+}
+
+.doc-pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.doc-page-prev,
+.doc-page-next {
+  background: transparent;
+  color: #004F78;
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: background 0.15s;
+}
+
+.doc-page-prev:hover:not(:disabled),
+.doc-page-next:hover:not(:disabled) {
+  background-color: #f0f5fa;
+}
+
+.doc-page-prev:disabled,
+.doc-page-next:disabled {
+  color: #c4d0da;
+  cursor: not-allowed;
+}
+
+.doc-page-numbers {
+  display: flex;
+  gap: 6px;
+}
+
+.doc-page-num {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background-color: #004F78;
+  color: #ffffff;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.15s, box-shadow 0.15s;
+}
+
+.doc-page-num:hover {
+  opacity: 0.85;
+}
+
+.doc-page-num.active {
+  box-shadow: 0 2px 8px rgba(0, 79, 120, 0.4);
+  background-color: #003a58;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .doc-page {
+    padding: 20px 16px;
+  }
+
+  .doc-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .doc-search-wrapper {
+    width: 100%;
+  }
+
+  .doc-pagination {
+    flex-direction: column;
+    gap: 12px;
+  }
+}

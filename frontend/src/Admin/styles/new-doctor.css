@@ -1,0 +1,246 @@
+/* ==========================================================================
+   ADD DOCTOR PAGE — Centered card matching mockup design
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* ── Page wrapper ── */
+.nd-page {
+  min-height: 100vh;
+  background-color: #d0e7f5;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 24px 60px;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ── Card ── */
+.nd-modal-card {
+  background: #eef5fb;
+  border-radius: 18px;
+  border: 1.5px solid #c2d8ea;
+  box-shadow: 0 4px 24px rgba(0, 79, 120, 0.08);
+  width: 100%;
+  max-width: 720px;
+  padding: 32px 36px 32px;
+  box-sizing: border-box;
+}
+
+/* ── Breadcrumb ── */
+.nd-breadcrumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #5b7990;
+  cursor: pointer;
+  margin-bottom: 18px;
+  transition: color 0.15s;
+  user-select: none;
+}
+
+.nd-breadcrumb:hover {
+  color: #004F78;
+}
+
+.nd-breadcrumb-icon {
+  font-size: 13px;
+}
+
+/* ── Title ── */
+.nd-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #003d5c;
+  text-align: center;
+  margin: 0 0 28px;
+  letter-spacing: -0.3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.nd-title-icon {
+  font-size: 24px;
+  color: #004F78;
+}
+
+/* ── Form ── */
+.nd-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* ── Row (2 columns) ── */
+.nd-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+/* ── Field ── */
+.nd-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* ── Labels ── */
+.nd-label {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #3a6070;
+}
+
+.nd-req {
+  color: #c0392b;
+  margin-left: 1px;
+}
+
+/* ── Text input ── */
+.nd-input {
+  height: 40px;
+  padding: 0 12px;
+  border: 1.5px solid #bcd5e6;
+  border-radius: 8px;
+  font-size: 13.5px;
+  color: #003d5c;
+  background: #f5fafd;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  font-family: 'Inter', sans-serif;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.nd-input:focus {
+  border-color: #004F78;
+  box-shadow: 0 0 0 3px rgba(0, 79, 120, 0.08);
+  background: #fff;
+}
+
+.nd-input-error {
+  border-color: #d96c6c !important;
+}
+
+/* ── Error message ── */
+.nd-error-msg {
+  font-size: 11px;
+  color: #c0392b;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+/* ── Select wrapper ── */
+.nd-select-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.nd-select {
+  width: 100%;
+  height: 40px;
+  padding: 0 32px 0 12px;
+  border: 1.5px solid #bcd5e6;
+  border-radius: 8px;
+  font-size: 13.5px;
+  color: #003d5c;
+  background: #f5fafd;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-sizing: border-box;
+}
+
+.nd-select:focus {
+  border-color: #004F78;
+  box-shadow: 0 0 0 3px rgba(0, 79, 120, 0.08);
+  background: #fff;
+}
+
+.nd-select-arrow {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 11px;
+  color: #8fa3b3;
+  pointer-events: none;
+}
+
+/* ── Action buttons ── */
+.nd-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+  padding-top: 20px;
+  border-top: 1.5px solid #d0e2ee;
+}
+
+.nd-btn-cancel {
+  padding: 9px 24px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  background: transparent;
+  color: #5b7990;
+  border: 1.5px solid #bcd5e6;
+  font-family: 'Inter', sans-serif;
+  transition: background 0.15s, color 0.15s;
+}
+
+.nd-btn-cancel:hover {
+  background: #eef3f7;
+  color: #003d5c;
+}
+
+.nd-btn-save {
+  padding: 9px 24px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  background: #004F78;
+  color: #ffffff;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  transition: background 0.15s;
+}
+
+.nd-btn-save:hover:not(:disabled) {
+  background: #003a58;
+}
+
+.nd-btn-save:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Responsive ── */
+@media (max-width: 620px) {
+  .nd-page {
+    padding: 20px 12px 40px;
+  }
+
+  .nd-modal-card {
+    padding: 20px 18px 24px;
+  }
+
+  .nd-row {
+    grid-template-columns: 1fr;
+  }
+
+  .nd-title {
+    font-size: 20px;
+  }
+}

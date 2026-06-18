@@ -1,0 +1,282 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.dwh-page {
+  min-height: 100vh;
+  background: #eaf2f8;
+  font-family: "Segoe UI", sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 24px 48px;
+}
+
+.dwh-topbar {
+  width: 100%;
+  max-width: 780px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.dwh-back-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  color: #3a6b88;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+.dwh-back-icon {
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+}
+
+.dwh-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.dwh-page-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1a4b68;
+  margin-bottom: 8px;
+}
+
+.dwh-subtitle {
+  color: #5a8099;
+  font-size: 14px;
+}
+
+.dwh-content {
+  width: 100%;
+  max-width: 780px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Duration section */
+.dwh-duration-card {
+  background: #deeaf3;
+  border-radius: 18px;
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dwh-duration-label {
+  color: #1a4b68;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.dwh-duration-options {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.dwh-duration-btn {
+  padding: 12px 24px;
+  border-radius: 12px;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  background: #c4d8e8;
+  color: #2e6285;
+  transition: 0.18s;
+}
+
+.dwh-duration-btn.active {
+  background: #3a7ca5;
+  color: #fff;
+}
+
+.dwh-duration-btn:hover:not(.active) {
+  background: #b4cedd;
+}
+
+/* Day rows */
+.dwh-day-card {
+  background: #deeaf3;
+  border-radius: 18px;
+  padding: 20px 28px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.dwh-checkbox-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.dwh-checkbox {
+  width: 22px;
+  height: 22px;
+  border: 2px solid #3a7ca5;
+  border-radius: 6px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background: #fff;
+  transition: 0.15s;
+  flex-shrink: 0;
+}
+
+.dwh-checkbox:checked {
+  background: #3a7ca5;
+  border-color: #3a7ca5;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 7l4 4 6-7' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 13px;
+}
+
+.dwh-day-name {
+  color: #1a4b68;
+  font-size: 16px;
+  font-weight: 700;
+  min-width: 120px;
+}
+
+.dwh-time-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+
+.dwh-time-label {
+  color: #5a8099;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.dwh-time-btn {
+  background: #3a7ca5;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 11px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  min-width: 110px;
+  text-align: center;
+  transition: 0.15s;
+}
+
+.dwh-time-btn:disabled {
+  background: #c4d8e8;
+  color: #8aafc6;
+  cursor: not-allowed;
+}
+
+.dwh-time-btn:not(:disabled):hover {
+  background: #2e6285;
+}
+
+.dwh-time-input {
+  background: #3a7ca5;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 11px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  min-width: 120px;
+  outline: none;
+  -webkit-appearance: none;
+  color-scheme: dark;
+}
+
+.dwh-time-input:disabled {
+  background: #c4d8e8;
+  color: #8aafc6;
+  cursor: not-allowed;
+  color-scheme: light;
+}
+
+/* Save button */
+.dwh-save-wrap {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.dwh-save-btn {
+  background: #1a4b68;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 36px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.15s;
+}
+
+.dwh-save-btn:hover {
+  background: #0f3a52;
+}
+
+.dwh-save-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.dwh-message {
+  background: #e9f7f0;
+  color: #1c7b56;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.dwh-loading {
+  padding: 60px;
+  color: #1a4b68;
+  font-size: 18px;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .dwh-day-card {
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 16px 18px;
+  }
+
+  .dwh-time-controls {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .dwh-duration-options {
+    gap: 8px;
+  }
+
+  .dwh-duration-btn {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+}

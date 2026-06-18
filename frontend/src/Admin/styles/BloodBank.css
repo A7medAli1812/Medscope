@@ -1,0 +1,199 @@
+/* ===========================
+   BLOOD BANK PAGE
+   =========================== */
+
+.blood-container {
+  padding: 32px 36px;
+  background-color: #ffffff;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.blood-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #004F78;
+  margin: 0 0 28px 0;
+}
+
+/* ===========================
+   GRID - 4 columns x 2 rows
+   =========================== */
+
+.blood-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+/* ===========================
+   BLOOD CARD
+   =========================== */
+
+.blood-card {
+  background: #F1F8FF;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 79, 120, 0.12);
+  box-shadow: 0 4px 16px rgba(0, 79, 120, 0.07);
+  padding: 28px 26px 24px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 220px;
+  transition: box-shadow 0.2s;
+}
+
+.blood-card.pulse {
+  animation: pulse-anim 0.3s ease;
+}
+
+@keyframes pulse-anim {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+/* ===========================
+   BLOOD TYPE BADGE
+   =========================== */
+
+.blood-type {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background-color: #004F78;
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.3px;
+}
+
+/* ===========================
+   LABEL
+   =========================== */
+
+.blood-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #004F78;
+  margin: 0;
+}
+
+/* ===========================
+   QUANTITY CONTROL
+   =========================== */
+
+.quantity-control {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: #ffffff;
+  border: 1px solid rgba(0, 79, 120, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+  width: fit-content;
+}
+
+.quantity-number {
+  font-size: 18px;
+  font-weight: 700;
+  color: #004F78;
+  padding: 8px 20px;
+  min-width: 50px;
+  text-align: center;
+}
+
+.btn-decrease,
+.btn-increase {
+  background: transparent;
+  border: none;
+  color: #004F78;
+  font-size: 20px;
+  font-weight: 700;
+  width: 36px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+  line-height: 1;
+}
+
+.btn-decrease {
+  border-right: 1px solid rgba(0, 79, 120, 0.15);
+}
+
+.btn-increase {
+  border-left: 1px solid rgba(0, 79, 120, 0.15);
+}
+
+.btn-decrease:hover:not(:disabled),
+.btn-increase:hover:not(:disabled) {
+  background: rgba(0, 79, 120, 0.08);
+}
+
+.btn-decrease:disabled,
+.btn-increase:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ===========================
+   PROGRESS BAR
+   =========================== */
+
+.blood-card .progress-bar {
+  width: 100%;
+  height: 5px;
+  background-color: rgba(0, 79, 120, 0.12);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.blood-card .progress {
+  height: 100%;
+  background-color: #004F78;
+  border-radius: 10px;
+  transition: width 0.4s ease;
+}
+
+/* ===========================
+   STATUS
+   =========================== */
+
+.blood-status {
+  font-size: 12px;
+  font-weight: 500;
+  color: #1a7f4b;
+  margin: 0;
+  text-align: center;
+}
+
+.blood-status.low {
+  color: #d32f2f;
+}
+
+/* ===========================
+   RESPONSIVE
+   =========================== */
+
+@media (max-width: 900px) {
+  .blood-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .blood-container {
+    padding: 20px 16px;
+  }
+
+  .blood-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+}

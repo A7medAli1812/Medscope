@@ -1,0 +1,148 @@
+.booking-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 24px 40px;
+    background-color: #f4f8fb;
+    min-height: 100vh;
+}
+
+.booking-header {
+    text-align: center;
+    margin-top: 24px;
+}
+
+.booking-title {
+    color: #004a61;
+    font-size: 2rem;
+    font-weight: 500;
+    margin: 0 0 8px 0;
+}
+
+.booking-subtitle {
+    color: #557c96;
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* Specialty Selection styling */
+.specialty-search-wrapper {
+    width: 100%;
+    max-width: 800px;
+    position: relative;
+    margin-bottom: 24px;
+}
+
+.specialty-search-input {
+    width: 100%;
+    padding: 12px 16px 12px 42px;
+    border: 1px solid #cbd5e1;
+    border-radius: 24px;
+    background-color: #e2e8f0;
+    color: #334155;
+    font-size: 0.95rem;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.specialty-search-input:focus {
+    background-color: #ffffff;
+    border-color: #004a61;
+    box-shadow: 0 0 0 2px rgba(0, 74, 97, 0.1);
+}
+
+.specialty-search-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    color: #64748b;
+}
+
+.specialty-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    width: 100%;
+    max-width: 800px;
+}
+
+@media(min-width: 768px) {
+    .specialty-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.specialty-card {
+    background-color: #e2e8f0;
+    border-radius: 12px;
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.specialty-card:hover {
+    background-color: #d1d5db;
+}
+
+.specialty-card.selected {
+    background-color: #e0f2fe;
+    border-color: #004a61;
+}
+
+.specialty-icon {
+    width: 32px;
+    height: 32px;
+    color: #004a61;
+}
+
+.specialty-name {
+    color: #004a61;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-align: center;
+}
+
+.booking-actions {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 32px;
+}
+
+.btn-wizard-next {
+    background-color: #477c98;
+    color: white;
+    border: none;
+    padding: 12px 40px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-wizard-next:hover {
+    background-color: #3b687f;
+}
+
+.btn-wizard-next:disabled {
+    background-color: #cbd5e1;
+    cursor: not-allowed;
+}
+
+/* Shared Booking Wrapper for Wizard */
+.booking-wizard-wrapper {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+}

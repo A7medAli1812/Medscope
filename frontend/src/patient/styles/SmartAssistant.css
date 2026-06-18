@@ -1,0 +1,10 @@
+.smart-assistant-page {
+  padding: 30px;
+  width: 100%;
+  height: 100%;
+}
+
+.smart-assistant-page h2 {
+  margin-bottom: 20px;
+  color: #0066a1;
+}

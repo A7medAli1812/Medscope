@@ -1,0 +1,164 @@
+/* ===== Overlay ===== */
+.loader-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 79, 120, 0.15);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: loaderFadeIn 0.3s ease forwards;
+}
+
+@keyframes loaderFadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* ===== Content ===== */
+.loader-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+/* ===== Rings ===== */
+.loader-rings {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loader-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 3px solid transparent;
+}
+
+.ring-1 {
+    width: 100px;
+    height: 100px;
+    border-top-color: #004F78;
+    border-right-color: #004F78;
+    animation: spin 1.2s linear infinite;
+}
+
+.ring-2 {
+    width: 76px;
+    height: 76px;
+    border-bottom-color: #3ae8b6;
+    border-left-color: #3ae8b6;
+    animation: spin 1.6s linear infinite reverse;
+}
+
+.ring-3 {
+    width: 52px;
+    height: 52px;
+    border-top-color: #0a8cd8;
+    border-right-color: #0a8cd8;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ===== Center Icon ===== */
+.loader-center-icon {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #004F78, #0a8cd8);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pulse 1.2s ease-in-out infinite;
+    box-shadow: 0 0 16px rgba(0, 79, 120, 0.3);
+}
+
+.loader-center-icon i {
+    color: #ffffff;
+    font-size: 1rem;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.15);
+    }
+}
+
+/* ===== Text ===== */
+.loader-text {
+    color: #004F78;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    animation: textPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes textPulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 480px) {
+    .loader-rings {
+        width: 80px;
+        height: 80px;
+    }
+
+    .ring-1 {
+        width: 80px;
+        height: 80px;
+    }
+
+    .ring-2 {
+        width: 60px;
+        height: 60px;
+    }
+
+    .ring-3 {
+        width: 40px;
+        height: 40px;
+    }
+
+    .loader-center-icon {
+        width: 28px;
+        height: 28px;
+    }
+
+    .loader-center-icon i {
+        font-size: 0.8rem;
+    }
+
+    .loader-text {
+        font-size: 0.85rem;
+    }
+}

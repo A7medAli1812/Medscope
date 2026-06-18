@@ -1,0 +1,351 @@
+/* ============================================================
+   Multi-Hospital View — Pure CSS
+   Medical-grade teal/blue color palette
+   ============================================================ */
+
+/* ---- Page Container ---- */
+.mh-container {
+    padding: 0;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* ---- Hospital Card ---- */
+.mh-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 25px rgba(0, 50, 80, 0.05);
+    border: 1px solid #eef2f5;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+}
+
+.mh-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: #008eb4;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.mh-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 35px rgba(0, 50, 80, 0.1);
+    border-color: #dce8ef;
+}
+
+.mh-card:hover::before {
+    opacity: 1;
+}
+
+/* ---- Card Header ---- */
+.mh-card-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+.mh-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #005a8a, #008eb4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(0, 90, 138, 0.2);
+}
+
+.mh-icon svg {
+    width: 24px;
+    height: 24px;
+    color: #ffffff;
+}
+
+.mh-hospital-name {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #1a3a4a;
+    margin: 0;
+    letter-spacing: -0.01em;
+}
+
+/* ---- Bed List ---- */
+.mh-bed-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ---- Bed Row ---- */
+.mh-bed-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-bottom: 4px;
+}
+
+.mh-bed-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.mh-bed-label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #4a6375;
+}
+
+.mh-bed-label--teal {
+    color: #007a94;
+}
+
+.mh-bed-count {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1a3a4a;
+}
+
+.mh-bed-count small {
+    font-weight: 400;
+    color: #8fa3b0;
+    font-size: 0.8rem;
+    margin-left: 2px;
+}
+
+/* ---- Progress Section ---- */
+.mh-progress-container {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.mh-progress-track {
+    flex: 1;
+    height: 10px;
+    background: #f0f4f7;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.mh-progress-fill {
+    height: 100%;
+    border-radius: 5px;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mh-availability-text {
+    width: 100px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #6c8ea4;
+    text-align: right;
+}
+
+/* ---- Status Coloring ---- */
+
+/* Good (Low occupancy) */
+.status-good .mh-progress-fill {
+    background: linear-gradient(90deg, #059669, #00be8c);
+}
+
+.status-good .mh-availability-text {
+    color: #059669;
+}
+
+/* Warning (Medium-High occupancy) */
+.status-warning .mh-progress-fill {
+    background: linear-gradient(90deg, #f59e0b, #fbbf24);
+}
+
+.status-warning .mh-availability-text {
+    color: #d97706;
+}
+
+/* Critical (Very High occupancy) */
+.status-critical .mh-progress-fill {
+    background: linear-gradient(90deg, #ef4444, #f87171);
+}
+
+.status-critical .mh-availability-text {
+    color: #dc2626;
+}
+
+/* Empty (N/A) */
+.status-empty .mh-progress-track {
+    background: #f1f5f9;
+}
+
+.status-empty .mh-progress-fill {
+    background: #cbd5e1;
+}
+
+.status-empty .mh-availability-text {
+    color: #94a3b8;
+}
+
+/* ---- Page Header & Refresh ---- */
+.mh-page-wrapper {
+    width: 100%;
+}
+
+.mh-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding: 0 4px;
+}
+
+.mh-last-updated {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.mh-refresh-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    padding: 8px 16px;
+    border-radius: 10px;
+    color: #475569;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.mh-refresh-btn:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    color: #1e293b;
+    transform: translateY(-1px);
+}
+
+.mh-refresh-btn:active {
+    transform: translateY(0);
+}
+
+/* ---- UI States (Loading, Empty, Error) ---- */
+.mh-loading-state,
+.mh-empty-state,
+.mh-error-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 40px;
+    text-align: center;
+    background: #ffffff;
+    border-radius: 24px;
+    border: 2px dashed #e2e8f0;
+    min-height: 400px;
+}
+
+.mh-loading-state {
+    border-style: solid;
+    border-color: transparent;
+}
+
+.mh-empty-icon,
+.mh-error-icon {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+}
+
+.mh-empty-state h3,
+.mh-error-state h3 {
+    font-size: 1.5rem;
+    color: #1e293b;
+    margin: 0 0 12px 0;
+}
+
+.mh-empty-state p,
+.mh-error-state p {
+    color: #64748b;
+    max-width: 400px;
+    margin: 0 0 24px 0;
+    line-height: 1.6;
+}
+
+.mh-retry-btn {
+    background: #008eb4;
+    color: #ffffff;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.mh-retry-btn:hover {
+    background: #007696;
+    transform: scale(1.05);
+}
+
+/* ============================================================
+   RESPONSIVE BREAKPOINTS
+   ============================================================ */
+
+@media (max-width: 767px) {
+    .mh-page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .mh-refresh-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .mh-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+
+    .mh-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+    }
+
+    .mh-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .mh-hospital-name {
+        font-size: 1.05rem;
+    }
+
+    .mh-progress-container {
+        gap: 12px;
+    }
+
+    .mh-availability-text {
+        display: none;
+        /* Hide on very small screens to save space */
+    }
+}

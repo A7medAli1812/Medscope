@@ -1,407 +1,369 @@
-
-import React, { useState } from "react";
-import "./SignUpForm.css";
+import React, { useState, useMemo, useCallback } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import AuthCard from "../components/AuthCard";
 import SuccessModal from "../components/SuccessModal";
-import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import "react-datepicker/dist/react-datepicker.css";
-import { ar } from "date-fns/locale";
-import { enUS } from "date-fns/locale";
-import DatePicker from "react-datepicker";
+import Loader from "../components/Loader";
+import { signupUser } from "../patient/services/authService.js";
+import "./Auth.css";
 
-const SignUpForm = () => {
-  const { t, i18n } = useTranslation();
-  const [selectedDate, setSelectedDate] = useState(null);
+const EMAIL_RE = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/;
+const EGYPT_PHONE_RE = /^(\+20|01)[0-9]{9,10}$/;
 
-  //  detect current language
-  const currentLang = i18n.language;
-  const currentLocale = currentLang === "ar" ? ar : enUS;
-  const isRTL = currentLang === "ar";
+const getPasswordStrength = (password) => {
+  if (!password) return { level: "", label: "", width: "0%" };
 
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    phone: "",
-    gender: "",
-    dateOfBirth: "",
-    agreeToTerms: false,
-  });
+  const hasLower = /[a-z]/.test(password);
+  const hasUpper = /[A-Z]/.test(password);
+  const hasNumber = /[0-9]/.test(password);
+  const hasSpecial = /[^A-Za-z0-9]/.test(password);
+  const isLong = password.length >= 8;
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [passwordStrength, setPasswordStrength] = useState("");
-  const [errors, setErrors] = useState({});
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  if (isLong && hasLower && hasUpper && hasNumber && hasSpecial)
+    return { level: "strong", label: "Strong", width: "100%" };
+  if (isLong && (hasLower || hasUpper) && hasNumber)
+    return { level: "medium", label: "Medium", width: "66%" };
+  return { level: "weak", label: "Weak", width: "33%" };
+};
 
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+const validateField = (name, value, extra = {}) => {
+  switch (name) {
+    case "firstName":
+    case "lastName":
+      if (!value.trim()) return `${name === "firstName" ? "First" : "Last"} name is required.`;
+      if (value.trim().length < 2) return `${name === "firstName" ? "First" : "Last"} name must be at least 2 characters.`;
+      return "";
+    case "email":
+      if (!value.trim()) return "Email is required.";
 
-    if (errors[name]) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: "",
-      }));
-    }
+      if (value.includes(" "))
+        return "Email cannot contain spaces.";
 
-    if (name === "password") {
-      checkPasswordStrength(value);
-    }
-  };
+      if (!EMAIL_RE.test(value))
+        return "Please enter a valid email address (example: name@email.com).";
 
-  const checkPasswordStrength = (password) => {
-    if (password.length === 0) {
-      setPasswordStrength("");
-      return;
-    }
+      if (value.length > 100)
+        return "Email is too long.";
 
-    let strength = 0;
-    if (password.length >= 6) strength++;
-    if (/[A-Z]/.test(password)) strength++;
-    if (/[0-9]/.test(password)) strength++;
-    if (/[^A-Za-z0-9]/.test(password)) strength++;
+      return "";
+    case "password":
+      if (!value) return "Password is required.";
+      if (value.length < 8) return "Password must be at least 8 characters.";
+      if (!/[A-Z]/.test(value)) return "Password must include an uppercase letter.";
+      if (!/[a-z]/.test(value)) return "Password must include a lowercase letter.";
+      if (!/[0-9]/.test(value)) return "Password must include a number.";
+      return "";
+    case "confirmPassword":
+      if (!value) return "Please confirm your password.";
+      if (value !== extra.password) return "Passwords do not match.";
+      return "";
+    case "phone":
+      if (!value.trim()) return "Phone number is required.";
+      if (!EGYPT_PHONE_RE.test(value.replace(/\s/g, ""))) return "Enter a valid Egyptian phone (e.g. +201xxxxxxxxx).";
+      return "";
+    case "dob":
+      if (!value) return "Date of birth is required.";
 
-    if (strength < 2) setPasswordStrength("weak");
-    else if (strength < 3) setPasswordStrength("medium");
-    else setPasswordStrength("strong");
-  };
-
-  const validateForm = () => {
-    const newErrors = {};
-
-    //  First Name
-    if (!formData.firstName.trim()) newErrors.firstName = t("signup.fnamevalidation");
-
-    //  Last Name
-    if (!formData.lastName.trim()) newErrors.lastName = t("signup.lnamevalidation");
-
-    //  Email
-    if (!formData.email.trim()) newErrors.email = t("signup.emailvalidation");
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
-      newErrors.email = t("signup.emailformatvalidation");
-
-    //  Password
-    if (!formData.password) newErrors.password = t("signup.passwordvalidation");
-    else if (formData.password.length < 6) newErrors.password = t("signup.psw1validation");
-    else if (!/[A-Z]/.test(formData.password)) newErrors.password = t("signup.psw2validation");
-    else if (!/\d/.test(formData.password)) newErrors.password = t("signup.psw3validation");
-
-    //  Confirm Password
-    if (!formData.confirmPassword) newErrors.confirmPassword = t("signup.confirmPasswordvalidation");
-    else if (formData.password !== formData.confirmPassword)
-      newErrors.confirmPassword = t("signup.confirmPasswordMatchvalidation");
-
-    //  Phone
-    if (!formData.phone.trim()) newErrors.phone = t("signup.phonevalidation");
-    else if (!/^\+20\d{10}$/.test(formData.phone)) newErrors.phone = t("signup.phoneformatvalidation");
-
-    //  Gender
-    if (!formData.gender) newErrors.gender = t("signup.gendervalidation");
-
-    //  Date of Birth
-    if (!formData.dateOfBirth) {
-      newErrors.dateOfBirth = t("signup.dobvalidation");
-    } else {
-      const birthDate = new Date(formData.dateOfBirth);
+      const birthDate = new Date(value);
       const today = new Date();
 
-      if (isNaN(birthDate.getTime())) {
-        newErrors.dateOfBirth = t("signup.dobvalidation");
-      } else {
-        let age = today.getFullYear() - birthDate.getFullYear();
-        const monthDiff = today.getMonth() - birthDate.getMonth();
-        const dayDiff = today.getDate() - birthDate.getDate();
+      if (birthDate > today) return "Date of birth cannot be in the future.";
 
-        if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
-          age--;
-        }
+      const age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
 
-        if (age < 13) newErrors.dateOfBirth = t("signup.dobagevalidation");
-        else if (age > 120) newErrors.dateOfBirth = t("signup.dobfuturevalidation");
-      }
-    }
+      const realAge =
+        monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())
+          ? age - 1
+          : age;
 
-    //  Terms
-    if (!formData.agreeToTerms) newErrors.agreeToTerms = t("signup.agreevalidation");
+      if (realAge < 18) return "You must be at least 18 years old.";
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+      return "";
+    case "terms":
+      if (!value) return "You must accept the Terms & Conditions.";
+      return "";
+    default:
+      return "";
+  }
+};
 
-  const handleSubmit = (e) => {
+const SignUpForm = () => {
+  const navigate = useNavigate();
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [phone, setPhone] = useState("");
+  const [gender, setGender] = useState("male");
+  const [dob, setDob] = useState("");
+  const [termsAccepted, setTermsAccepted] = useState(false);
+
+  const [touched, setTouched] = useState({});
+  const [submitAttempted, setSubmitAttempted] = useState(false);
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const strength = useMemo(() => getPasswordStrength(password), [password]);
+  const markTouched = useCallback((field) => setTouched((prev) => ({ ...prev, [field]: true })), []);
+
+  const errors = useMemo(() => ({
+    firstName: validateField("firstName", firstName),
+    lastName: validateField("lastName", lastName),
+    email: validateField("email", email),
+    password: validateField("password", password),
+    confirmPassword: validateField("confirmPassword", confirmPassword, { password }),
+    phone: validateField("phone", phone),
+    dob: validateField("dob", dob),
+    terms: validateField("terms", termsAccepted),
+  }), [firstName, lastName, email, password, confirmPassword, phone, dob, termsAccepted]);
+
+  const shouldShow = (field) => (touched[field] || submitAttempted) && errors[field];
+  const isFormValid = Object.values(errors).every((e) => !e) && strength.level !== "weak";
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(" handleSubmit called");
-    const isValid = validateForm();
-    console.log(" Validation Result:", isValid);
+    setSubmitAttempted(true);
+    if (!isFormValid) return;
+    await handleConfirm();
   };
 
-  const closeSuccessModal = () => {
-    setShowSuccessModal(false);
-    setFormData({
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      phone: "",
-      gender: "",
-      dateOfBirth: "",
-      agreeToTerms: false,
-    });
-    setSelectedDate(null);
-    setErrors({});
-    setPasswordStrength("");
-  };
+  const handleConfirm = async () => {
+  try {
+    setLoading(true);
+
+    const data = await signupUser(
+      firstName,
+      lastName,
+      email,
+      password,
+      confirmPassword,
+      phone,
+      gender,
+      dob
+    );
+
+    localStorage.setItem("token", data.token);
+    setShowSuccess(true);
+
+  } catch (error) {
+    alert(error.message);
+  } finally {
+    setLoading(false);
+  }
+};
+
+  const fieldError = (field) => shouldShow(field) ? (
+    <span className="field-error"><i className="fas fa-exclamation-circle"></i> {errors[field]}</span>
+  ) : null;
+
+  const inputGroupClass = (field) => `auth-input-group${shouldShow(field) ? " input-error" : ""}`;
 
   return (
-    <div className="signup-form-container">
-      <div className="signup-form-card">
-        <div className="form-header">
-          <h1 className="form-title">{t("signup.title")}</h1>
-        </div>
-
-        <form onSubmit={handleSubmit} className="signup-form">
-          {/* first + last name */}
+    <>
+      <AuthCard
+        title="Sign Up"
+        subtitle="Join our healthcare platform to manage your medical records and appointments"
+        icon="fa-solid fa-user-doctor"
+        isSignup={true}
+      >
+        <form onSubmit={handleSubmit} noValidate>
+          {/* First & Last Name */}
           <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="firstName" className="form-labell">
-                {t("signup.firstName")}
-              </label>
-              <div className="input-container">
-                <i className="fas fa-user input-icon"></i>
+            <div className="form-col">
+              <label className="auth-label">First Name</label>
+              <div className={inputGroupClass("firstName")}>
+                <span className="auth-input-icon"><i className="fas fa-user"></i></span>
                 <input
                   type="text"
-                  id="firstName"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleInputChange}
-                  placeholder={t("signup.firstName")}
-                  className={`form-inputt ${errors.firstName ? "error" : ""}`}
+                  className="auth-input"
+                  placeholder="First name"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  onBlur={() => markTouched("firstName")}
                 />
               </div>
-              {errors.firstName && <span className="error-message">{errors.firstName}</span>}
+              {fieldError("firstName")}
             </div>
-
-            <div className="form-group">
-              <label htmlFor="lastName" className="form-labell">
-                {t("signup.lastName")}
-              </label>
-              <div className="input-container">
-                <i className="fas fa-user input-icon"></i>
+            <div className="form-col">
+              <label className="auth-label">Last Name</label>
+              <div className={inputGroupClass("lastName")}>
+                <span className="auth-input-icon"><i className="fas fa-user"></i></span>
                 <input
                   type="text"
-                  id="lastName"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleInputChange}
-                  placeholder={t("signup.lastName")}
-                  className={`form-inputt ${errors.lastName ? "error" : ""}`}
+                  className="auth-input"
+                  placeholder="Last name"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  onBlur={() => markTouched("lastName")}
                 />
               </div>
-              {errors.lastName && <span className="error-message">{errors.lastName}</span>}
+              {fieldError("lastName")}
             </div>
           </div>
 
-          {/* email */}
-          <div className="form-group">
-            <label htmlFor="email" className="form-labell">
-              {t("signup.email")}
-            </label>
-            <div className="input-container">
-              <i className="fas fa-envelope input-icon"></i>
+          {/* Email */}
+          <div className="auth-form-group">
+            <label className="auth-label">Email Address</label>
+            <div className={inputGroupClass("email")}>
+              <span className="auth-input-icon danger"><i className="fas fa-envelope"></i></span>
               <input
                 type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                placeholder={t("signup.email")}
-                className={`form-inputt ${errors.email ? "error" : ""}`}
+                className="auth-input"
+                placeholder="Enter your email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                onBlur={() => markTouched("email")}
               />
             </div>
-            {errors.email && <span className="error-message">{errors.email}</span>}
+            {fieldError("email")}
           </div>
 
-          {/* password */}
-          <div className="form-group">
-            <label htmlFor="password" className="form-labell">
-              {t("signup.password")}
-            </label>
-            <div className="input-container">
-              <i className="fas fa-lock input-icon"></i>
+          {/* Password */}
+          <div className="auth-form-group">
+            <label className="auth-label">Password</label>
+            <div className={inputGroupClass("password")}>
+              <span className="auth-input-icon primary"><i className="fas fa-lock"></i></span>
               <input
                 type={showPassword ? "text" : "password"}
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleInputChange}
-                placeholder={t("signup.password")}
-                className={`form-inputt ${errors.password ? "error" : ""}`}
+                className="auth-input"
+                placeholder="Create a strong password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onBlur={() => markTouched("password")}
               />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="password-toggle"
-              >
-                <i className={`fas ${showPassword ? "fa-eye-slash" : "fa-eye"} password-toggle-icon`}></i>
+              <button type="button" className="auth-btn-icon" onClick={() => setShowPassword(!showPassword)}>
+                <i className={`fas fa-eye${showPassword ? "-slash" : ""}`}></i>
               </button>
             </div>
-            {passwordStrength && (
-              <div className={`password-strength ${passwordStrength}`}>
-                <span>
-                  {passwordStrength === "weak"
-                    ? t("signup.strength1")
-                    : passwordStrength === "medium"
-                    ? t("signup.strength2")
-                    : t("signup.strength3")}
-                </span>
+            <div className="password-strength-wrapper">
+              <div className="password-strength-bar">
+                <div
+                  className={`password-strength-fill ${strength.level}`}
+                  style={{ width: strength.width }}
+                ></div>
               </div>
-            )}
-            {errors.password && <span className="error-message">{errors.password}</span>}
+              <span className={`password-strength-text ${strength.level}`}>
+                {strength.label || "—"}
+              </span>
+            </div>
+            <span className="password-hint">Must be at least 8 characters with one uppercase letter, one number, and one special character</span>
+            {fieldError("password")}
           </div>
 
-          {/* confirm password */}
-          <div className="form-group">
-            <label htmlFor="confirmPassword" className="form-labell">
-              {t("signup.confirmPassword")}
-            </label>
-            <div className="input-container">
-              <i className="fas fa-lock input-icon"></i>
+          {/* Confirm Password */}
+          <div className="auth-form-group">
+            <label className="auth-label">Confirm Password</label>
+            <div className={inputGroupClass("confirmPassword")}>
+              <span className="auth-input-icon primary"><i className="fas fa-lock"></i></span>
               <input
-                type={showConfirmPassword ? "text" : "password"}
-                id="confirmPassword"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleInputChange}
-                placeholder={t("signup.confirmPassword")}
-                className={`form-inputt ${errors.confirmPassword ? "error" : ""}`}
+                type={showConfirm ? "text" : "password"}
+                className="auth-input"
+                placeholder="Confirm your password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                onBlur={() => markTouched("confirmPassword")}
               />
-              <button
-                type="button"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="password-toggle"
-              >
-                <i
-                  className={`fas ${showConfirmPassword ? "fa-eye-slash" : "fa-eye"} password-toggle-icon`}
-                ></i>
+              <button type="button" className="auth-btn-icon" onClick={() => setShowConfirm(!showConfirm)}>
+                <i className={`fas fa-eye${showConfirm ? "-slash" : ""}`}></i>
               </button>
             </div>
-            {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
+            {fieldError("confirmPassword")}
           </div>
 
-          {/* phone */}
-          <div className="form-group">
-            <label htmlFor="phone" className="form-labell">
-              {t("signup.phone")}
-            </label>
-            <div className="input-container">
-              <i className="fas fa-phone input-icon"></i>
+          {/* Phone */}
+          <div className="auth-form-group">
+            <label className="auth-label">Phone Number</label>
+            <div className={inputGroupClass("phone")}>
+              <span className="auth-input-icon danger"><i className="fas fa-phone"></i></span>
               <input
                 type="tel"
-                id="phone"
-                name="phone"
-                value={formData.phone}
-                onChange={handleInputChange}
+                className="auth-input"
                 placeholder="+20xxxxxxxxxxx"
-                className={`form-inputt ${errors.phone ? "error" : ""}`}
-                maxLength={13}
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                onBlur={() => markTouched("phone")}
               />
             </div>
-            {errors.phone && <span className="error-message">{errors.phone}</span>}
+            {fieldError("phone")}
           </div>
 
-          {/* gender */}
-          <div className="form-group">
-            <label className="form-labell">{t("signup.gender")}</label>
-            <div className="radio-group">
-              {["male", "female", "preferNotToSay"].map((g) => (
-                <label className="radio-label" key={g}>
-                  <input
-                    type="radio"
-                    name="gender"
-                    value={g}
-                    checked={formData.gender === g}
-                    onChange={handleInputChange}
-                    className="radio-input"
-                  />
-                  <span className="radio-custom"></span>
-                  {t(`signup.${g}`)}
-                </label>
-              ))}
+          {/* Gender */}
+          <div className="auth-form-group">
+            <label className="auth-label">Gender</label>
+            <div className="gender-group">
+              <label className="gender-radio">
+                <input type="radio" name="gender" value="male" checked={gender === "male"} onChange={(e) => setGender(e.target.value)} /> Male
+              </label>
+              <label className="gender-radio">
+                <input type="radio" name="gender" value="female" checked={gender === "female"} onChange={(e) => setGender(e.target.value)} /> Female
+              </label>
+              <label className="gender-radio">
+                <input type="radio" name="gender" value="preferNotToSay" checked={gender === "preferNotToSay"} onChange={(e) => setGender(e.target.value)} /> Prefer not to say
+              </label>
             </div>
-            {errors.gender && <span className="error-message">{errors.gender}</span>}
           </div>
 
-          {/* date of birth */}
-          <div className="form-group">
-            <label className="form-labell">{t("signup.dob")}</label>
-            <div className="input-container">
-              <i className="fa-solid fa-calendar input-icon calendar-click"></i>
-              <DatePicker
-                selected={selectedDate}
-                onChange={(date) => {
-                  setSelectedDate(date);
-                  setFormData((prev) => ({ ...prev, dateOfBirth: date }));
-                }}
-                placeholderText={t("signup.selectDob")}
-                locale={currentLocale}
-                dateFormat="dd/MM/yyyy"
-                className="form-inputt"
-                calendarStartDay={isRTL ? 6 : 0}
-                popperPlacement={isRTL ? "top-end" : "top-start"}
-                showMonthDropdown
-                showYearDropdown
-                dropdownMode="select"
-              />
-            </div>
-            {errors.dateOfBirth && <span className="error-message">{errors.dateOfBirth}</span>}
-          </div>
-
-          {/* agree to terms */}
-          <div className="form-group">
-            <label className="checkbox-label">
+          {/* Date of Birth */}
+          <div className="auth-form-group">
+            <label className="auth-label">Date of Birth</label>
+            <div className={inputGroupClass("dob")}>
               <input
-                type="checkbox"
-                name="agreeToTerms"
-                checked={formData.agreeToTerms}
-                onChange={handleInputChange}
-                className="checkbox-input"
+                type="date"
+                className="auth-input"
+                value={dob}
+                max={new Date().toISOString().split("T")[0]}
+                onChange={(e) => setDob(e.target.value)}
+                onBlur={() => markTouched("dob")}
               />
-              <span className="checkbox-custom"></span>
-              <span className="checkbox-text">
-                {t("signup.agreeText")}{" "}
-                <a href="#terms" className="link">
-                  {t("signup.terms")}
-                </a>{" "}
-                {t("signup.and")}{" "}
-                <a href="#privacy" className="link">
-                  {t("signup.privacy")}
-                </a>
-              </span>
-            </label>
-            {errors.agreeToTerms && <span className="error-message">{errors.agreeToTerms}</span>}
+            </div>
+            {fieldError("dob")}
           </div>
 
-          {/* submit */}
-          <button type="submit" className="submit-button">
-            <i className="fas fa-user-plus submit-icon"></i>
-            <p className="crt-acc">{t("signup.submit")}</p>
+          {/* Terms */}
+          <label className="terms-checkbox">
+            <input
+              type="checkbox"
+              checked={termsAccepted}
+              onChange={(e) => {
+                setTermsAccepted(e.target.checked);
+                markTouched("terms");
+              }}
+            />
+            <span className="terms-label">
+              I agree to the <a href="#terms" className="auth-link">Terms & Conditions</a> and <a href="#privacy" className="auth-link">Privacy Policy</a> <span className="text-danger">*</span>
+            </span>
+          </label>
+          {fieldError("terms")}
+
+          <button type="submit" className="auth-submit-btn" disabled={loading}>
+            {loading ? <i className="fas fa-spinner fa-spin"></i> : <><i className="fas fa-user-plus"></i> Create Account</>}
           </button>
 
-          <div className="Signin-link">
-            {t("signup.alreadyAccount")} <Link to="/">{t("signup.signin")}</Link>
+          <div className="text-center small-text text-muted mt-3">
+            Already have an account? <Link to="/login" className="auth-link auth-link-danger ms-1" style={{ marginLeft: "0.5rem" }}>Sign In</Link>
           </div>
         </form>
-      </div>
+      </AuthCard>
+      {/* Loader */}
+      {loading && <Loader message="Creating your account..." />}
 
-      <SuccessModal isOpen={showSuccessModal} onClose={closeSuccessModal} />
-    </div>
+      {/* Success Modal */}
+      {showSuccess && (
+        <SuccessModal
+          message="Registration Successful!"
+          onClose={() => {
+            setShowSuccess(false);
+            navigate("/login");
+          }}
+          autoDismiss={2500}
+        />
+      )}
+    </>
   );
 };
 

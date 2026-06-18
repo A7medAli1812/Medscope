@@ -1,0 +1,263 @@
+/* ==========================================================================
+   ADMIN HOME PREMIUM DESIGN SYSTEM (RESOLVED STYLE CONFLICTS)
+   ========================================================================== */
+
+.admin-home-container {
+  padding: 30px 40px;
+  background-color: #f4f8fb;
+  min-height: 100vh;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ── Header Section ── */
+.admin-home-header-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.admin-home-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #004F78;
+  margin: 0;
+}
+
+/* ── User Profile Area ── */
+.admin-home-profile-area {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background-color: transparent;
+  padding: 0;
+  box-shadow: none;
+}
+
+.notification-bell-container {
+  position: relative;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: transparent;
+  color: #004F78;
+  transition: opacity 0.2s;
+}
+
+.notification-bell-container:hover {
+  opacity: 0.8;
+}
+
+.bell-icon {
+  font-size: 20px;
+}
+
+.bell-badge {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  width: 8px;
+  height: 8px;
+  background-color: #d96c6c;
+  border-radius: 50%;
+  border: 1.5px solid #f4f8fb;
+}
+
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+  text-align: right;
+}
+
+.profile-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #004F78;
+}
+
+.profile-role {
+  font-size: 11px;
+  font-weight: 500;
+  color: #8fa3b3;
+  text-transform: capitalize;
+}
+
+/* ── Hospital Details Card (Mockup style) ── */
+.admin-home-card {
+  background-color: #CFDFEB; /* Light blue-grey card */
+  border-radius: 20px;
+  padding: 40px;
+  display: flex;
+  justify-content: space-between;
+  gap: 60px;
+  box-shadow: 0 4px 18px rgba(0, 79, 120, 0.02);
+  border: 1px solid rgba(0, 79, 120, 0.05);
+  transition: transform 0.2s;
+}
+
+.admin-home-card:hover {
+  transform: translateY(-2px);
+}
+
+.admin-home-left {
+  flex: 1.1;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.admin-home-hospital-header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  background-color: transparent !important; /* override any MultiHospitalView background */
+  padding: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  margin-bottom: 0 !important;
+}
+
+.admin-home-hospital-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+  flex-shrink: 0;
+}
+
+.admin-home-hospital-icon {
+  font-size: 24px;
+  color: #22c55e; /* Green hospital logo icon color matching mockup */
+}
+
+.admin-home-hospital-title-area {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.admin-home-hospital-name {
+  font-size: 24px;
+  font-weight: 800;
+  color: #004F78 !important;
+  margin: 0 0 4px 0 !important;
+}
+
+.admin-home-hospital-type {
+  font-size: 14px;
+  font-weight: 500;
+  color: #5b7990;
+  margin: 0;
+}
+
+/* Info List details */
+.admin-home-info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.admin-home-info-item {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  text-align: left !important;
+  gap: 14px !important;
+  font-size: 15px !important;
+  color: #004F78 !important;
+  font-weight: 600 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.admin-home-info-icon {
+  width: 20px;
+  font-size: 16px;
+  color: #004F78;
+  opacity: 0.85;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+/* ── Available Specialties (Right Side) ── */
+.admin-home-right {
+  flex: 0.9;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-home-specialties-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #004F78;
+  margin: 0 0 24px 0;
+}
+
+.admin-home-specialties-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px 24px;
+}
+
+.admin-home-specialty-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  color: #004F78;
+  font-weight: 600;
+}
+
+.admin-home-specialty-dot {
+  width: 6px;
+  height: 6px;
+  background-color: #004F78;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.no-specialties {
+  color: #5b7990;
+  font-size: 14px;
+  margin: 0;
+}
+
+.admin-home-loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  font-size: 16px;
+  color: #004F78;
+  font-weight: 600;
+  background-color: #f4f8fb;
+}
+
+/* ==========================================================================
+   RESPONSIVE OVERRIDES
+   ========================================================================== */
+
+@media (max-width: 900px) {
+  .admin-home-card {
+    flex-direction: column;
+    gap: 40px;
+    padding: 30px;
+  }
+  
+  .admin-home-specialties-grid {
+    grid-template-columns: 1fr;
+  }
+}

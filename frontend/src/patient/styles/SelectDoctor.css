@@ -1,0 +1,138 @@
+/* Reusing .booking-layout, .booking-header, .booking-wizard-wrapper, .specialty-search-wrapper, etc. from SelectSpecialty.css for consistency where applicable, but we need specific classes for the doctor list */
+
+.doctor-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    max-width: 800px;
+}
+
+.doctor-card {
+    display: flex;
+    flex-direction: column;
+    background-color: #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    gap: 16px;
+    transition: background-color 0.2s;
+}
+
+@media (min-width: 600px) {
+    .doctor-card {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+.doctor-card:hover {
+    background-color: #d1d5db;
+}
+
+.doctor-info-section {
+    display: flex;
+    gap: 16px;
+    flex: 1;
+}
+
+.doctor-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 2px solid white;
+}
+
+.doctor-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.doctor-name-title {
+    color: #004a61;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.doctor-card-specialty {
+    color: #477c98;
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+.doctor-rating {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.8rem;
+    color: #557c96;
+}
+
+.star-icon {
+    width: 14px;
+    height: 14px;
+    color: #fbbf24;
+}
+
+.star-icon.empty {
+    color: #cbd5e1;
+}
+
+.doctor-bio {
+    color: #64748b;
+    font-size: 0.8rem;
+    line-height: 1.4;
+    margin: 4px 0 0 0;
+    max-width: 480px;
+}
+
+.doctor-action-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 140px;
+}
+
+@media (min-width: 600px) {
+    .doctor-action-section {
+        align-items: flex-end;
+    }
+}
+
+.btn-view-schedule {
+    background-color: #cbd5e1;
+    color: #334155;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+}
+
+.btn-view-schedule:hover {
+    background-color: #94a3b8;
+}
+
+.btn-select-doctor {
+    background-color: #477c98;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+}
+
+.btn-select-doctor:hover {
+    background-color: #3b687f;
+}

@@ -1,0 +1,402 @@
+.review-container {
+    background-color: #e2e8f0;
+    border-radius: 12px;
+    padding: 32px;
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+}
+
+.review-header {
+    color: #004a61;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 24px 0;
+}
+
+.review-content {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+@media (min-width: 768px) {
+    .review-content {
+        flex-direction: row;
+    }
+}
+
+/* Patient Details Form Area */
+.review-form-section {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-group-review {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-row-2col {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+@media (min-width: 600px) {
+    .form-row-2col {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.review-label {
+    color: #004a61;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.review-label svg {
+    width: 16px;
+    color: #7f1d1d;
+    /* specific color from mockup */
+}
+
+.review-label .blood-icon {
+    width: 16px;
+    height: 16px;
+    color: #dc2626;
+}
+
+.review-label-blue svg {
+    color: #004a61;
+    /* Specific from mockup */
+}
+
+.review-input,
+.review-textarea {
+    width: 100%;
+    padding: 10px 16px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    color: #334155;
+    background-color: #f8fafc;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.review-input:focus,
+.review-textarea:focus {
+    border-color: #004a61;
+    background-color: white;
+}
+
+/* Readonly inputs — visually distinct, not editable */
+.review-input-readonly {
+    background-color: #f1f5f9;
+    color: #475569;
+    cursor: default;
+    border-color: #e2e8f0;
+}
+
+.review-input-readonly:focus {
+    border-color: #e2e8f0;
+    background-color: #f1f5f9;
+}
+
+/* Select dropdown — matches input style */
+.review-select {
+    width: 100%;
+    padding: 10px 16px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    color: #334155;
+    background-color: #f8fafc;
+    outline: none;
+    transition: all 0.2s;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23475569' d='M6 8.825a.5.5 0 0 1-.354-.146L2.146 5.18a.5.5 0 1 1 .708-.708L6 7.618l3.146-3.146a.5.5 0 1 1 .708.708L6.354 8.68a.5.5 0 0 1-.354.146Z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+}
+
+.review-select:focus {
+    border-color: #004a61;
+    background-color: white;
+}
+
+/* Required field indicator */
+.required-star {
+    color: #dc2626;
+    font-weight: 700;
+    margin-left: 2px;
+}
+
+.review-textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.review-textarea::placeholder {
+    color: #94a3b8;
+    font-style: italic;
+}
+
+/* Character counter below textarea */
+.notes-char-count {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    text-align: right;
+    margin-top: -4px;
+}
+
+/* Appointment Summary Card */
+.review-summary-section {
+    flex: 1;
+}
+
+.summary-card-inner {
+    background-color: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+}
+
+.summary-card-inner h3 {
+    color: #7f1d1d;
+    /* the red title in mockup */
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 16px 0;
+    text-align: center;
+}
+
+.summary-doctor-preview {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.summary-doc-img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.summary-doc-details h4 {
+    color: #004a61;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin: 0 0 2px 0;
+}
+
+.summary-doc-details p {
+    color: #64748b;
+    font-size: 0.8rem;
+    margin: 0;
+}
+
+.summary-date-time {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 16px;
+}
+
+.summary-dt-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #0f172a;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.summary-dt-row svg {
+    width: 18px;
+    color: #004a61;
+}
+
+.summary-dt-row.time-row svg {
+    color: #7f1d1d;
+}
+
+/* Bottom Actions */
+.review-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-top: 32px;
+}
+
+.btn-review-back {
+    background-color: #477c98;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-review-back:hover {
+    background-color: #3b687f;
+}
+
+.btn-review-confirm {
+    background-color: #004a61;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-review-confirm:hover:not(:disabled) {
+    background-color: #003647;
+}
+
+.btn-review-confirm:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Button spinner (inline) */
+.btn-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    display: inline-block;
+}
+
+/* ── Profile Loading State ─────────────────────────────────────────────────── */
+.profile-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 48px 0;
+}
+
+.profile-loading p {
+    color: #64748b;
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+.profile-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid #e2e8f0;
+    border-top-color: #004a61;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ── Error Banner ──────────────────────────────────────────────────────────── */
+.review-error-banner {
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #991b1b;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 16px;
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Success Overlay */
+.success-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.success-card {
+    background: white;
+    padding: 48px;
+    border-radius: 20px;
+    text-align: center;
+    max-width: 450px;
+    width: 90%;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    animation: slideUp 0.4s ease-out;
+}
+
+.success-icon {
+    width: 80px;
+    height: 80px;
+    color: #10b981;
+    margin: 0 auto 24px;
+}
+
+.success-card h2 {
+    color: #0f172a;
+    font-size: 1.75rem;
+    margin-bottom: 12px;
+}
+
+.success-card p {
+    color: #64748b;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.redirect-text {
+    margin-top: 24px;
+    font-weight: 500;
+    color: #004a61 !important;
+    font-size: 0.95rem !important;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}

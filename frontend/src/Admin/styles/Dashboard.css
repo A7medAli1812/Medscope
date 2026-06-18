@@ -1,0 +1,463 @@
+/* ==========================================================================
+   ADMIN DASHBOARD PREMIUM DESIGN SYSTEM
+   ========================================================================== */
+
+.dashboard-container {
+  padding: 30px 40px;
+  background-color: #f4f8fb;
+  min-height: 100vh;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ── Header Section ── */
+.dashboard-header-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.dashboard-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #004F78;
+  margin: 0;
+}
+
+/* ── User Profile Area (Transparent in Mockup) ── */
+.dashboard-profile-area {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background-color: transparent;
+  padding: 0;
+  box-shadow: none;
+}
+
+.notification-bell-container {
+  position: relative;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: transparent;
+  color: #004F78;
+  transition: opacity 0.2s;
+}
+
+.notification-bell-container:hover {
+  opacity: 0.8;
+}
+
+.bell-icon {
+  font-size: 20px;
+}
+
+.bell-badge {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  width: 8px;
+  height: 8px;
+  background-color: #d96c6c;
+  border-radius: 50%;
+  border: 1.5px solid #f4f8fb;
+}
+
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+  text-align: right;
+}
+
+.profile-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #004F78;
+}
+
+.profile-role {
+  font-size: 11px;
+  font-weight: 500;
+  color: #8fa3b3;
+  text-transform: capitalize;
+}
+
+/* ── Stats Cards Panel (White background wrapper in Mockup) ── */
+.stats-cards-wrapper {
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 18px rgba(0, 79, 120, 0.02);
+  border: 1px solid rgba(0, 79, 120, 0.05);
+}
+
+.stats-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.stat-card {
+  background-color: #CFDFEB; /* Light blue-grey matching mockup */
+  border-radius: 12px;
+  padding: 22px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.2s ease;
+  border: none;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+}
+
+.stat-card-content h4 {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #004F78;
+  margin: 0 0 10px 0;
+}
+
+.stat-card-content h2 {
+  font-size: 30px;
+  font-weight: 800;
+  color: #004F78;
+  margin: 0;
+  line-height: 1;
+}
+
+.stat-card .stat-icon {
+  font-size: 24px;
+  color: #004F78;
+  opacity: 0.9;
+}
+
+/* ── Charts Row Container ── */
+.charts-container {
+  display: grid;
+  grid-template-columns: 1.1fr 1.55fr;
+  gap: 36px;
+  align-items: stretch;
+}
+
+/* ── Chart Card Shared Layout ── */
+.chart-card {
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 6px 20px rgba(0, 79, 120, 0.03);
+  border: 1px solid rgba(0, 79, 120, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.chart-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.chart-card h4 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #004F78;
+  margin: 0;
+}
+
+.chart-selects {
+  display: flex;
+  gap: 8px;
+}
+
+.chart-card select {
+  padding: 4px 24px 4px 10px;
+  border: 1px solid rgba(0, 79, 120, 0.15);
+  border-radius: 20px;
+  font-size: 12px;
+  color: #004F78;
+  background-color: #ffffff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%23004F78' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: border-color 0.2s;
+  box-shadow: 0 1px 4px rgba(0, 79, 120, 0.03);
+}
+
+.chart-card select:focus {
+  border-color: #004F78;
+}
+
+/* ── Left Transparent Pie Chart Card (Transparent in Mockup) ── */
+.chart-card-transparent {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.chart-card-transparent .chart-card-header {
+  margin-bottom: 24px;
+}
+
+.chart-card-transparent h4 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #004F78;
+  margin: 0;
+  line-height: 24px;
+}
+
+/* Horizontal alignment of Legend & Donut Chart */
+.pie-chart-layout {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+}
+
+.pie-legend {
+  flex: 1.2;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0;
+}
+
+.pie-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #004F78;
+  font-weight: 500;
+}
+
+.pie-legend-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.pie-legend-name {
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pie-legend-value {
+  font-weight: 700;
+  color: #5b7990;
+}
+
+.pie-chart-wrapper {
+  flex: 1.8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 230px;
+}
+
+/* ── Bar Chart Subtitle & Legend Layout ── */
+.bar-chart-title-area {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.bar-chart-subtitle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.chart-total-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #004F78;
+  margin: 0;
+}
+
+.chart-total-label span {
+  font-weight: 800;
+}
+
+.bar-legend {
+  display: flex;
+  gap: 16px;
+}
+
+.bar-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #004F78;
+  font-weight: 600;
+}
+
+.bar-legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.bar-legend-dot.new-patients {
+  background-color: #004F78;
+}
+
+.bar-legend-dot.old-patients {
+  background-color: #CFDFEB;
+}
+
+.bar-chart-wrapper {
+  margin-top: 15px;
+  min-height: 260px;
+}
+
+/* ── Patients Chart Pagination ── */
+.chart-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #eef3f7;
+}
+
+.pagination-controls-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.chart-pagination button {
+  background-color: transparent;
+  color: #004F78;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+
+.chart-pagination button:hover:not(:disabled) {
+  background-color: #f0f5fa;
+}
+
+.chart-pagination button:disabled {
+  color: #c4d0da;
+  cursor: not-allowed;
+}
+
+.page-numbers {
+  display: flex;
+  gap: 6px;
+}
+
+.page-num-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50% !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 !important;
+  font-size: 12px;
+  font-weight: 700 !important;
+  border: none;
+  background: transparent;
+  color: #004F78;
+}
+
+.page-num-btn.active {
+  background-color: #004F78 !important;
+  color: #ffffff !important;
+}
+
+/* ── Custom Chart Tooltips ── */
+.custom-chart-tooltip {
+  background-color: #ffffff;
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 4px 18px rgba(0, 79, 120, 0.12);
+  border: 1px solid rgba(0, 79, 120, 0.08);
+  font-size: 12px;
+}
+
+.tooltip-label {
+  margin: 0 0 6px 0;
+  color: #004F78;
+}
+
+.tooltip-item {
+  margin: 0;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   RESPONSIVE OVERRIDES
+   ========================================================================== */
+
+@media (max-width: 1250px) {
+  .charts-container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .pie-chart-layout {
+    justify-content: flex-start;
+    gap: 40px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .stats-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 650px) {
+  .dashboard-container {
+    padding: 20px;
+  }
+  
+  .dashboard-header-block {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  
+  .stats-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .pie-chart-layout {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

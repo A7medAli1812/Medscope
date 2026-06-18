@@ -1,0 +1,414 @@
+/* ================= PAGE ================= */
+.da-page {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  background: #eef3f7;
+  font-family: "Inter", sans-serif;
+  overflow: hidden;
+}
+
+/* ================= SIDEBAR ================= */
+.da-sidebar {
+  width: 240px;
+  min-width: 240px;
+  background: #0a5a87;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 24px 0;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.da-sidebar-top {
+  display: flex;
+  flex-direction: column;
+}
+
+.da-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 26px 34px;
+}
+
+.da-logo-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: #2aa7df;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.da-logo-text {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.da-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.da-nav-item {
+  padding: 16px 26px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #cfe6f4;
+  transition: 0.25s ease;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.da-nav-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.da-nav-active {
+  background: rgba(255, 255, 255, 0.14);
+  border-left: 4px solid #2fc0ff;
+  color: white;
+}
+
+.da-logout {
+  padding: 22px 26px;
+  color: white;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+/* ================= MAIN ================= */
+.da-main {
+  flex: 1;
+  padding: 34px;
+  overflow-x: hidden;
+  min-width: 0;
+}
+
+/* ================= TOPBAR ================= */
+.da-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 34px;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.da-page-title {
+  font-size: 34px;
+  font-weight: 700;
+  color: #0d4061;
+  margin-bottom: 6px;
+}
+
+.da-subtitle {
+  color: #7a94a8;
+  font-size: 14px;
+}
+
+.da-profile {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: white;
+  padding: 10px 16px;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+
+.da-profile-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.da-profile h4 {
+  font-size: 15px;
+  color: #0d4061;
+  margin: 0;
+}
+
+.da-profile span {
+  font-size: 13px;
+  color: #7a94a8;
+}
+
+/* ================= CARD ================= */
+.da-card {
+  background: linear-gradient(to bottom, #dfeaf2, #d6e3ec);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+  width: 100%;
+  overflow: hidden;
+}
+
+/* ================= HEADER ================= */
+.da-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 26px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.da-card-title {
+  font-size: 26px;
+  color: #0d4061;
+  font-weight: 700;
+}
+
+.da-card-subtitle {
+  color: #6f8ba0;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+/* ================= TABS ================= */
+.da-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.da-tab {
+  border: none;
+  background: #e6edf3;
+  color: #6d8395;
+  padding: 11px 24px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s ease;
+  font-size: 14px;
+}
+
+.da-tab:hover {
+  transform: translateY(-1px);
+}
+
+.da-tab-active {
+  background: white !important;
+  color: #0a5a87 !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+
+/* ================= TABLE ================= */
+.da-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 16px;
+}
+
+.da-table {
+  width: 100%;
+  min-width: 950px;
+  border-collapse: collapse;
+}
+
+.da-table th {
+  text-align: left;
+  padding: 18px 14px;
+  color: #0a5a87;
+  font-size: 14px;
+  font-weight: 700;
+  border-bottom: 2px solid #aac5d7;
+  white-space: nowrap;
+}
+
+.da-table td {
+  padding: 18px 14px;
+  border-bottom: 1px solid #bfd3df;
+  color: #4e6a7d;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.da-table tr:last-child td {
+  border-bottom: none;
+}
+
+.da-patient-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 180px;
+}
+
+.da-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* ================= VISIT BADGE ================= */
+.da-visit-badge {
+  background: rgba(10, 90, 135, 0.1);
+  color: #0a5a87;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+/* ================= ACTIONS ================= */
+.da-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.da-btn-details,
+.da-btn-visit {
+  border: none;
+  padding: 9px 18px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+
+.da-btn-details {
+  background: #2f81ac;
+  color: white;
+}
+
+.da-btn-details:hover {
+  background: #23698d;
+}
+
+.da-btn-visit {
+  background: white;
+  color: #2f81ac;
+}
+
+.da-btn-visit:hover {
+  background: #f2f7fa;
+}
+
+/* ================= PAGINATION ================= */
+.da-pagination {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 14px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.da-pages {
+  display: flex;
+  gap: 8px;
+}
+
+/* Previous + Next */
+.da-page-nav {
+  border: none;
+  background: #d7e5ee;
+  color: #0a5a87;
+  height: 40px;
+  padding: 0 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.da-page-nav:hover {
+  background: #c4d8e6;
+}
+
+/* Numbers */
+.da-page-btn {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 10px;
+  background: #d7e5ee;
+  color: #0a5a87;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+
+.da-page-btn:hover {
+  background: #c4d8e6;
+}
+
+.da-page-active {
+  background: #0a5a87 !important;
+  color: white !important;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 1200px) {
+  .da-main {
+    padding: 28px;
+  }
+
+  .da-card {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 992px) {
+  .da-sidebar {
+    width: 210px;
+    min-width: 210px;
+  }
+
+  .da-page-title {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 768px) {
+  .da-page {
+    flex-direction: column;
+  }
+
+  .da-sidebar {
+    width: 100%;
+    min-width: 100%;
+    height: auto;
+  }
+
+  .da-main {
+    padding: 20px;
+  }
+
+  .da-topbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .da-card {
+    padding: 20px;
+  }
+
+  .da-pagination {
+    justify-content: center;
+  }
+}

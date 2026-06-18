@@ -1,117 +1,1597 @@
-/* Global Reset and Base Styles */
-
+/* ================= Global Reset ================= */
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
-  overflow: hidden; /* Remove scrollbar completely */
-  height: 100%;
-}
-
+/* ================= Html & Body ================= */
+html,
 body {
-  height: 100%;
-  overflow: hidden; /* Remove scrollbar completely */
-  margin: 0;
-  padding: 0;
-  /* background-image: url('/background.jpg'); */
-  /* background-size: cover; */
-  /* background-position: center; */
-  /* background-repeat: no-repeat; */
+    width: 100%;
+    height: 100%;
+    font-family: 'Inter', sans-serif;
+    background-color: #e1eff8;
+
 }
 
-html[dir="rtl"] {
-  direction: rtl;
-  text-align: right;
+/* ================= Links ================= */
+a {
+    text-decoration: none;
+    color: inherit;
 }
 
-html[dir="ltr"] {
-  direction: ltr;
-  text-align: left;
+/* ================= Buttons ================= */
+button {
+    cursor: pointer;
+    border: none;
+    outline: none;
+    font-family: inherit;
 }
 
-/* لو عندك header أو footer بيحتوي أيقونات */
-.header, .footer {
-  transition: all 0.3s ease;
+/* ================= Input & Textarea ================= */
+input,
+textarea {
+    font-family: inherit;
+    outline: none;
 }
 
-
-/* CSS Variables for Light and Dark Themes */
-:root {
-  /* Light Theme Variables */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
-  --bg-tertiary: #f1f5f9;
-  --text-primary: #1e293b;
-  --text-secondary: #64748b;
-  --text-muted: #94a3b8;
-  --border-color: #e2e8f0;
-  --border-hover: #cbd5e1;
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  --accent-primary: #084668;
-  --accent-hover: #2563eb;
-  --accent-light: #dbeafe;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --error: #ef4444;
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+/* ================= Images ================= */
+img {
+    display: block;
+    max-width: 100%;
+    height: auto;
 }
 
-/* Dark Theme Variable */
-[data-theme="dark"] {
-  --bg-primary: #0a0a0a;
-  --bg-secondary: #111111;
-  --bg-tertiary: #1a1a1a; 
-  
-  --text-primary: #f9fafb;
-  --text-secondary: #cbd5e1;
-  --text-muted: #9ca3af;
-  
-  --border-color: #2a2a2a;
-  --border-hover: #3a3a3a; 
-  
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.7);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.8);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.85);
-  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.9);
-  
-  --accent-primary: #0ea5e9; 
-  --accent-hover: #38bdf8; 
-  --accent-light: #1e3a8a; 
-  
-  --success: #22c55e;
-  --warning: #eab308; 
-    --error: #ef4444;
-  
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Global Transitions */
-* {
-  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-              color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-              border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-              box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Scrollbar Styles */
+/* ================= Scrollbar Optional ================= */
 ::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+    width: 8px;
 }
 
-html, body {
-  overflow-y: scroll; /* يفضل دا بدل auto */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* Internet Explorer و Edge القديم */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
 }
 
-body {
-  overscroll-behavior: contain;
-  touch-action: pan-y;
+::-webkit-scrollbar-thumb {
+    background: #c4d8e4;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #004f78;
+}
+
+/* ================= Dark Mode variables & overrides ================= */
+:root {
+  --bg-color: #e1eff8;
+  --text-color: #2c3e50;
+  --text-muted: #7f8c8d;
+  --card-bg: #ffffff;
+  --card-header-bg: #f5f9fc;
+  --border-color: #d1e2ee;
+  --input-bg: #ffffff;
+  --table-header-bg: #eef5fa;
+  --table-row-hover: #f5faff;
+  --modal-bg: #ffffff;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+html.dark {
+  --bg-color: #0b0f19;
+  --text-color: #e6ebf5;
+  --text-muted: #94a3b8;
+  --card-bg: #111827;
+  --card-header-bg: #1f2937;
+  --border-color: #374151;
+  --input-bg: #1f2937;
+  --table-header-bg: #1f2937;
+  --table-row-hover: #1e293b;
+  --modal-bg: #111827;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Global Selectors applying variables in dark mode */
+html.dark body {
+  background-color: var(--bg-color) !important;
+  color: var(--text-color) !important;
+}
+
+/* Sidebar and Header overrides in Dark Mode */
+html.dark .super-sidebar, 
+html.dark .pt-sidebar,
+html.dark .doc-sidebar,
+html.dark .admin-sidebar,
+html.dark .sidebar,
+html.dark .doc-sidebar-block,
+html.dark .pt-sidebar-top {
+  background: #0d111c !important;
+  border-right: 1px solid var(--border-color) !important;
+}
+
+html.dark .super-sidebar-header {
+  background: #090d16 !important;
+}
+
+html.dark .super-nav-item,
+html.dark .sidebar-nav a,
+html.dark .sidebar-nav span,
+html.dark .pt-nav-item,
+html.dark .pt-nav-item span,
+html.dark .logout-btn,
+html.dark .logout-btn span {
+  color: #94a3b8 !important;
+}
+
+html.dark .super-nav-item:hover,
+html.dark .sidebar-nav li:hover,
+html.dark .sidebar-nav li:hover a,
+html.dark .sidebar-nav li:hover span,
+html.dark .pt-nav-item:hover,
+html.dark .pt-nav-item:hover span,
+html.dark .logout-btn:hover,
+html.dark .logout-btn:hover span {
+  background: #1e293b !important;
+  color: #ffffff !important;
+}
+
+html.dark .super-nav-item.active,
+html.dark .sidebar-nav li.active,
+html.dark .sidebar-nav li.active a,
+html.dark .sidebar-nav li.active span,
+html.dark .pt-nav-item.pt-nav-active,
+html.dark .pt-nav-item.pt-nav-active span {
+  background: #1e293b !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+html.dark .super-right,
+html.dark .admin-layout,
+html.dark .admin-content,
+html.dark .pt-main,
+html.dark .pt-page,
+html.dark .doc-page,
+html.dark .settings-page {
+  background: var(--bg-color) !important;
+  color: var(--text-color) !important;
+}
+
+html.dark .super-header,
+html.dark .pt-topbar,
+html.dark .doc-header-block,
+html.dark .admin-header-block,
+html.dark .header {
+  background-color: #0d111c !important;
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+html.dark .super-user-name,
+html.dark .profile-name,
+html.dark .profile-details span {
+  color: var(--text-color) !important;
+}
+
+/* Page titles and text overrides */
+html.dark h1, html.dark h2, html.dark h3, html.dark h4, html.dark h5, html.dark h6,
+html.dark .admin-table th, html.dark .hospital-table th, html.dark .doc-table th, html.dark .pt-table th,
+html.dark .super-header-title, html.dark .settings-title, html.dark .pt-page-title, html.dark .doc-page-title,
+html.dark .card-title, html.dark .table-card-header, html.dark .new-modal-topbar span {
+  color: var(--text-color) !important;
+}
+
+html.dark p, html.dark span, html.dark td, html.dark li, html.dark label,
+html.dark .super-header-subtitle, html.dark .settings-subtitle, html.dark .readonly {
+  color: var(--text-color) !important;
+}
+
+/* Cards & Modals */
+html.dark .admin-table-wrapper,
+html.dark .hospital-table-wrapper,
+html.dark .doc-card-wrapper,
+html.dark .doc-card,
+html.dark .pt-card,
+html.dark .settings-card,
+html.dark .admin-patients-card,
+html.dark .admin-patients-card-wrapper,
+html.dark .pt-card-header,
+html.dark .new-modal-body {
+  background-color: var(--card-bg) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: var(--shadow) !important;
+  color: var(--text-color) !important;
+}
+
+html.dark .new-modal,
+html.dark .new-success-modal,
+html.dark .confirm-modal-content,
+html.dark .success-modal-content,
+html.dark .edit-modal-content,
+html.dark .modal-content {
+  background-color: var(--modal-bg) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+html.dark .modal-overlay {
+  background: rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Input elements */
+html.dark input,
+html.dark select,
+html.dark textarea,
+html.dark .search-box input,
+html.dark .doc-search-input,
+html.dark .pt-search,
+html.dark .new-form-field input,
+html.dark .new-form-field select,
+html.dark .new-form-field textarea,
+html.dark .filter-select,
+html.dark .doc-filter-select,
+html.dark .gender-select-filter,
+html.dark .action-select {
+  background-color: var(--input-bg) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+/* Table overrides */
+html.dark table,
+html.dark .admin-table,
+html.dark .hospital-table,
+html.dark .doc-table,
+html.dark .pt-table,
+html.dark .admin-patients-table {
+  background-color: var(--card-bg) !important;
+  color: var(--text-color) !important;
+  border-collapse: collapse;
+}
+
+html.dark tr {
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+html.dark tr:hover {
+  background-color: var(--table-row-hover) !important;
+}
+
+html.dark th {
+  background-color: var(--table-header-bg) !important;
+  color: var(--text-color) !important;
+  border-bottom: 2px solid var(--border-color) !important;
+}
+
+html.dark td {
+  color: var(--text-color) !important;
+}
+
+/* Public landing/landing page specific dark overrides */
+html.dark .hero-section,
+html.dark .partners-section,
+html.dark .features-section,
+html.dark .tools-section,
+html.dark .footer {
+  background-color: #0b0f19 !important;
+  color: var(--text-color) !important;
+}
+
+/* Settings Page Dark Mode Fixes */
+html.dark .settings-card,
+html.dark .reports-card {
+  background-color: var(--card-bg) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: var(--shadow) !important;
+}
+
+html.dark .info-field p,
+html.dark .info-field p.readonly,
+html.dark .notif-item {
+  background-color: var(--input-bg) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+html.dark .toggle {
+  background-color: var(--input-bg) !important;
+  border-color: var(--border-color) !important;
+}
+
+html.dark .toggle.on {
+  background-color: #004f78 !important;
+  border-color: #004f78 !important;
+}
+
+/* Recharts Dark Mode SVG Fixes */
+html.dark g.recharts-cartesian-axis-tick text {
+  fill: var(--text-color) !important;
+}
+
+html.dark line.recharts-cartesian-grid-horizontal,
+html.dark line.recharts-cartesian-grid-vertical {
+  stroke: var(--border-color) !important;
+}
+
+html.dark .recharts-default-tooltip {
+  background-color: var(--modal-bg) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-color) !important;
+}
+
+html.dark .recharts-tooltip-item {
+  color: var(--text-color) !important;
+}
+
+/* Search Box Dark Mode Fixes */
+html.dark .search-box,
+html.dark .search-box-wrapper,
+html.dark .doc-search-wrapper,
+html.dark .pt-search-wrap {
+  background-color: var(--input-bg) !important;
+  background: var(--input-bg) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+html.dark .search-box input,
+html.dark .search-box-wrapper input,
+html.dark .doc-search-wrapper input,
+html.dark .pt-search-wrap input,
+html.dark .search-box input:focus,
+html.dark .search-box-wrapper input:focus,
+html.dark .doc-search-wrapper input:focus,
+html.dark .pt-search-wrap input:focus {
+  background-color: transparent !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  color: var(--text-color) !important;
+}
+
+html.dark .search-box i,
+html.dark .search-box-wrapper .search-icon,
+html.dark .doc-search-wrapper .doc-search-icon,
+html.dark .pt-search-wrap i {
+  color: var(--text-muted) !important;
+}
+
+/* Home Page Dark Mode Fixes */
+html.dark .home-page {
+  background-color: var(--bg-color) !important;
+  color: var(--text-color) !important;
+}
+
+html.dark .features-section,
+html.dark .body-diagram-section,
+html.dark .management-tools-section,
+html.dark .home-section {
+  background-color: var(--bg-color) !important;
+}
+
+html.dark .partners-section {
+  background-color: #0d111c !important;
+}
+
+html.dark .specialty-label-card {
+  background: var(--card-bg) !important;
+  border-color: var(--border-color) !important;
+}
+
+html.dark .specialty-card-icon {
+  background: var(--input-bg) !important;
+}
+
+html.dark .specialty-card-name {
+  color: var(--text-color) !important;
+}
+
+html.dark .platform-services-badge {
+  background-color: #1e293b !important;
+  color: #a8c8e0 !important;
+  border-color: var(--border-color) !important;
+}
+
+html.dark .home-badge-blue {
+  background-color: #1e293b !important;
+  color: #a8c8e0 !important;
+}
+
+html.dark .home-badge-white {
+  background-color: #111827 !important;
+  color: #a8c8e0 !important;
+  border-color: var(--border-color) !important;
+}
+
+html.dark .most-popular-badge {
+  color: #ffffff !important;
+}
+
+html.dark .sub-tool-card {
+  background-color: var(--card-bg) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: var(--shadow) !important;
+}
+
+html.dark .sub-tool-card h3 {
+  color: var(--text-color) !important;
+}
+
+html.dark .sub-tool-features span {
+  color: #94a3b8 !important;
+}
+
+html.dark .sub-tool-icon {
+  background-color: #004f78 !important;
+}
+
+html.dark .home-section-title,
+html.dark .feature-card h3 {
+  color: var(--text-color) !important;
+}
+html.dark .home-section-subtitle,
+html.dark .feature-card p {
+  color: var(--text-muted) !important;
+}
+
+html.dark .title-divider {
+  background-color: var(--text-color) !important;
+}
+
+html.dark .body-diagram-main-image {
+  filter: invert(0.92) hue-rotate(180deg) brightness(0.9) contrast(1.1) !important;
+}
+
+/* Auth Pages Dark Mode Overrides */
+html.dark .auth-page-wrapper {
+  background-color: var(--bg-color) !important;
+}
+
+html.dark .auth-card {
+  background-color: var(--card-bg) !important;
+  border-color: var(--border-color) !important;
+  box-shadow: var(--shadow) !important;
+}
+
+html.dark .auth-icon-wrapper {
+  background-color: var(--input-bg) !important;
+  color: var(--text-color) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+html.dark .auth-title {
+  color: var(--text-color) !important;
+}
+
+html.dark .auth-subtitle {
+  color: var(--text-muted) !important;
+}
+
+html.dark .auth-label {
+  color: var(--text-color) !important;
+}
+
+html.dark .auth-input-group {
+  background-color: var(--input-bg) !important;
+  border-color: var(--border-color) !important;
+}
+
+html.dark .auth-input-group:focus-within {
+  border-color: #0081c7 !important;
+  box-shadow: 0 0 5px rgba(0, 129, 199, 0.4) !important;
+}
+
+html.dark .auth-input-icon {
+  color: var(--text-muted) !important;
+}
+
+html.dark .auth-input {
+  background: transparent !important;
+  border: none !important;
+  color: var(--text-color) !important;
+}
+
+html.dark .auth-input::placeholder {
+  color: #5b7083 !important;
+}
+
+html.dark .gender-radio {
+  color: var(--text-muted) !important;
+}
+
+html.dark .gender-radio input[type="radio"] {
+  accent-color: #0081c7 !important;
+}
+
+html.dark .terms-checkbox input[type="checkbox"] {
+  accent-color: #0081c7 !important;
+}
+
+html.dark .terms-label {
+  color: var(--text-muted) !important;
+}
+
+html.dark .terms-label a {
+  color: #0081c7 !important;
+  text-decoration-color: #374151 !important;
+}
+
+html.dark .terms-label a:hover {
+  color: #00a0f0 !important;
+  text-decoration-color: #00a0f0 !important;
+}
+
+html.dark .auth-link {
+  color: #0081c7 !important;
+}
+
+html.dark .auth-link:hover {
+  color: #00a0f0 !important;
+}
+
+html.dark .otp-input {
+  background-color: var(--input-bg) !important;
+  color: var(--text-color) !important;
+  border-color: var(--border-color) !important;
+}
+
+html.dark .otp-input:focus {
+  border-color: #0081c7 !important;
+  box-shadow: 0 0 5px rgba(0, 129, 199, 0.4) !important;
+}
+
+html.dark .password-strength-bar {
+  background-color: var(--border-color) !important;
+}
+
+html.dark .password-hint {
+  color: var(--text-muted) !important;
+}
+
+html.dark .confirm-summary li {
+  color: var(--text-color) !important;
+  border-bottom-color: var(--border-color) !important;
+}
+
+html.dark .confirm-summary strong {
+  color: #0081c7 !important;
+}
+
+html.dark .auth-error-message {
+  background-color: #2d191b !important;
+  border-color: #ef4444 !important;
+  color: #fca5a5 !important;
+}
+
+/* Patient Portal Dark Mode Overrides */
+html.dark .patient-layout-wrapper {
+  background-color: var(--bg-color) !important;
+}
+
+html.dark .patient-sidebar-container {
+  background-color: #0d111c !important;
+  border-right: 1px solid var(--border-color) !important;
+}
+
+html.dark .patient-branding {
+  background-color: #090d16 !important;
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+html.dark .patient-branding h1 {
+  color: var(--text-color) !important;
+}
+
+html.dark .patient-header {
+  background-color: #0d111c !important;
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+html.dark .patient-header-info h2 {
+  color: var(--text-color) !important;
+}
+
+html.dark .patient-header-info p {
+  color: var(--text-muted) !important;
+}
+
+html.dark .patient-content-scroll {
+  background-color: var(--bg-color) !important;
+}
+
+/* Patient Sidebar Links */
+html.dark .sidebar-nav-link {
+  color: var(--text-muted) !important;
+}
+
+html.dark .sidebar-nav-link:hover {
+  background-color: #1e293b !important;
+  color: #ffffff !important;
+}
+
+html.dark .sidebar-nav-link.active {
+  background-color: #1e293b !important;
+  color: #ffffff !important;
+}
+
+html.dark .sidebar-logout {
+  color: var(--text-muted) !important;
+}
+
+html.dark .sidebar-logout:hover {
+  background-color: #1e293b !important;
+  color: #ffffff !important;
+}
+
+html.dark .sidebar-icon {
+  color: inherit !important;
+}
+
+/* Cards & Containers */
+html.dark .updates-card,
+html.dark .section-card,
+html.dark .profile-card,
+html.dark .appointment-card,
+html.dark .hospital-card,
+html.dark .mh-card {
+  background-color: var(--card-bg) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: var(--shadow) !important;
+  color: var(--text-color) !important;
+}
+
+/* Dashboard Updates */
+html.dark .updates-header {
+  border-bottom: 1px solid var(--border-color) !important;
+  color: var(--text-color) !important;
+}
+
+html.dark .updates-header h3 {
+  color: var(--text-color) !important;
+}
+
+html.dark .updates-count {
+  color: var(--text-muted) !important;
+}
+
+html.dark .update-item {
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+html.dark .update-item:last-child {
+  border-bottom: none !important;
+}
+
+html.dark .update-title {
+  color: var(--text-color) !important;
+}
+
+html.dark .update-time {
+  color: var(--text-muted) !important;
+}
+
+html.dark .no-data {
+  color: var(--text-muted) !important;
+}
+
+/* Quick Action Cards */
+html.dark .action-card {
+  background-color: var(--card-bg) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: var(--shadow) !important;
+}
+
+html.dark .action-card .action-icon-wrapper {
+  background-color: var(--input-bg) !important;
+  color: var(--text-color) !important;
+}
+
+html.dark .action-appointments {
+  border-left: 4px solid #0081c7 !important;
+}
+html.dark .action-reports {
+  border-left: 4px solid #10b981 !important;
+}
+html.dark .action-book {
+  border-left: 4px solid #f59e0b !important;
+}
+html.dark .action-assistant {
+  border-left: 4px solid #8b5cf6 !important;
+}
+
+html.dark .action-text h4 {
+  color: var(--text-color) !important;
+}
+
+html.dark .action-text p {
+  color: var(--text-muted) !important;
+}
+
+/* Lists and section headers */
+html.dark .section-header {
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+html.dark .section-header h3 {
+  color: var(--text-color) !important;
+}
+
+html.dark .section-link {
+  color: #0081c7 !important;
+}
+
+html.dark .section-link:hover {
+  color: #00a0f0 !important;
+}
+
+html.dark .list-item {
+  background-color: var(--input-bg) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-color) !important;
+}
+
+html.dark .item-details h4 {
+  color: var(--text-color) !important;
+}
+
+html.dark .item-subtitle,
+html.dark .item-date {
+  color: var(--text-muted) !important;
+}
+
+/* Badges */
+html.dark .badge-confirmed,
+html.dark .badge-ready,
+html.dark .appt-badge.confirmed {
+  background-color: #064e3b !important;
+  color: #a7f3d0 !important;
+}
+
+html.dark .appt-badge.pending {
+  background-color: #78350f !important;
+  color: #fde68a !important;
+}
+
+html.dark .appt-badge.cancelled {
+  background-color: #7f1d1d !important;
+  color: #fca5a5 !important;
+}
+
+/* Profile Details */
+html.dark .profile-card-header {
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+html.dark .profile-card-header h3 {
+  color: var(--text-color) !important;
+}
+
+html.dark .info-item {
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+html.dark .info-label {
+  color: var(--text-muted) !important;
+}
+
+html.dark .info-value {
+  color: var(--text-color) !important;
+}
+
+html.dark .account-box {
+  background-color: var(--input-bg) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+html.dark .account-box-label {
+  color: var(--text-muted) !important;
+}
+
+html.dark .account-box-value {
+  color: var(--text-color) !important;
+}
+
+html.dark .notification-heading {
+  color: var(--text-color) !important;
+}
+
+html.dark .setting-item {
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+html.dark .setting-label {
+  color: var(--text-color) !important;
+}
+
+html.dark .danger-text {
+  color: #f87171 !important;
+}
+
+/* Appointments Tab & Header controls */
+html.dark .appointments-action-bar {
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+html.dark .tab-link {
+  color: var(--text-muted) !important;
+}
+
+html.dark .tab-link:hover {
+  color: var(--text-color) !important;
+}
+
+html.dark .tab-link.active {
+  color: #0081c7 !important;
+  border-bottom-color: #0081c7 !important;
+}
+
+/* Appointment Cards */
+html.dark .appt-datetime {
+  background-color: var(--input-bg) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  color: var(--text-color) !important;
+}
+
+html.dark .datetime-row {
+  color: var(--text-color) !important;
+}
+
+html.dark .doctor-name {
+  color: var(--text-color) !important;
+}
+
+html.dark .doctor-specialty {
+  color: var(--text-muted) !important;
+}
+
+html.dark .appt-footer {
+  border-top: 1px solid var(--border-color) !important;
+}
+
+html.dark .btn-cancel-appt {
+  background-color: #2d191b !important;
+  color: #fca5a5 !important;
+  border: 1px solid #7f1d1d !important;
+}
+
+html.dark .btn-cancel-appt:hover {
+  background-color: #451a1a !important;
+  color: #ffffff !important;
+  border-color: #b91c1c !important;
+}
+
+/* Blood Bank Page */
+html.dark .bb-notice {
+  background-color: #1e293b !important;
+  border-left-color: #0081c7 !important;
+  color: var(--text-color) !important;
+}
+
+html.dark .bb-notice strong {
+  color: #0081c7 !important;
+}
+
+html.dark .bb-input {
+  background-color: var(--input-bg) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+html.dark .bb-select {
+  background-color: var(--input-bg) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+html.dark .hospital-header {
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+html.dark .hospital-name {
+  color: var(--text-color) !important;
+}
+
+html.dark .hospital-detail {
+  color: var(--text-muted) !important;
+}
+
+html.dark .blood-section-title {
+  color: var(--text-color) !important;
+}
+
+html.dark .blood-type-card {
+  background-color: var(--input-bg) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+html.dark .blood-type-label {
+  color: var(--text-muted) !important;
+}
+
+html.dark .blood-type-units {
+  color: var(--text-color) !important;
+}
+
+html.dark .status-badge.low {
+  background-color: #7f1d1d !important;
+  color: #fca5a5 !important;
+}
+
+html.dark .status-badge.medium {
+  background-color: #78350f !important;
+  color: #fde68a !important;
+}
+
+html.dark .status-badge.high {
+  background-color: #064e3b !important;
+  color: #a7f3d0 !important;
+}
+
+/* Multi-Hospital View */
+html.dark .mh-last-updated {
+  color: var(--text-muted) !important;
+}
+
+html.dark .mh-refresh-btn {
+  background-color: var(--input-bg) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+html.dark .mh-refresh-btn:hover {
+  background-color: #1e293b !important;
+}
+
+html.dark .mh-card-header {
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+html.dark .mh-icon {
+  background-color: var(--input-bg) !important;
+  color: var(--text-color) !important;
+}
+
+html.dark .mh-hospital-name {
+  color: var(--text-color) !important;
+}
+
+html.dark .mh-bed-row {
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+html.dark .mh-bed-row:last-child {
+  border-bottom: none !important;
+}
+
+html.dark .mh-bed-label {
+  background-color: var(--input-bg) !important;
+  color: var(--text-color) !important;
+}
+
+html.dark .mh-bed-count {
+  color: var(--text-color) !important;
+}
+
+html.dark .mh-progress-track {
+  background-color: var(--input-bg) !important;
+}
+
+html.dark .mh-progress-fill {
+  background-color: #0081c7 !important;
+}
+
+html.dark .mh-availability-text {
+  color: var(--text-muted) !important;
+}
+
+/* Settings Item overrides */
+html.dark .setting-item {
+  background-color: var(--input-bg) !important;
+  border-color: var(--border-color) !important;
+}
+
+html.dark .setting-item:hover {
+  background-color: #1e293b !important;
+}
+
+html.dark .setting-label {
+  color: var(--text-color) !important;
+}
+
+/* Empty State cards */
+html.dark .btn-empty-state {
+  background-color: var(--card-bg) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-muted) !important;
+}
+
+/* Patient Record Page (Medical History) */
+html.dark .mh-patient-card,
+html.dark .mh-summary-card,
+html.dark .mh-section-card {
+  background-color: var(--card-bg) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-color) !important;
+}
+
+html.dark .mh-patient-name-container h2 {
+  color: var(--text-color) !important;
+}
+
+html.dark .mh-patient-id,
+html.dark .mh-patient-id strong {
+  color: var(--text-muted) !important;
+}
+
+html.dark .mh-detail-label {
+  color: #0081c7 !important;
+}
+
+html.dark .mh-detail-value {
+  color: var(--text-color) !important;
+}
+
+html.dark .mh-summary-header {
+  color: #0081c7 !important;
+}
+
+html.dark .mh-summary-count {
+  color: var(--text-color) !important;
+}
+
+html.dark .mh-tabs-container {
+  background-color: var(--input-bg) !important;
+}
+
+html.dark .mh-tab {
+  color: var(--text-muted) !important;
+}
+
+html.dark .mh-tab.active {
+  background-color: #1e293b !important;
+  color: #ffffff !important;
+}
+
+html.dark .mh-section-title {
+  color: var(--text-color) !important;
+  border-bottom-color: var(--border-color) !important;
+}
+
+html.dark .mh-list-item {
+  border-bottom-color: var(--border-color) !important;
+}
+
+html.dark .mh-item-name {
+  color: #0081c7 !important;
+}
+
+html.dark .mh-item-detail {
+  color: var(--text-muted) !important;
+}
+
+html.dark .mh-med-pill {
+  background-color: #0081c7 !important;
+  color: #ffffff !important;
+}
+
+html.dark .dashboard-container {
+  background-color: var(--bg-color) !important;
+}
+
+/* Patient Booking Flow Dark Mode Overrides */
+html.dark .hospital-selection-container,
+html.dark .booking-layout,
+html.dark .book-new-container {
+  background-color: var(--bg-color) !important;
+}
+
+html.dark .book-form-card,
+html.dark .datetime-card,
+html.dark .review-container,
+html.dark .summary-card-inner,
+html.dark .success-card {
+  background-color: var(--card-bg) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-color) !important;
+}
+
+html.dark .booking-title,
+html.dark .hospital-title,
+html.dark .book-title,
+html.dark .review-header {
+  color: var(--text-color) !important;
+  border-bottom-color: var(--border-color) !important;
+}
+
+html.dark .booking-subtitle,
+html.dark .hospital-location {
+  color: var(--text-muted) !important;
+}
+
+/* Stepper */
+html.dark .step-number {
+  background-color: var(--input-bg) !important;
+  color: var(--text-muted) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+html.dark .step-label {
+  color: var(--text-muted) !important;
+}
+
+html.dark .stepper-step.active .step-number,
+html.dark .stepper-step.completed .step-number {
+  background-color: #0081c7 !important;
+  border-color: #0081c7 !important;
+  color: #ffffff !important;
+}
+
+html.dark .stepper-step.active .step-label,
+html.dark .stepper-step.completed .step-label {
+  color: var(--text-color) !important;
+}
+
+html.dark .step-connector {
+  background-color: var(--border-color) !important;
+}
+
+/* Specialty Page */
+html.dark .specialty-search-input {
+  background-color: var(--input-bg) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+html.dark .specialty-search-input:focus {
+  background-color: var(--input-bg) !important;
+  border-color: #0081c7 !important;
+}
+
+html.dark .specialty-card {
+  background-color: var(--input-bg) !important;
+  border: 2px solid transparent !important;
+}
+
+html.dark .specialty-card:hover {
+  background-color: #1e293b !important;
+}
+
+html.dark .specialty-card.selected {
+  background-color: #1e293b !important;
+  border-color: #0081c7 !important;
+}
+
+html.dark .specialty-name,
+html.dark .specialty-icon {
+  color: var(--text-color) !important;
+}
+
+/* Doctor Selection Page */
+html.dark .doctor-card {
+  background-color: var(--card-bg) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+html.dark .doctor-card:hover {
+  background-color: #1e293b !important;
+}
+
+html.dark .doctor-name-title {
+  color: var(--text-color) !important;
+}
+
+html.dark .doctor-card-specialty {
+  color: #0081c7 !important;
+}
+
+html.dark .doctor-bio {
+  color: var(--text-muted) !important;
+}
+
+html.dark .doctor-rating {
+  color: var(--text-muted) !important;
+}
+
+html.dark .btn-view-schedule {
+  background-color: var(--input-bg) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+html.dark .btn-view-schedule:hover {
+  background-color: #1e293b !important;
+}
+
+/* Date Time Selection Page */
+html.dark .calendar-month,
+html.dark .calendar-nav-btn,
+html.dark .calendar-day-header,
+html.dark .time-slots-header {
+  color: var(--text-color) !important;
+}
+
+html.dark .calendar-day-btn {
+  color: var(--text-muted) !important;
+}
+
+html.dark .calendar-day-btn:hover:not(.disabled) {
+  background-color: #1e293b !important;
+  color: #ffffff !important;
+}
+
+html.dark .calendar-day-btn.active {
+  background-color: #0081c7 !important;
+  color: #ffffff !important;
+}
+
+html.dark .calendar-day-btn.disabled {
+  color: #374151 !important;
+}
+
+html.dark .time-slot-btn-large {
+  border-color: var(--border-color) !important;
+  color: var(--text-color) !important;
+}
+
+html.dark .time-slot-btn-large:hover {
+  background-color: #1e293b !important;
+  border-color: #0081c7 !important;
+}
+
+html.dark .time-slot-btn-large.selected {
+  background-color: #0081c7 !important;
+  color: #ffffff !important;
+  border-color: #0081c7 !important;
+}
+
+html.dark .location-note {
+  color: var(--text-muted) !important;
+}
+
+html.dark .location-note svg {
+  color: #0081c7 !important;
+}
+
+/* Review Confirm Page */
+html.dark .review-label {
+  color: var(--text-color) !important;
+}
+
+html.dark .review-input,
+html.dark .review-textarea,
+html.dark .review-select {
+  background-color: var(--input-bg) !important;
+  color: var(--text-color) !important;
+  border-color: var(--border-color) !important;
+}
+
+html.dark .review-input:focus,
+html.dark .review-textarea:focus,
+html.dark .review-select:focus {
+  background-color: var(--input-bg) !important;
+  border-color: #0081c7 !important;
+}
+
+html.dark .review-input-readonly {
+  background-color: #1f2937 !important;
+  color: var(--text-muted) !important;
+  border-color: var(--border-color) !important;
+}
+
+html.dark .summary-card-inner h3 {
+  color: #ef4444 !important;
+}
+
+html.dark .summary-doc-details h4 {
+  color: var(--text-color) !important;
+}
+
+html.dark .summary-doc-details p {
+  color: var(--text-muted) !important;
+}
+
+html.dark .summary-dt-row {
+  color: var(--text-color) !important;
+}
+
+html.dark .summary-dt-row svg {
+  color: #0081c7 !important;
+}
+
+html.dark .summary-dt-row.time-row svg {
+  color: #ef4444 !important;
+}
+
+html.dark .success-card h2 {
+  color: var(--text-color) !important;
+}
+
+html.dark .success-card p {
+  color: var(--text-muted) !important;
+}
+
+html.dark .redirect-text {
+  color: #0081c7 !important;
+}
+
+/* ==========================================================================
+   Doctor Portal Dark Mode Overrides
+   ========================================================================== */
+html.dark .da-sidebar,
+html.dark .pt-sidebar {
+  background-color: #0d111c !important;
+  border-right: 1px solid var(--border-color) !important;
+}
+
+html.dark .da-logo {
+  background-color: #090d16 !important;
+}
+
+html.dark .da-nav-item,
+html.dark .pt-nav-item {
+  color: var(--text-muted) !important;
+}
+
+html.dark .da-nav-item:hover,
+html.dark .pt-nav-item:hover {
+  background-color: #1e293b !important;
+  color: #ffffff !important;
+}
+
+html.dark .da-nav-item.da-nav-active,
+html.dark .pt-nav-item.pt-nav-active {
+  background-color: #1e293b !important;
+  color: #ffffff !important;
+}
+
+html.dark .da-logout,
+html.dark .pt-logout {
+  color: var(--text-muted) !important;
+}
+
+html.dark .da-logout:hover,
+html.dark .pt-logout:hover {
+  background-color: #1e293b !important;
+  color: #ffffff !important;
+}
+
+html.dark .da-main,
+html.dark .pt-main,
+html.dark .pr-page,
+html.dark .dwh-page {
+  background-color: var(--bg-color) !important;
+  color: var(--text-color) !important;
+}
+
+html.dark .da-topbar,
+html.dark .pt-topbar,
+html.dark .pr-topbar,
+html.dark .dwh-topbar {
+  background-color: #0d111c !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  color: var(--text-color) !important;
+}
+
+html.dark .da-page-title,
+html.dark .pt-page-title,
+html.dark .pr-topbar-title,
+html.dark .dwh-page-title {
+  color: var(--text-color) !important;
+}
+
+html.dark .da-subtitle,
+html.dark .pt-subtitle,
+html.dark .pr-topbar-sub,
+html.dark .dwh-subtitle {
+  color: var(--text-muted) !important;
+}
+
+html.dark .da-card,
+html.dark .pt-card,
+html.dark .pr-info-card,
+html.dark .pr-stat-card,
+html.dark .pr-section-card,
+html.dark .pr-note-card,
+html.dark .dwh-duration-card,
+html.dark .dwh-day-card {
+  background-color: var(--card-bg) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: var(--shadow) !important;
+  color: var(--text-color) !important;
+}
+
+html.dark .da-card-header,
+html.dark .pt-card-header,
+html.dark .pr-info-top {
+  border-bottom: 1px solid var(--border-color) !important;
+  color: var(--text-color) !important;
+}
+
+html.dark .da-card-title,
+html.dark .pt-card-title,
+html.dark .pr-patient-name {
+  color: var(--text-color) !important;
+}
+
+html.dark .da-card-subtitle,
+html.dark .pt-card-subtitle,
+html.dark .pr-patient-id {
+  color: var(--text-muted) !important;
+}
+
+html.dark .da-table-wrap,
+html.dark .pt-table-wrap {
+  border-color: var(--border-color) !important;
+}
+
+html.dark .da-table,
+html.dark .pt-table {
+  background-color: var(--card-bg) !important;
+  color: var(--text-color) !important;
+}
+
+html.dark .da-table th,
+html.dark .pt-table th {
+  background-color: var(--table-header-bg) !important;
+  color: var(--text-color) !important;
+  border-bottom: 2px solid var(--border-color) !important;
+}
+
+html.dark .da-table td,
+html.dark .pt-table td {
+  border-bottom: 1px solid var(--border-color) !important;
+  color: var(--text-color) !important;
+}
+
+html.dark .da-table tr:hover,
+html.dark .pt-table tr:hover {
+  background-color: var(--table-row-hover) !important;
+}
+
+html.dark .pt-patient-cell {
+  color: var(--text-color) !important;
+}
+
+html.dark .pr-subheader-bar {
+  background-color: var(--card-bg) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+html.dark .pr-sub-details-btn {
+  background-color: var(--input-bg) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+html.dark .pr-sub-details-btn:hover {
+  background-color: var(--table-row-hover) !important;
+}
+
+html.dark .pr-field-value {
+  color: var(--text-color) !important;
+}
+
+html.dark .pr-field-label {
+  color: var(--text-muted) !important;
+}
+
+html.dark .pr-stat-card {
+  background-color: var(--card-bg) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+html.dark .pr-stat-title {
+  color: var(--text-color) !important;
+}
+
+html.dark .pr-stat-num {
+  color: var(--text-color) !important;
+}
+
+html.dark .pr-tab-btn {
+  background-color: var(--input-bg) !important;
+  color: var(--text-muted) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+html.dark .pr-tab-btn:hover,
+html.dark .pr-tab-btn.pr-tab-active {
+  background-color: #1e293b !important;
+  color: #ffffff !important;
+  border-color: #1e293b !important;
+}
+
+html.dark .pr-entry {
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+html.dark .pr-entry-name {
+  color: var(--text-color) !important;
+}
+
+html.dark .pr-entry-sub {
+  color: var(--text-muted) !important;
+}
+
+html.dark .pr-entry-notes {
+  background-color: var(--input-bg) !important;
+  color: var(--text-color) !important;
+  border-left: 3px solid var(--border-color) !important;
+}
+
+html.dark .pr-add-note-form {
+  background-color: var(--card-bg) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+html.dark .pr-form-input,
+html.dark .pr-form-textarea {
+  background-color: var(--input-bg) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+html.dark .pr-note-card {
+  background-color: var(--card-bg) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+html.dark .pr-note-card-header {
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+html.dark .pr-note-date {
+  color: var(--text-color) !important;
+}
+
+html.dark .pr-note-field-label {
+  color: var(--text-muted) !important;
+}
+
+html.dark .pr-note-field-value {
+  color: var(--text-color) !important;
+}
+
+html.dark .dwh-duration-label,
+html.dark .dwh-duration-btn {
+  color: var(--text-color) !important;
+}
+
+html.dark .dwh-duration-btn {
+  background-color: var(--input-bg) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+html.dark .dwh-duration-btn.active {
+  background-color: #004f78 !important;
+  border-color: #004f78 !important;
+  color: #ffffff !important;
+}
+
+html.dark .dwh-day-name {
+  color: var(--text-color) !important;
+}
+
+html.dark .dwh-time-btn {
+  background-color: var(--input-bg) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+html.dark .dwh-time-btn:disabled {
+  background-color: #1f2937 !important;
+  color: #4b5563 !important;
+  border-color: #374151 !important;
+}
+
+html.dark .dwh-time-input {
+  background-color: var(--input-bg) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+html.dark .dwh-time-label {
+  color: var(--text-muted) !important;
+}
+
+html.dark .dwh-checkbox {
+  accent-color: #004f78 !important;
 }

@@ -1,0 +1,212 @@
+/* ===========================
+   MULTI-HOSPITAL VIEW PAGE
+   =========================== */
+
+.multi-page {
+  padding: 32px 36px;
+  background-color: #f4f8fb;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* ===========================
+   TOP HEADER
+   =========================== */
+.multi-header-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  direction: ltr;
+}
+
+.multi-page-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1c5b7c;
+  margin: 0;
+}
+
+.multi-profile-area {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.notification-bell-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
+.bell-icon {
+  color: #8c2a2a;
+  font-size: 24px;
+}
+
+.bell-badge {
+  position: absolute;
+  top: 5px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  background-color: #1c5b7c;
+  border-radius: 50%;
+  border: 2px solid #f4f8fb;
+}
+
+.multi-profile-details {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profile-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1c5b7c;
+}
+
+.profile-role {
+  font-size: 12px;
+  color: #1c5b7c;
+  opacity: 0.8;
+}
+
+/* ===========================
+   HOSPITAL CARD
+   =========================== */
+
+.hospital-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 30px 40px;
+  margin-bottom: 30px;
+  direction: ltr; /* Force LTR so left is left */
+  text-align: left;
+  border: 1px solid #e1e9f0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* ===========================
+   HOSPITAL HEADER
+   =========================== */
+
+.hospital-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* explicitly left */
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.hospital-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  background: #1c5b7c;
+  color: #ffffff;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hospital-header h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1c5b7c;
+  margin: 0;
+}
+
+/* ===========================
+   BEDS CONTAINER
+   =========================== */
+
+.beds-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ===========================
+   BED ROW
+   =========================== */
+
+.bed-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: #f4f8fb;
+  border-radius: 12px;
+  padding: 16px 24px;
+}
+
+.bed-text-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bed-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1c5b7c;
+}
+
+.bed-count-text {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1c5b7c;
+}
+
+/* ===========================
+   PROGRESS BAR
+   =========================== */
+
+.bed-bar-container {
+  background-color: #e1e9f0;
+  border-radius: 20px;
+  height: 6px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.bed-bar-fill {
+  background-color: #1c5b7c;
+  height: 100%;
+  border-radius: 20px;
+  transition: width 0.6s ease;
+}
+
+/* ===========================
+   LOADING / ERROR
+   =========================== */
+
+.multi-page > p {
+  color: rgba(28, 91, 124, 0.5);
+  font-size: 14px;
+  margin: 0;
+}
+
+/* ===========================
+   RESPONSIVE
+   =========================== */
+
+@media (max-width: 640px) {
+  .hospital-card {
+    padding: 20px;
+  }
+}

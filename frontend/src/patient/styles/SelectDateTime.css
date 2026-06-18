@@ -1,0 +1,182 @@
+.datetime-card {
+    background-color: #e2e8f0;
+    border-radius: 12px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    width: 100%;
+    max-width: 800px;
+}
+
+@media (min-width: 768px) {
+    .datetime-card {
+        flex-direction: row;
+    }
+}
+
+/* Left side - Calendar */
+.calendar-section {
+    flex: 1;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.calendar-month {
+    color: #004a61;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.calendar-nav-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #004a61;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.calendar-nav-btn svg {
+    width: 20px;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    text-align: center;
+}
+
+.calendar-day-header {
+    color: #004a61;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.calendar-day-btn {
+    background: none;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    color: #64748b;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    transition: all 0.2s;
+}
+
+.calendar-day-btn:hover:not(.disabled) {
+    background-color: #cbd5e1;
+    color: #004a61;
+}
+
+.calendar-day-btn.active {
+    background-color: #004a61;
+    color: white;
+}
+
+.calendar-day-btn.disabled {
+    color: #cbd5e1;
+    cursor: not-allowed;
+}
+
+/* Right side - Time Slots */
+.time-slots-section {
+    flex: 1;
+    border-top: 1px solid #cbd5e1;
+    padding-top: 32px;
+}
+
+@media (min-width: 768px) {
+    .time-slots-section {
+        border-top: none;
+        border-left: 1px solid #cbd5e1;
+        padding-top: 0;
+        padding-left: 32px;
+    }
+}
+
+.time-slots-header {
+    color: #004a61;
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 24px 0;
+}
+
+.time-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+@media (min-width: 1024px) {
+    .time-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.time-slot-btn-large {
+    background-color: transparent;
+    border: 1px solid #94a3b8;
+    color: #004a61;
+    padding: 10px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+}
+
+.time-slot-btn-large:hover {
+    border-color: #004a61;
+    background-color: #f1f5f9;
+}
+
+.time-slot-btn-large.selected {
+    background-color: #004a61;
+    color: white;
+    border-color: #004a61;
+}
+
+.time-footer-note {
+    color: #94a3b8;
+    font-size: 0.75rem;
+    text-align: center;
+    margin-top: 24px;
+}
+
+.location-note {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #475569;
+    font-size: 0.85rem;
+    margin-top: 24px;
+}
+
+.location-note svg {
+    width: 18px;
+    color: #004a61;
+}
+
+/* Next button bottom right layout */
+.datetime-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 16px;
+}
