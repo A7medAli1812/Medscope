@@ -1,4 +1,4 @@
-﻿using MedScope.Application.DTOs.Doctor.WorkingHours;
+using MedScope.Application.DTOs.Doctor.WorkingHours;
 using MedScope.Application.Interfaces.Doctor;
 using MedScope.Domain.Entities;
 using MedScope.Infrastructure.Persistence;
@@ -14,6 +14,34 @@ namespace MedScope.Infrastructure.Services.Doctor
         public DoctorWorkingHoursService(ApplicationDbContext context)
         {
             _context = context;
+        }
+
+        public async Task<WorkingHoursResponseDto> GetWorkingHours(string doctorUserId)
+        {
+            var doctorId = await _context.Doctors
+                .Where(d => d.UserId == doctorUserId)
+                .Select(d => d.Id)
+                .FirstOrDefaultAsync();
+
+            if (doctorId == 0)
+                throw new Exception("Doctor not found");
+
+            var hours = await _context.DoctorWorkingHours
+                .Where(x => x.DoctorId == doctorId)
+                .ToListAsync();
+
+            var duration = hours.FirstOrDefault()?.AppointmentDuration ?? 30;
+
+            return new WorkingHoursResponseDto
+            {
+                AppointmentDuration = duration,
+                WorkingDays = hours.Select(h => new WorkingDayResponseDto
+                {
+                    Day = char.ToUpper(h.Day[0]) + h.Day[1..], // capitalize Sunday, Monday...
+                    From = h.From.ToString(@"hh\:mm"),
+                    To = h.To.ToString(@"hh\:mm"),
+                }).ToList()
+            };
         }
 
         public async Task SaveWorkingHours(string doctorUserId, SaveWorkingHoursDto dto)
@@ -62,4 +90,4 @@ namespace MedScope.Infrastructure.Services.Doctor
             await _context.SaveChangesAsync();
         }
     }
-}
+}
