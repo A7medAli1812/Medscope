@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 using MedScope.Application.Abstractions.Persistence;
 using MedScope.Application.DTOs.BedManagementDto;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +28,7 @@ namespace MedScope.Application.Features.BedManagement
                 .FirstOrDefaultAsync(cancellationToken);
 
             var beds = await _context.Beds
+                .AsNoTracking()
                 .Where(b => b.HospitalId == hospitalId)
                 .ToListAsync(cancellationToken);
 

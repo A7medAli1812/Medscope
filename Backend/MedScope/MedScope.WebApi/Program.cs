@@ -107,6 +107,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ForgotPasswordHandler>();
 builder.Services.AddScoped<ResetPasswordHandler>();
+builder.Services.AddScoped<VerifyOtpHandler>();
 
 // =======================
 // CORS

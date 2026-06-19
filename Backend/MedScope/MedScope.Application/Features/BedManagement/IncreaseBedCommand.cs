@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +8,5 @@ using MediatR;
 
 namespace MedScope.Application.Features.BedManagement
 {
-    public record IncreaseBedCommand(int Id) : IRequest<Unit>;
+    public record IncreaseBedCommand(int Id) : IRequest<int>;
 }

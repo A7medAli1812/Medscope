@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MedScope.Application.Features.BedManagement
 {
-    public class IncreaseBedCommandHandler : IRequestHandler<IncreaseBedCommand, Unit>
+    public class IncreaseBedCommandHandler : IRequestHandler<IncreaseBedCommand, int>
     {
         private readonly IApplicationDbContext _context;
 
@@ -16,7 +16,7 @@ namespace MedScope.Application.Features.BedManagement
             _context = context;
         }
 
-        public async Task<Unit> Handle(IncreaseBedCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(IncreaseBedCommand request, CancellationToken cancellationToken)
         {
             var bed = await _context.Beds
                 .FirstOrDefaultAsync(b => b.Id == request.Id, cancellationToken);
@@ -26,11 +26,11 @@ namespace MedScope.Application.Features.BedManagement
 
             bed.AvailableBeds += 1;
 
-            _context.Beds.Update(bed); 
+            _context.Beds.Update(bed);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            var rows = await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
+            return rows;
         }
     }
 }
