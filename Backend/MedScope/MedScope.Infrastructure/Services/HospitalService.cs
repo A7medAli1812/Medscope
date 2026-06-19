@@ -33,14 +33,8 @@ namespace MedScope.Infrastructure.Services
                     Name     = h.Name,
                     // Combine Address + City into a single readable location string
                     Location = (h.Address + ", " + h.City).Trim(' ', ','),
-                    ImageUrl = h.ImageUrl,
-                   
-                    Specialties = h.HospitalSpecialties
-                        .Select(hs => hs.Specialty.Name)
-                        .OrderBy(name => name)
-                        .ToList()
+                    ImageUrl = h.ImageUrl
                 })
-               
                 .ToListAsync();
 
             return hospitals;

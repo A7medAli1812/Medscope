@@ -1,4 +1,4 @@
-﻿using MedScope.Application.Abstractions.Persistence;
+using MedScope.Application.Abstractions.Persistence;
 using MedScope.Domain.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -101,7 +101,7 @@ public class ApplicationDbContext
 
         builder.Entity<HospitalSpecialty>()
             .HasOne(hs => hs.Hospital)
-            .WithMany()
+            .WithMany(h => h.HospitalSpecialties)
             .HasForeignKey(hs => hs.HospitalId)
             .OnDelete(DeleteBehavior.Cascade);
 
