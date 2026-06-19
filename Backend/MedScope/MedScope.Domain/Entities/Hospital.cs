@@ -1,4 +1,4 @@
-﻿using MedScope.Domain.Entities;
+using MedScope.Domain.Entities;
 
 public class Hospital
 {
@@ -15,6 +15,9 @@ public class Hospital
     public string Address { get; set; } = string.Empty;
     public string City { get; set; } = string.Empty;
 
+    // 🏠 Home Page fields
+    public string? ImageUrl { get; set; }
+
     // 🔥 مهمين جدًا
     public bool IsActive { get; set; } = true;
     public bool IsDeleted { get; set; } = false;
@@ -23,4 +26,5 @@ public class Hospital
     public ICollection<Admin> Admins { get; set; }
     public ICollection<BloodBank> BloodBanks { get; set; }
     public ICollection<Bed> Beds { get; set; } = new List<Bed>();
+    public ICollection<HospitalSpecialty> HospitalSpecialties { get; set; } = new List<HospitalSpecialty>();
 }
