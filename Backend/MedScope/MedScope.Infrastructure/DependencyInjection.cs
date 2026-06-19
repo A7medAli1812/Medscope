@@ -1,4 +1,4 @@
-﻿using MedScope.Application.Abstractions.Appointments;
+using MedScope.Application.Abstractions.Appointments;
 using MedScope.Application.Abstractions.Blood;
 using MedScope.Application.Abstractions.Persistence;
 using MedScope.Application.Interfaces;
@@ -74,6 +74,11 @@ namespace MedScope.Infrastructure
             services.AddScoped<IDoctorPatientNoteUpdateService, DoctorPatientNoteUpdateService>();
 
             services.AddScoped<IDoctorWorkingHoursService, DoctorWorkingHoursService>();
+
+            // =========================
+            // Hospital (Public)
+            // =========================
+            services.AddScoped<IHospitalService, HospitalService>();
 
             return services;
         }
