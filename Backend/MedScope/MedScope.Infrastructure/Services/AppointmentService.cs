@@ -486,7 +486,7 @@ namespace MedScope.Infrastructure.Services
                 {
                     Id = h.Id,
                     Name = h.Name,
-                   
+                    ImageUrl = h.ImageUrl
                 })
                 .OrderBy(h => h.Name)
                 .ToListAsync();

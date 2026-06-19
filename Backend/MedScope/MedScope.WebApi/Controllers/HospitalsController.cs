@@ -30,5 +30,22 @@ namespace MedScope.WebApi.Controllers
             var hospitals = await _hospitalService.GetHomeHospitalsAsync();
             return Ok(hospitals);
         }
+
+        /// <summary>
+        /// Uploads an image for a specific hospital and returns the image URL.
+        /// </summary>
+        [HttpPost("{id}/upload-image")]
+        public async Task<IActionResult> UploadHospitalImage(int id, IFormFile file)
+        {
+            try
+            {
+                var imageUrl = await _hospitalService.UploadHospitalImageAsync(id, file);
+                return Ok(new { ImageUrl = imageUrl });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 }
