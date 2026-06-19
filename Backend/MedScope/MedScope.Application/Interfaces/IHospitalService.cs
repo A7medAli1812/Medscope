@@ -1,4 +1,5 @@
 using MedScope.Application.DTOs.Hospital;
+using Microsoft.AspNetCore.Http;
 
 namespace MedScope.Application.Interfaces
 {
@@ -12,5 +13,7 @@ namespace MedScope.Application.Interfaces
         /// Only active, non-deleted hospitals are returned.
         /// </summary>
         Task<List<HomeHospitalDto>> GetHomeHospitalsAsync();
+        
+        Task<string> UploadHospitalImageAsync(int hospitalId, IFormFile file);
     }
 }
