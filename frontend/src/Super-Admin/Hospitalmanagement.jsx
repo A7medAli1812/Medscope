@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import "./HospitalManagement.css";
 import {
   getHospitals,
+  getAllHospitals,
   createHospital,
   updateHospital,
   deleteHospital,
   changeHospitalStatus,
+  uploadHospitalImage,
 } from "../api/superAdminApi";
 
 const HospitalManagement = () => {
@@ -23,6 +25,7 @@ const HospitalManagement = () => {
   const [createdId, setCreatedId] = useState("");
   const [formData, setFormData] = useState({ name: "", city: "", email: "", phone: "", address: "" });
   const [saving, setSaving] = useState(false);
+  const [imageFile, setImageFile] = useState(null);
 
   const pageSize = 7;
 
@@ -62,6 +65,7 @@ const HospitalManagement = () => {
   const openAdd = () => {
     setEditIndex(null);
     setFormData({ name: "", city: "", email: "", phone: "", address: "" });
+    setImageFile(null);
     setModalStep("form");
   };
 
@@ -75,6 +79,7 @@ const HospitalManagement = () => {
       phone: "",
       address: "",
     });
+    setImageFile(null);
     setModalStep("form");
   };
 
@@ -92,6 +97,11 @@ const HospitalManagement = () => {
           phone: formData.phone,
           address: formData.address,
         });
+
+        if (imageFile) {
+          await uploadHospitalImage(hospital.id, imageFile);
+        }
+
         setModalStep(null);
       } else {
         // Create new hospital
@@ -102,9 +112,17 @@ const HospitalManagement = () => {
           phone: formData.phone,
           address: formData.address,
           type: "General",
-          hospitalNumber: 0,
-          website: "",
+          hospitalNumber: Math.floor(Math.random() * 900000) + 100000,
+          website: "https://medscope.com",
         });
+
+        // Fetch all hospitals to find the one we just created
+        const allRes = await getAllHospitals();
+        const createdHospital = (allRes.data || []).find(h => h.name === formData.name);
+        if (imageFile && createdHospital) {
+          await uploadHospitalImage(createdHospital.id, imageFile);
+        }
+
         setCreatedId(formData.name);
         setModalStep("success");
       }
@@ -230,6 +248,17 @@ const HospitalManagement = () => {
                     <input type={type} value={formData[key]} onChange={(e) => setFormData({ ...formData, [key]: e.target.value })} />
                   </div>
                 ))}
+                
+                <div className="new-form-field">
+                  <label><i className="fas fa-image"></i> Hospital Image</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setImageFile(e.target.files[0])}
+                    style={{ border: 'none', padding: '10px 0' }}
+                  />
+                </div>
+
                 <div className="new-modal-btns">
                   <button className="new-save-btn" onClick={handleSave} disabled={saving}>
                     {saving ? "Saving..." : "Save"}

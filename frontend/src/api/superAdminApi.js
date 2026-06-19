@@ -22,6 +22,16 @@ export const deleteHospital = (id) =>
 export const changeHospitalStatus = (id, isActive) =>
   axiosInstance.patch(`/super-admin/hospitals/${id}/status`, { isActive });
 
+export const uploadHospitalImage = (id, file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  return axiosInstance.post(`/hospitals/${id}/upload-image`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
+
 // ============================
 // Admins
 // ============================
