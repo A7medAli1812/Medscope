@@ -1,4 +1,4 @@
-﻿public class PatientDto
+public class PatientDto
 {
     public int Id { get; set; }
 
@@ -12,7 +12,7 @@
 
     public string DateOfBirth { get; set; }
 
-    public string BloodGroup { get; set; }  
-   
+    public int Age { get; set; }
 
+    public string BloodGroup { get; set; }  
 }
