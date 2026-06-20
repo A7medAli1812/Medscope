@@ -1,0 +1,539 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ================= LAYOUT ================= */
+.pr-layout {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  background: #edf2f6;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* ================= SIDEBAR ================= */
+.pr-sidebar {
+  width: 250px;
+  min-width: 250px;
+  background: #0b5f8a;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  flex-shrink: 0;
+}
+
+.pr-sidebar-top {
+  display: flex;
+  flex-direction: column;
+}
+
+.pr-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 24px 32px;
+}
+
+.pr-logo-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: #2eb6f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+}
+
+.pr-logo-text {
+  font-size: 24px;
+  font-weight: 700;
+  color: white;
+}
+
+.pr-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pr-nav-item {
+  padding: 15px 26px;
+  cursor: pointer;
+  color: rgba(255,255,255,0.75);
+  font-size: 15px;
+  font-weight: 500;
+  transition: 0.25s ease;
+  border-left: 4px solid transparent;
+}
+
+.pr-nav-item:hover {
+  background: rgba(255,255,255,0.08);
+  color: white;
+}
+
+.pr-nav-active {
+  background: rgba(255,255,255,0.12);
+  border-left: 4px solid #2eb6f5;
+  color: white;
+}
+
+.pr-logout {
+  padding: 18px 26px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  color: white;
+  transition: 0.2s;
+}
+
+.pr-logout:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+/* ================= MAIN CONTENT ================= */
+.pr-main-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+}
+
+.pr-page {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* ================= TOPBAR ================= */
+.pr-topbar {
+  background: #0b5f8a;
+  border-radius: 18px 18px 0 0;
+  min-height: 85px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 28px;
+  color: white;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.pr-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.pr-topbar-title {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.pr-topbar-sub {
+  font-size: 13px;
+  opacity: 0.85;
+  margin-top: 2px;
+}
+
+.pr-print-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.35);
+  color: white;
+  padding: 10px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+  font-size: 13px;
+}
+
+.pr-print-btn:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+/* ================= BREADCRUMB ================= */
+.pr-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  background: #0b5f8a;
+  color: white;
+  cursor: pointer;
+  font-size: 13px;
+  border-radius: 0 0 18px 18px;
+  margin-bottom: 28px;
+}
+
+/* ================= BODY ================= */
+.pr-body {
+  width: 100%;
+  max-width: 1120px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ================= INFO CARD ================= */
+.pr-info-card {
+  background: #d5e2eb;
+  border-radius: 24px;
+  padding: 30px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+}
+
+.pr-info-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 26px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.pr-patient-name {
+  font-size: 42px;
+  color: #18384e;
+  font-weight: 700;
+}
+
+.pr-patient-id {
+  margin-top: 8px;
+  color: #688196;
+  font-size: 14px;
+}
+
+.pr-edit-avatar {
+  border: none;
+  background: #2eb6f5;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* ================= INFO GRID ================= */
+.pr-info-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.pr-info-field {
+  background: #c8d9e5;
+  padding: 18px;
+  border-radius: 16px;
+}
+
+.pr-field-label {
+  font-size: 12px;
+  color: #6a8499;
+  margin-bottom: 8px;
+}
+
+.pr-field-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: #18384e;
+}
+
+/* ================= STATS ================= */
+.pr-stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.pr-stat-card {
+  background: #d5e2eb;
+  border-radius: 16px;
+  padding: 22px;
+  border-left: 5px solid;
+}
+
+.pr-stat-red {
+  border-color: #e15252;
+}
+
+.pr-stat-blue {
+  border-color: #3c7ea1;
+}
+
+.pr-stat-green {
+  border-color: #39aa72;
+}
+
+.pr-stat-orange {
+  border-color: #e08030;
+}
+
+.pr-stat-icon {
+  color: #5a7a92;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+.pr-stat-num {
+  font-size: 34px;
+  font-weight: 700;
+  color: #18384e;
+}
+
+/* ================= TABS ================= */
+.pr-tabs-row {
+  display: flex;
+  background: #c8d9e5;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.pr-tab-btn {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 18px;
+  cursor: pointer;
+  font-size: 15px;
+  color: #5e7b92;
+  transition: 0.2s;
+}
+
+.pr-tab-active {
+  background: #0b5f8a;
+  color: white;
+  font-weight: 600;
+}
+
+/* ================= SECTION ================= */
+.pr-section-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.pr-section-card {
+  background: #d5e2eb;
+  border-radius: 20px;
+  padding: 26px;
+}
+
+.pr-section-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.pr-title-red {
+  color: #e15252;
+}
+
+.pr-title-blue {
+  color: #3c7ea1;
+}
+
+.pr-title-green {
+  color: #39aa72;
+}
+
+.pr-title-orange {
+  color: #e08030;
+}
+
+.pr-entry {
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.5);
+}
+
+.pr-entry:last-child {
+  border-bottom: none;
+}
+
+.pr-entry-name {
+  font-weight: 700;
+  color: #18384e;
+  font-size: 18px;
+}
+
+.pr-entry-sub {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #688196;
+}
+
+/* ================= NOTES ================= */
+.pr-notes-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.pr-add-note-btn {
+  border: none;
+  background: #0b5f8a;
+  color: white;
+  padding: 16px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* ================= FORM ================= */
+.pr-add-note-form {
+  background: #d5e2eb;
+  border-radius: 22px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.pr-form-input,
+.pr-form-textarea {
+  width: 100%;
+  border: none;
+  background: #edf2f6;
+  border-radius: 12px;
+  padding: 14px 16px;
+  outline: none;
+  font-size: 14px;
+}
+
+.pr-form-textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.pr-note-form-actions {
+  display: flex;
+  gap: 14px;
+}
+
+.pr-save-note-btn,
+.pr-clear-btn {
+  flex: 1;
+  border: none;
+  border-radius: 30px;
+  height: 50px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.pr-save-note-btn {
+  background: #0b5f8a;
+  color: white;
+}
+
+.pr-clear-btn {
+  background: #edf2f6;
+  color: #0b5f8a;
+}
+
+/* ================= NOTE CARD ================= */
+.pr-note-card {
+  background: #d5e2eb;
+  border-radius: 18px;
+  padding: 24px;
+}
+
+.pr-note-card-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.pr-note-date {
+  font-weight: 700;
+  color: #18384e;
+}
+
+.pr-note-created {
+  font-size: 11px;
+  color: #688196;
+  margin-top: 4px;
+}
+
+.pr-note-edit-btn {
+  border: none;
+  background: #0b5f8a;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.pr-note-field-label {
+  margin-top: 14px;
+  margin-bottom: 5px;
+  font-size: 12px;
+  color: #688196;
+}
+
+.pr-note-field-value {
+  color: #18384e;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 1100px) {
+  .pr-info-row,
+  .pr-stats-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .pr-layout {
+    flex-direction: column;
+  }
+
+  .pr-sidebar {
+    width: 100%;
+    min-width: 100%;
+    height: auto;
+    position: relative;
+  }
+
+  .pr-main-content {
+    padding: 18px;
+  }
+}
+
+@media (max-width: 768px) {
+  .pr-info-row,
+  .pr-stats-row {
+    grid-template-columns: 1fr;
+  }
+
+  .pr-note-form-actions {
+    flex-direction: column;
+  }
+
+  .pr-topbar {
+    padding: 18px;
+  }
+
+  .pr-breadcrumb {
+    padding: 12px 18px;
+  }
+
+  .pr-patient-name {
+    font-size: 30px;
+  }
+
+  .pr-body {
+    gap: 18px;
+  }
+}

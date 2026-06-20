@@ -1,0 +1,295 @@
+/* ===========================
+   DOCTORS PAGE
+   =========================== */
+
+.doctors-page {
+  padding: 32px 36px;
+  background-color: #ffffff;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.doctors-page .page-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #004F78;
+  margin: 0 0 24px 0;
+}
+
+/* ===========================
+   CARD
+   =========================== */
+
+.table-container {
+  background: #F1F8FF;
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0, 79, 120, 0.08);
+  border: 1px solid rgba(0, 79, 120, 0.12);
+  padding: 0 0 20px 0;
+  overflow: hidden;
+}
+
+/* ===========================
+   HEADER
+   =========================== */
+
+.table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 28px 16px 28px;
+  border-bottom: 1px solid rgba(0, 79, 120, 0.15);
+}
+
+.table-header h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #004F78;
+  margin: 0;
+  padding-bottom: 2px;
+  border-bottom: 3px solid #004F78;
+  display: inline-block;
+}
+
+.new-btn {
+  background-color: #004F78;
+  color: #ffffff;
+  border: none;
+  border-radius: 23px;
+  padding: 9px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  white-space: nowrap;
+}
+
+.new-btn:hover {
+  opacity: 0.85;
+}
+
+/* ===========================
+   FILTERS
+   =========================== */
+
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 28px;
+}
+
+.search-input {
+  padding: 8px 16px 8px 36px;
+  border: 1px solid rgba(0, 79, 120, 0.25);
+  border-radius: 23px;
+  font-size: 13px;
+  color: #004F78;
+  background: #ffffff
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='%23004F78' opacity='0.4' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.099zm-5.242 1.656a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z'/%3E%3C/svg%3E")
+    no-repeat 12px center;
+  width: 200px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.search-input::placeholder {
+  color: rgba(0, 79, 120, 0.4);
+}
+
+.search-input:focus {
+  border-color: #004F78;
+}
+
+.filter-btn {
+  padding: 8px 36px 8px 14px;
+  border: 1px solid #004F78;
+  border-radius: 23px;
+  font-size: 13px;
+  color: #004F78;
+  background-color: #ffffff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23004F78' viewBox='0 0 16 16'%3E%3Cpath d='M1.5 3a.5.5 0 0 1 .5-.5h12a.5.5 0 0 1 0 1H2a.5.5 0 0 1-.5-.5zM3 6.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM5 10a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5A.5.5 0 0 1 5 10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: border-color 0.2s;
+}
+
+.filter-btn:focus {
+  border-color: #003a5c;
+}
+
+/* ===========================
+   TABLE
+   =========================== */
+
+.doctors-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+.doctors-table thead tr {
+  background-color: #F1F8FF;
+  border-top: 1px solid rgba(0, 79, 120, 0.1);
+  border-bottom: 1.5px solid rgba(0, 79, 120, 0.1);
+}
+
+.doctors-table thead th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 700;
+  color: #004F78;
+  font-size: 12.5px;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+}
+
+.doctors-table thead th:first-child {
+  padding-left: 28px;
+}
+
+.doctors-table thead th:last-child {
+  padding-right: 28px;
+}
+
+.doctors-table tbody tr {
+  border-bottom: 1px solid rgba(0, 79, 120, 0.07);
+  transition: background-color 0.15s;
+}
+
+.doctors-table tbody tr:hover {
+  background-color: #e8f3fc;
+}
+
+.doctors-table tbody td {
+  padding: 13px 16px;
+  color: #2c5f78;
+  font-size: 13px;
+  vertical-align: middle;
+}
+
+.doctors-table tbody td:first-child {
+  padding-left: 28px;
+  font-weight: 600;
+  color: #004F78;
+}
+
+.doctors-table tbody td:last-child {
+  padding-right: 28px;
+}
+
+/* ===========================
+   ACTION BUTTON
+   =========================== */
+
+.edit-btn {
+  background-color: #e8f4fb;
+  color: #004F78;
+  border: 1px solid rgba(0, 79, 120, 0.25);
+  border-radius: 6px;
+  width: 30px;
+  height: 30px;
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+}
+
+.edit-btn:hover {
+  opacity: 0.7;
+}
+
+/* ===========================
+   STATUS BADGE
+   =========================== */
+
+.status {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.status.active {
+  background-color: #e6f7ee;
+  color: #1a7f4b;
+  border: 1px solid #a8e0c0;
+}
+
+.status.inactive {
+  background-color: #fff0f0;
+  color: #d32f2f;
+  border: 1px solid #ffcdd2;
+}
+
+/* ===========================
+   PAGINATION
+   =========================== */
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 18px 28px 6px 28px;
+}
+
+.pagination button {
+  height: 32px;
+  width: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background-color: #004F78;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.pagination button:hover {
+  opacity: 0.8;
+}
+
+.pagination button.active {
+  background-color: #004F78;
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0, 79, 120, 0.4);
+}
+
+/* Previous / Next spans */
+.pagination span {
+  color: #004F78;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0 4px;
+  transition: opacity 0.2s;
+  user-select: none;
+}
+
+.pagination span:hover {
+  opacity: 0.7;
+}
+
+/* ===========================
+   LOADING / EMPTY
+   =========================== */
+
+.loading {
+  text-align: center;
+  color: rgba(0, 79, 120, 0.45);
+  padding: 40px 0;
+  font-size: 14px;
+}

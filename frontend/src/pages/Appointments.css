@@ -1,0 +1,385 @@
+/* ===========================
+   APPOINTMENTS PAGE
+   =========================== */
+
+.appointments-container {
+  padding: 32px 36px;
+  background-color: #ffffff;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.appointments-container .page-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #004F78;
+  margin: 0 0 24px 0;
+}
+
+/* ===========================
+   CARD
+   =========================== */
+
+.appointments-card {
+  background: #F1F8FF;
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0, 79, 120, 0.08);
+  border: 1px solid rgba(0, 79, 120, 0.12);
+  padding: 0 0 20px 0;
+  overflow: hidden;
+}
+
+/* ===========================
+   HEADER - Tabs + New Button
+   =========================== */
+
+.appointments-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 18px 28px 0 28px;
+  border-bottom: 1px solid rgba(0, 79, 120, 0.15);
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+}
+
+.tab {
+  background: transparent;
+  border: none;
+  padding: 10px 18px 14px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(0, 79, 120, 0.45);
+  cursor: pointer;
+  letter-spacing: 0.4px;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+  position: relative;
+  bottom: -1px;
+}
+
+.tab:hover {
+  color: #004F78;
+}
+
+.tab.active {
+  color: #004F78;
+  border-bottom: 3px solid #004F78;
+}
+
+/* New Appointment Button */
+.new-appointment {
+  background-color: #004F78;
+  color: #ffffff;
+  border: none;
+  border-radius: 23px;
+  padding: 9px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 12px;
+  transition: opacity 0.2s;
+  white-space: nowrap;
+}
+
+.new-appointment:hover {
+  opacity: 0.85;
+}
+
+/* ===========================
+   FILTERS
+   =========================== */
+
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 28px;
+}
+
+/* Search */
+.search {
+  padding: 8px 16px 8px 36px;
+  border: 1px solid rgba(0, 79, 120, 0.25);
+  border-radius: 23px;
+  font-size: 13px;
+  color: #004F78;
+  background: #ffffff
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='%23004F78' opacity='0.4' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.099zm-5.242 1.656a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z'/%3E%3C/svg%3E")
+    no-repeat 12px center;
+  width: 200px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.search::placeholder {
+  color: rgba(0, 79, 120, 0.4);
+}
+
+.search:focus {
+  border-color: #004F78;
+}
+
+/* Date Filter */
+.date-filter {
+  display: flex;
+  align-items: center;
+  border: 1px solid #004F78;
+  border-radius: 23px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.date-filter input[type="date"] {
+  border: none;
+  outline: none;
+  padding: 8px 10px;
+  font-size: 13px;
+  color: #004F78;
+  background: transparent;
+  width: 130px;
+  cursor: pointer;
+}
+
+.date-filter input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.filter-btn {
+  background: transparent;
+  border: none;
+  border-left: 1px solid rgba(0, 79, 120, 0.2);
+  padding: 8px 14px;
+  font-size: 13px;
+  color: #004F78;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+
+.filter-btn:hover {
+  background: rgba(0, 79, 120, 0.05);
+}
+
+/* ===========================
+   TABLE
+   =========================== */
+
+.appointments-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+.appointments-table thead tr {
+  background-color: #F1F8FF;
+  border-top: 1px solid rgba(0, 79, 120, 0.1);
+  border-bottom: 1.5px solid rgba(0, 79, 120, 0.1);
+}
+
+.appointments-table thead th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 700;
+  color: #004F78;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.appointments-table thead th:first-child {
+  padding-left: 28px;
+}
+
+.appointments-table thead th:last-child {
+  padding-right: 28px;
+}
+
+.appointments-table tbody tr {
+  border-bottom: 1px solid rgba(0, 79, 120, 0.07);
+  transition: background-color 0.15s;
+}
+
+.appointments-table tbody tr:hover {
+  background-color: #e8f3fc;
+}
+
+.appointments-table tbody td {
+  padding: 13px 16px;
+  color: #2c5f78;
+  font-size: 13px;
+  vertical-align: middle;
+}
+
+.appointments-table tbody td:first-child {
+  padding-left: 28px;
+  font-weight: 500;
+  color: #004F78;
+}
+
+.appointments-table tbody td:last-child {
+  padding-right: 28px;
+}
+
+/* Patient avatar in table */
+.appointments-table tbody td img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+/* Patient initials fallback */
+.patient-initials {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #d0eaf7;
+  color: #004F78;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+/* ===========================
+   ACTION BUTTONS
+   =========================== */
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.complete {
+  background-color: #e8f4fb;
+  color: #004F78;
+  border: 1px solid rgba(0, 79, 120, 0.25);
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete {
+  background-color: #fff0f0;
+  color: #d32f2f;
+  border: 1px solid #ffcdd2;
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.complete:hover,
+.delete:hover {
+  opacity: 0.7;
+}
+
+/* Reschedule button */
+.reschedule {
+  background: transparent;
+  border: none;
+  color: #004F78;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+  transition: opacity 0.2s;
+}
+
+.reschedule:hover {
+  opacity: 0.7;
+}
+
+/* ===========================
+   PAGINATION
+   =========================== */
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 18px 28px 6px 28px;
+}
+
+.pagination button {
+  height: 32px;
+  width: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background-color: #004F78;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.pagination button:hover:not(:disabled) {
+  opacity: 0.8;
+}
+
+.pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination button.active {
+  background-color: #004F78;
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0, 79, 120, 0.4);
+}
+
+/* Previous / Next */
+.pagination button:first-child,
+.pagination button:last-child {
+  width: auto;
+  border-radius: 6px;
+  background: transparent;
+  color: #004F78;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 0 8px;
+}
+
+.pagination button:first-child:hover:not(:disabled),
+.pagination button:last-child:hover:not(:disabled) {
+  background: transparent;
+  opacity: 0.7;
+}
+
+/* ===========================
+   EMPTY STATE
+   =========================== */
+
+.appointments-table tbody td[colspan] {
+  text-align: center;
+  color: rgba(0, 79, 120, 0.45);
+  padding: 40px 0;
+  font-size: 14px;
+}

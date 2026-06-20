@@ -1,0 +1,230 @@
+.sv-page {
+  min-height: 100vh;
+  background: #edf2f6;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* Header */
+.sv-header {
+  background: #0a5c8a;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 28px;
+  gap: 14px;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+/* Back Button */
+.sv-back-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: none;
+  background: #084d76;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.25s;
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.sv-back-btn:hover {
+  background: #063a59;
+  transform: translateX(-2px);
+}
+
+.sv-back-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.sv-header-logo {
+  width: 36px;
+  height: 36px;
+  background: #2ea8df;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sv-header-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.sv-header-sub {
+  font-size: 12px;
+  opacity: 0.85;
+  margin-top: 2px;
+}
+
+/* Body */
+.sv-body {
+  max-width: 760px;
+  margin: 30px auto;
+  padding: 0 20px 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* Card */
+.sv-card {
+  background: #d4e1eb;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.04);
+}
+
+.sv-card-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a3a50;
+  margin-bottom: 18px;
+}
+
+.sv-card-title svg {
+  flex-shrink: 0;
+}
+
+/* Labels */
+.sv-label {
+  display: block;
+  font-size: 13px;
+  color: #4f6c81;
+  font-weight: 600;
+  margin-bottom: 8px;
+  margin-top: 14px;
+}
+
+.sv-req {
+  color: #e05252;
+}
+
+/* Inputs */
+.sv-input,
+.sv-textarea {
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  background: #edf2f6;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #1a3a50;
+  outline: none;
+  box-sizing: border-box;
+  font-family: inherit;
+  transition: 0.2s;
+}
+
+.sv-input {
+  height: 46px;
+}
+
+.sv-textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.sv-input:focus,
+.sv-textarea:focus {
+  background: #ffffff;
+  box-shadow: 0 0 0 2px rgba(10, 92, 138, 0.15);
+}
+
+.sv-input::placeholder,
+.sv-textarea::placeholder {
+  color: #95a5b3;
+}
+
+/* Add Button Row */
+.sv-add-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 18px;
+}
+
+.sv-add-btn {
+  background: #0a5c8a;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.sv-add-btn:hover {
+  background: #084d76;
+}
+
+/* Submit */
+.sv-submit-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.sv-submit-btn {
+  min-width: 180px;
+  height: 48px;
+  background: #0a5c8a;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s;
+  box-shadow: 0 6px 14px rgba(10,92,138,0.18);
+}
+
+.sv-submit-btn:hover {
+  background: #084d76;
+  transform: translateY(-1px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sv-header {
+    padding: 0 16px;
+    height: auto;
+    min-height: 64px;
+  }
+
+  .sv-body {
+    padding: 0 14px 40px;
+    margin-top: 22px;
+  }
+
+  .sv-card {
+    padding: 18px;
+    border-radius: 14px;
+  }
+
+  .sv-submit-btn {
+    width: 100%;
+  }
+
+  .sv-add-row {
+    justify-content: stretch;
+  }
+
+  .sv-add-btn {
+    width: 100%;
+  }
+}

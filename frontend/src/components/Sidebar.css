@@ -1,0 +1,119 @@
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #084668;
+    /* Dark Blue from design */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 0;
+    top: 0;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.sidebar-header {
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logo-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    color:#084668;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.sidebar h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+    color: white;
+}
+
+.sidebar-nav {
+    flex: 1;
+    padding: 1rem 0;
+}
+
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-nav li {
+    margin-bottom: 0.5rem;
+}
+
+.sidebar-nav a {
+    display: flex;
+    align-items: center;
+    padding: 1rem 2rem;
+    color: #adb5bd;
+    /* Muted text color */
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+}
+
+.sidebar-nav a:hover,
+.sidebar-nav li.active a {
+    background-color: #0a557c;
+    /* Slightly lighter active state */
+    color: white;
+    border-left-color: #0ea5e9;
+}
+
+.nav-icon {
+    margin-right: 1rem;
+    width: 20px;
+    text-align: center;
+}
+
+.sidebar-footer {
+    padding: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logout-btn {
+    display: flex;
+    align-items: center;
+    color: #adb5bd;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.logout-btn:hover {
+    color: white;
+}
+
+/* RTL Support if needed based on App.jsx */
+html[dir="rtl"] .sidebar {
+    left: auto;
+    right: 0;
+}
+
+html[dir="rtl"] .sidebar-nav a {
+    border-left: none;
+    border-right: 4px solid transparent;
+}
+
+html[dir="rtl"] .sidebar-nav a:hover,
+html[dir="rtl"] .sidebar-nav li.active a {
+    border-right-color: #0ea5e9;
+}
+
+html[dir="rtl"] .nav-icon {
+    margin-right: 0;
+    margin-left: 1rem;
+}

@@ -1,0 +1,167 @@
+/* ===========================
+   BED MANAGEMENT PAGE
+   =========================== */
+
+.bed-page {
+  padding: 32px 36px;
+  background-color: #ffffff;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.bed-page .page-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #004F78;
+  margin: 0 0 6px 0;
+}
+
+/* Tab label */
+.bed-page .bed-tab {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #004F78;
+  padding-bottom: 8px;
+  border-bottom: 3px solid #004F78;
+  margin-bottom: 28px;
+}
+
+/* ===========================
+   BED GRID
+   =========================== */
+
+.bed-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+/* ===========================
+   BED CARD
+   =========================== */
+
+.bed-card {
+  background: #F1F8FF;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 79, 120, 0.12);
+  box-shadow: 0 4px 16px rgba(0, 79, 120, 0.07);
+  padding: 22px 24px 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: box-shadow 0.2s, opacity 0.2s;
+  min-height: 140px;
+}
+
+.bed-card.updating {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* ===========================
+   CARD TOP ROW - icon + count
+   =========================== */
+
+.bed-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bed-header i {
+  font-size: 22px;
+  color: #004F78;
+}
+
+/* ===========================
+   BED INFO - name + count
+   =========================== */
+
+.bed-info {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.bed-info h3 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #004F78;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.bed-count {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #004F78;
+  white-space: nowrap;
+}
+
+/* Up / Down icons */
+.bed-icons {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.bed-icons i {
+  font-size: 13px;
+  color: #004F78;
+  cursor: pointer;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid #004F78;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s;
+}
+
+.bed-icons i:hover:not(.disabled) {
+  background: #004F78;
+  color: #ffffff;
+}
+
+.bed-icons i.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* ===========================
+   PROGRESS BAR
+   =========================== */
+
+.progress-bar {
+  width: 100%;
+  height: 5px;
+  background-color: rgba(0, 79, 120, 0.12);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background-color: #004F78;
+  border-radius: 10px;
+  transition: width 0.4s ease;
+}
+
+/* ===========================
+   RESPONSIVE
+   =========================== */
+
+@media (max-width: 640px) {
+  .bed-page {
+    padding: 20px 16px;
+  }
+
+  .bed-grid {
+    grid-template-columns: 1fr;
+  }
+}

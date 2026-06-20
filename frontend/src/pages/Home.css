@@ -1,0 +1,114 @@
+.home-page {
+  padding: 35px;
+  background: #f5f7fb;
+  min-height: 100vh;
+}
+
+.page-title {
+  font-size: 26px;
+  margin-bottom: 25px;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+/* 🔥 الكارد الكبير */
+.home-card {
+  background: #dfeaf4;
+  border-radius: 25px;
+  padding: 40px;
+  display: flex;
+  justify-content: space-between;
+  gap: 60px;
+
+  /* تحسين الشكل */
+  box-shadow: 
+    0 10px 30px rgba(0,0,0,0.08),
+    inset 0 1px 0 rgba(255,255,255,0.6);
+
+  transition: 0.3s;
+}
+
+.home-card:hover {
+  transform: translateY(-5px);
+}
+
+/* LEFT */
+.home-left {
+  flex: 1;
+}
+
+.hospital-name {
+  font-size: 28px;
+  margin-bottom: 10px;
+  color: #2f4b66;
+  font-weight: 700;
+}
+
+.hospital-type {
+  font-size: 16px;
+  margin-bottom: 25px;
+  color: #6c7a89;
+}
+
+/* 🔥 info */
+.info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.info-list p {
+  font-size: 23px;
+  color: #2c3e50;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* RIGHT */
+.home-right {
+  flex: 1;
+}
+
+.home-right h4 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #2f4b66;
+}
+
+/* 🔥 specialties */
+.specialties {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px 25px;
+}
+
+.specialties span {
+  font-size: 22px;
+  color: #2c3e50;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 🔥 النقطة */
+.specialties span::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background: #4a7ca5;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* 📱 responsive */
+@media (max-width: 900px) {
+  .home-card {
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .specialties {
+    grid-template-columns: 1fr;
+  }
+}
