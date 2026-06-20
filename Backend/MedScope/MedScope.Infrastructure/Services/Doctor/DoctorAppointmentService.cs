@@ -1,4 +1,4 @@
-﻿using MedScope.Application.Common;
+using MedScope.Application.Common;
 using MedScope.Application.DTOs.Doctor;
 using MedScope.Application.Interfaces.Doctor;
 using MedScope.Infrastructure.Persistence;
@@ -46,14 +46,13 @@ public class DoctorAppointmentService : IDoctorAppointmentService
         }
         else if (view == "week")
         {
-            var start = date.AddDays(-(int)date.DayOfWeek);
-            var end = start.AddDays(6);
-
-            query = query.Where(x => x.a.Date >= start && x.a.Date <= end);
+            var end = date.AddDays(7);
+            query = query.Where(x => x.a.Date >= date && x.a.Date <= end);
         }
         else if (view == "month")
         {
             query = query.Where(x =>
+                x.a.Date >= date &&
                 x.a.Date.Month == date.Month &&
                 x.a.Date.Year == date.Year);
         }
