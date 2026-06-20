@@ -215,10 +215,34 @@ After running the backend, visit: [`https://localhost:7003/swagger`](https://loc
 
 > Graduation Project — Computer Science Department
 
-| Name | Role |
+### 🔧 Backend Development
+| Name | Student ID |
 |---|---|
-| Ahmed Ali | Full-Stack Developer |
-| Fares | Backend Developer |
+| Fares Gamal Nady | 2202096 |
+| Malak Mustafa Awais | 2202606 |
+| Youssef Ahmed Eid | 2202052 |
+| Tasneem Khaled Rostom | 2202006 |
+
+### 🤖 AI Integration
+| Name | Student ID |
+|---|---|
+| Ahmed Ali Ahmed | 2202123 |
+
+### 🎨 Frontend Development
+| Name | Student ID |
+|---|---|
+| Khaled Ahmed Sayed | 2202035 |
+| Ziad Mahmoud Mohamed | 2202046 |
+
+### 🖌️ UI / UX Design
+| Name | Student ID |
+|---|---|
+| Reham Abdel-Tawab Mohamed | 2202008 |
+
+### 📋 Project Coordination
+| Name | Student ID |
+|---|---|
+| Eslam Ali Mahrous | 2202099 |
 
 ---
 
