@@ -180,6 +180,15 @@ namespace MedScope.Infrastructure.Services
                     };
                 }
 
+                if (!admin.IsActive)
+                {
+                    return new AuthResponseDto
+                    {
+                        IsSuccess = false,
+                        Message = "Your account has been deactivated. Please contact the Super Admin."
+                    };
+                }
+
                 hospitalId = admin.HospitalId;
             }
             else if (roles.Contains("Doctor"))
@@ -209,12 +218,6 @@ namespace MedScope.Infrastructure.Services
                 roles,
                 hospitalId,
                 out DateTime expiresAt);
-
-            // =========================
-            // Update Last Login
-            // =========================
-            user.LastLogin = DateTime.UtcNow;
-            await _userManager.UpdateAsync(user);
 
             return new AuthResponseDto
             {

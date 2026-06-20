@@ -1,4 +1,4 @@
-﻿using MedScope.Application.DTOs.Auth;
+using MedScope.Application.DTOs.Auth;
 using MedScope.Application.Features.Auth;
 using MedScope.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -61,6 +61,14 @@ namespace MedScope.WebApi.Controllers
                     return Unauthorized(new
                     {
                         message = "Invalid email or password"
+                    });
+                }
+
+                if (!result.IsSuccess)
+                {
+                    return Unauthorized(new
+                    {
+                        message = result.Message
                     });
                 }
 
