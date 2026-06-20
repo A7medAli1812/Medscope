@@ -149,8 +149,8 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters
             .Add(new DateOnlyJsonConverter());
 
-        options.JsonSerializerOptions.DefaultIgnoreCondition =
-            JsonIgnoreCondition.WhenWritingNull;
+        // options.JsonSerializerOptions.DefaultIgnoreCondition =
+        //     JsonIgnoreCondition.WhenWritingNull;
     });
 
 // =======================
