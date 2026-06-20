@@ -168,6 +168,7 @@ namespace MedScope.Infrastructure.Services
             if (roles.Contains("Admin"))
             {
                 var admin = await _context.Admins
+                    .Include(a => a.Hospital)
                     .AsNoTracking()
                     .FirstOrDefaultAsync(a => a.UserId == user.Id);
 
@@ -189,11 +190,21 @@ namespace MedScope.Infrastructure.Services
                     };
                 }
 
+                if (admin.Hospital == null || !admin.Hospital.IsActive || admin.Hospital.IsDeleted)
+                {
+                    return new AuthResponseDto
+                    {
+                        IsSuccess = false,
+                        Message = "Your hospital has been suspended. Please contact the Super Admin."
+                    };
+                }
+
                 hospitalId = admin.HospitalId;
             }
             else if (roles.Contains("Doctor"))
             {
                 var doctor = await _context.Doctors
+                    .Include(d => d.Hospital)
                     .AsNoTracking()
                     .FirstOrDefaultAsync(d => d.UserId == user.Id);
 
@@ -203,6 +214,15 @@ namespace MedScope.Infrastructure.Services
                     {
                         IsSuccess = false,
                         Message = "Doctor is not linked to a hospital"
+                    };
+                }
+
+                if (doctor.Hospital == null || !doctor.Hospital.IsActive || doctor.Hospital.IsDeleted)
+                {
+                    return new AuthResponseDto
+                    {
+                        IsSuccess = false,
+                        Message = "Your hospital has been suspended. Please contact the Super Admin."
                     };
                 }
 

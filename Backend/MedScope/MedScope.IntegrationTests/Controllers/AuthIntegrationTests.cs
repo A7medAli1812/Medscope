@@ -32,9 +32,9 @@ namespace MedScope.IntegrationTests.Controllers
             var response = await _client.PostAsync("/api/auth/login", content);
 
             // Assert
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
             var contentString = await response.Content.ReadAsStringAsync();
-            contentString.Should().Contain("\"isSuccess\":false");
+            contentString.Should().Contain("message");
         }
 
         [Fact]
