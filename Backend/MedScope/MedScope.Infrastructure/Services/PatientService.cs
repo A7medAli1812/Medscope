@@ -1,4 +1,4 @@
-﻿using MedScope.Application.DTOs;
+using MedScope.Application.DTOs;
 using MedScope.Application.DTOs.Patient;
 using MedScope.Application.Interfaces;
 using MedScope.Domain.Enums;
@@ -57,10 +57,17 @@ public class PatientService : IPatientService
 
         var totalCount = await patientsQuery.CountAsync();
 
-        var data = await patientsQuery
+        var queryData = await patientsQuery
             .Skip((query.Page - 1) * query.PageSize)
             .Take(query.PageSize)
-            .Select(x => new PatientDto
+            .ToListAsync();
+
+        var data = queryData.Select(x => 
+        {
+            var age = DateTime.Today.Year - x.DateOfBirth.Year;
+            if (x.DateOfBirth.Date > DateTime.Today.AddYears(-age)) age--;
+
+            return new PatientDto
             {
                 Id = x.Id,
                 FullName = x.FirstName + " " + x.LastName,
@@ -68,9 +75,10 @@ public class PatientService : IPatientService
                 PhoneNumber = x.PhoneNumber,
                 Gender = x.Gender.ToString(),
                 DateOfBirth = x.DateOfBirth.ToString("yyyy-MM-dd"),
+                Age = age,
                 BloodGroup = x.BloodGroup
-            })
-            .ToListAsync();
+            };
+        }).ToList();
 
         return new
         {
@@ -152,23 +160,43 @@ public class PatientService : IPatientService
     // =========================
     public async Task<PatientDetailsDto?> GetPatientByIdAsync(int id)
     {
-        var patient = await (from p in _context.Patients.AsNoTracking()
+        var patientData = await (from p in _context.Patients.AsNoTracking()
                              join u in _context.Users.AsNoTracking()
                              on p.UserId equals u.Id
                              where p.Id == id && !p.IsDeleted
-                             select new PatientDetailsDto
+                             select new
                              {
-                                 Id = p.Id,
-                                 FirstName = u.FirstName,
-                                 LastName = u.LastName,
-                                 Email = u.Email,
-                                 PhoneNumber = u.PhoneNumber,
-                                 Gender = u.Gender.ToString(),
-                                 DateOfBirth = u.DateOfBirth,
-                                 BloodGroup = p.BloodGroup
+                                 p.Id,
+                                 u.FirstName,
+                                 u.LastName,
+                                 u.Email,
+                                 u.PhoneNumber,
+                                 u.Gender,
+                                 u.DateOfBirth,
+                                 p.BloodGroup
                              }).FirstOrDefaultAsync();
 
-        return patient;
+        if (patientData == null) return null;
+
+        var age = 0;
+        if (patientData.DateOfBirth != default)
+        {
+            age = DateTime.Today.Year - patientData.DateOfBirth.Year;
+            if (patientData.DateOfBirth.Date > DateTime.Today.AddYears(-age)) age--;
+        }
+
+        return new PatientDetailsDto
+        {
+            Id = patientData.Id,
+            FirstName = patientData.FirstName,
+            LastName = patientData.LastName,
+            Email = patientData.Email,
+            PhoneNumber = patientData.PhoneNumber,
+            Gender = patientData.Gender.ToString(),
+            DateOfBirth = patientData.DateOfBirth,
+            Age = age,
+            BloodGroup = patientData.BloodGroup
+        };
     }
 
     // =========================
