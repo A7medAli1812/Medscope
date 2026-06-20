@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 using MedScope.Application.Abstractions.Persistence;
 using MedScope.Application.Common;
 using MedScope.Application.Features.SuperAdmin.Admins;
@@ -82,7 +82,10 @@ public GetAdminsQueryHandler(
                 // ✅ Safe Hospital
                 HospitalName = admin.HospitalName ?? "N/A",
 
-                Status = admin.IsActive ? "Active" : "Suspended"
+                Status = admin.IsActive ? "Active" : "Suspended",
+                
+                // ✅ Last Login
+                LastLogin = user?.LastLogin
             });
         }
 

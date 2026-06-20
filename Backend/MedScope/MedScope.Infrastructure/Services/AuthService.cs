@@ -1,4 +1,4 @@
-﻿using MedScope.Application.DTOs.Auth;
+using MedScope.Application.DTOs.Auth;
 using MedScope.Application.Interfaces;
 using MedScope.Domain.Entities;
 using MedScope.Infrastructure.Identity;
@@ -209,6 +209,12 @@ namespace MedScope.Infrastructure.Services
                 roles,
                 hospitalId,
                 out DateTime expiresAt);
+
+            // =========================
+            // Update Last Login
+            // =========================
+            user.LastLogin = DateTime.UtcNow;
+            await _userManager.UpdateAsync(user);
 
             return new AuthResponseDto
             {

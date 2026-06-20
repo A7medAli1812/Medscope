@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using MedScope.Domain.Entities;
 public class IdentityService : IIdentityService
 {
@@ -20,7 +20,8 @@ public class IdentityService : IIdentityService
             Id = user.Id,
             FirstName = user.FirstName,
             LastName = user.LastName,
-            Email = user.Email
+            Email = user.Email,
+            LastLogin = user.LastLogin
         };
     }
 }
