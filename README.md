@@ -233,16 +233,14 @@ After running the backend, visit: [`https://localhost:7003/swagger`](https://loc
 |---|---|
 | Khaled Ahmed Sayed | 2202035 |
 | Ziad Mahmoud Mohamed | 2202046 |
+| Eslam Ali Mahrous | 2202099 |
 
 ### 🖌️ UI / UX Design
 | Name | Student ID |
 |---|---|
 | Reham Abdel-Tawab Mohamed | 2202008 |
 
-### 📋 Project Coordination
-| Name | Student ID |
-|---|---|
-| Eslam Ali Mahrous | 2202099 |
+
 
 ---
 
