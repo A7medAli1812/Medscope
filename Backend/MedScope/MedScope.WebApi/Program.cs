@@ -32,6 +32,12 @@ var builder = WebApplication.CreateBuilder(args);
 // =======================
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
+// =======================
+// 🔒 تحميل الأسرار المحلية (مش موجود على GitHub)
+// ملف appsettings.Secrets.json موجود فقط على جهازك وعلى السيرفر
+// =======================
+builder.Configuration.AddJsonFile("appsettings.Secrets.json", optional: true, reloadOnChange: true);
+
 builder.Services.Configure<EmailSettings>(
     builder.Configuration.GetSection("EmailSettings"));
 
